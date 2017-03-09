@@ -1,0 +1,8 @@
+---
+- name: Install base packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - curl
+    - git
+    - supervisor
+    - nginx
