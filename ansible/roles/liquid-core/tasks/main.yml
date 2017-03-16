@@ -1,0 +1,20 @@
+---
+- name: Create the top folder
+  file: path=/opt/liquid-core state=directory mode=0755
+
+- name: Download the source code
+  git: repo=https://github.com/hoover/liquid-core.git
+       dest=/opt/liquid-core/liquid-core
+
+- name: Create the configuration file
+  template: src=local.py
+            dest=/opt/liquid-core/liquid-core/liquidcore/site/settings/local.py
+            mode=755
+
+- name: Create the libexec folder
+  file: path=/opt/liquid-core/libexec state=directory mode=0755
+
+- name: Create the runserver script
+  template: src=runserver
+            dest=/opt/liquid-core/libexec/runserver
+            mode=755

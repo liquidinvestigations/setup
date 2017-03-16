@@ -3,3 +3,4 @@
   hosts: local
   roles:
     - common
+    - liquid-core

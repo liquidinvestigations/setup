@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+cd /opt/liquid-core/liquid-core
+exec ./manage.py runserver 11903
