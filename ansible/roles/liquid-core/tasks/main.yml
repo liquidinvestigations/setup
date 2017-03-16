@@ -20,6 +20,11 @@
 - name: Create the database folder
   file: path=/opt/liquid-core/var state=directory owner=liquid mode=0755
 
+- name: Run migrations
+  shell: ../venv/bin/python ./manage.py migrate
+  args:
+    chdir: /opt/liquid-core/liquid-core
+
 - name: Create the libexec folder
   file: path=/opt/liquid-core/libexec state=directory mode=0755
 
