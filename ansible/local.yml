@@ -1,6 +1,8 @@
 ---
 - name: Install the Liquid Investigations toolkit
   hosts: local
+  vars_files:
+    - ['vars/defaults.yml', 'vars/config.yml']
   roles:
     - common
     - liquid-core
