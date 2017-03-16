@@ -37,3 +37,8 @@
   template: src=supervisor/liquid-core.conf
             dest=/etc/supervisor/conf.d/liquid-core.conf
   notify: Reload supervisor
+
+- name: Create the nginx configuration file
+  template: src=nginx/liquid-core.conf
+            dest=/etc/nginx/sites-enabled/liquid-core.conf
+  notify: Reload nginx

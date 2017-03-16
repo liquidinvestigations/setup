@@ -1,2 +1,5 @@
 - name: Reload supervisor
   shell: supervisorctl update
+
+- name: Reload nginx
+  shell: service nginx reload
