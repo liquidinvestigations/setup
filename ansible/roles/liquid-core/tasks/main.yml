@@ -17,6 +17,9 @@
     virtualenv: /opt/liquid-core/venv
     virtualenv_python: python3
 
+- name: Create the database folder
+  file: path=/opt/liquid-core/var state=directory owner=liquid mode=0755
+
 - name: Create the libexec folder
   file: path=/opt/liquid-core/libexec state=directory mode=0755
 
