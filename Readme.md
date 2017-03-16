@@ -16,11 +16,11 @@
 
    ```
    cd liquid-setup/ansible
-   sudo ansible-playbook -i hosts image.yml
+   sudo ansible-playbook image.yml
    ```
 
 ## Set up the bundle on the local system:
 ```
 cd liquid-setup/ansible
-sudo ansible-playbook -i hosts local.yml
+sudo ansible-playbook local.yml
 ```
