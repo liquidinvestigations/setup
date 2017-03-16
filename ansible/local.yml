@@ -1,0 +1,5 @@
+---
+- name: Install the Liquid Investigations toolkit
+  hosts: local
+  roles:
+    - common

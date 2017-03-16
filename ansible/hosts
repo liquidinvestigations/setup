@@ -1,2 +1,5 @@
 [image]
-/var/local/liquid/target
+/var/local/liquid/target ansible_connection=chroot
+
+[local]
+localhost ansible_connection=local

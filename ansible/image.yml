@@ -1,6 +1,5 @@
 ---
 - name: Install the Liquid Investigations toolkit
   hosts: image
-  connection: chroot
   roles:
     - common
