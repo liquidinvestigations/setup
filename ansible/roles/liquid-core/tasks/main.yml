@@ -32,3 +32,8 @@
   template: src=runserver
             dest=/opt/liquid-core/libexec/runserver
             mode=755
+
+- name: Create the supervisor configuration file
+  template: src=supervisor/liquid-core.conf
+            dest=/etc/supervisor/conf.d/liquid-core.conf
+  notify: Reload supervisor
