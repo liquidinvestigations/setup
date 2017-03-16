@@ -6,3 +6,5 @@
     - git
     - supervisor
     - nginx
+    - python3
+    - python-virtualenv

@@ -11,6 +11,12 @@
             dest=/opt/liquid-core/liquid-core/liquidcore/site/settings/local.py
             mode=755
 
+- name: Install requirements
+  pip:
+    requirements: /opt/liquid-core/liquid-core/requirements.txt
+    virtualenv: /opt/liquid-core/venv
+    virtualenv_python: python3
+
 - name: Create the libexec folder
   file: path=/opt/liquid-core/libexec state=directory mode=0755
 
