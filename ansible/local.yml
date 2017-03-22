@@ -5,4 +5,5 @@
     - ['vars/defaults.yml', 'vars/config.yml']
   roles:
     - common
+    - devel
     - liquid-core

@@ -1,0 +1,9 @@
+---
+- name: Install development packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - tmux
+    - sudo
+    - dnsutils
+    - man
+    - tcpdump
