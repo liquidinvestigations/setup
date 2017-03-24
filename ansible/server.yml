@@ -1,5 +1,5 @@
 ---
-- name: Install the Liquid Investigations toolkit
+- name: Install the server version of the Liquid Investigations toolkit
   hosts: local
   vars_files:
     - ['vars/defaults.yml', 'vars/config.yml']

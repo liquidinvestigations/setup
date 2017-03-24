@@ -1,4 +1,4 @@
-## Set up a liquid image based on a fresh ubuntu image:
+## Set up a microboard image based on a fresh ubuntu image:
 
 * Get a fresh Ubuntu Xenial image from `http://de.eu.odroid.in/ubuntu_16.04lts/`:
 
@@ -21,11 +21,17 @@
 
    ```
    cd liquid-setup/ansible
-   sudo ansible-playbook image.yml
+   sudo ansible-playbook board_chroot.yml
    ```
 
-## Set up the bundle on the local system:
+## Upgrade an existing installation on a microboard:
 ```
 cd liquid-setup/ansible
-sudo ansible-playbook local.yml
+sudo ansible-playbook board_local.yml
+```
+
+## Set up the bundle on a cloud server:
+```
+cd liquid-setup/ansible
+sudo ansible-playbook server.yml
 ```
