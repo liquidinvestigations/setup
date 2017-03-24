@@ -1,0 +1,33 @@
+---
+- name: Install wireless packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - wireless-tools
+    - bridge-utils
+    - hostapd
+    - dnsmasq
+
+- name: Don't run hostapd as system service
+  service:
+    name: hostapd
+    enabled: no
+
+- name: Don't run dnsmasq as system service
+  service:
+    name: dnsmasq
+    enabled: no
+
+- name: Create the hotspot folder
+  file: path=/opt/hotspot state=directory mode=0755
+
+- name: Create the boot script
+  template: src=boot.py
+            dest=/opt/hotspot/boot.py
+            mode=755
+
+- name: Start hotspot on boot
+  lineinfile:
+    dest: /etc/rc.local
+    insertbefore: "exit 0"
+    line: "/opt/hotspot/boot.py >> /var/log/rc.local.log 2>&1"
+
