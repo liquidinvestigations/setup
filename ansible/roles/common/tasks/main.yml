@@ -18,6 +18,11 @@
 - name: apt-get clean
   command: apt-get -y clean
 
+- name: Enable supervisor
+  service:
+    name: supervisor
+    enabled: yes
+
 - name: Create liquid user
   user:
     name: liquid
