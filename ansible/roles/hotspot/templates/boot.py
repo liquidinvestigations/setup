@@ -45,7 +45,7 @@ no-resolv
 no-poll
 no-hosts
 server=8.8.8.8
-address=/liquid/10.0.0.1
+address=/liquid/{liquid_address}
 dhcp-range={dhcp_range},12h
 """
 
@@ -93,12 +93,13 @@ def boot_hostapd(interface):
     subprocess.check_call(['supervisorctl', 'start', program_name])
     subprocess.check_call(['brctl', 'addif', 'br0', interface])
 
-def boot_dnsmasq(dhcp_range):
+def boot_dnsmasq(liquid_address, dhcp_range):
     dnsmasq_conf_path = RUN_DIR / 'dnsmasq.conf'
     supervisor_conf_path = SUPERVISOR_DIR / 'dnsmasq.conf'
 
     dnsmasq_conf = DNSMASQ_CONFIG_TEMPLATE.format(
         dhcp_range=dhcp_range,
+        liquid_address=liquid_address,
     )
     with dnsmasq_conf_path.open('wt', encoding='utf8') as f:
         f.write(dnsmasq_conf)
@@ -129,7 +130,7 @@ def main():
         return
 
     boot_hostapd(interfaces[0])
-    boot_dnsmasq('10.102.0.100,10.102.0.200')
+    boot_dnsmasq('10.102.0.1', '10.102.0.100,10.102.0.200')
 
 if __name__ == '__main__':
     main()
