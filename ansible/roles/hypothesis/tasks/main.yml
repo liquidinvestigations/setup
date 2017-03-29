@@ -39,6 +39,13 @@
     name: uuid-ossp
     db: hypothesis
 
+- name: Download elasticsearch v1
+  unarchive:
+    src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.tar.gz
+    dest: /opt/hypothesis
+    remote_src: yes
+    creates: /opt/hypothesis/elasticsearch-1.7.2
+
 - name: Migrate database
   command: bin/hypothesis init
   become: yes
