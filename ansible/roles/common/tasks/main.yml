@@ -15,6 +15,9 @@
     - python3
     - python-virtualenv
     - iptables
+    - build-essential
+    - postgresql
+    - postgresql-server-dev-all
 
 - name: apt-get clean
   command: apt-get -y clean
