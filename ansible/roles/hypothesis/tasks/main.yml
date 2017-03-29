@@ -24,3 +24,28 @@
     requirements: /opt/hypothesis/h/requirements.txt
     virtualenv: /opt/hypothesis/venv
     virtualenv_python: python2
+
+- name: Set up database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: hypothesis
+    owner: liquid
+
+- name: Create uuid extension on database
+  become: yes
+  become_user: postgres
+  postgresql_ext:
+    name: uuid-ossp
+    db: hypothesis
+
+- name: Migrate database
+  command: bin/hypothesis init
+  become: yes
+  become_user: liquid
+  environment:
+    PATH: "/opt/hypothesis/venv/bin:{{ ansible_env.PATH }}"
+    DATABASE_URL: postgresql:///hypothesis
+    APP_URL: "http://hypothesis.{{ liquid_domain }}"
+  args:
+    chdir: /opt/hypothesis/h

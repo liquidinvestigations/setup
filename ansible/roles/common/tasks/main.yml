@@ -17,7 +17,9 @@
     - iptables
     - build-essential
     - postgresql
+    - postgresql-contrib
     - postgresql-server-dev-all
+    - python-psycopg2 # so that ansible can manage postgres users and dbs
 
 - name: apt-get clean
   command: apt-get -y clean
@@ -27,6 +29,12 @@
     name: supervisor
     enabled: yes
 
-- name: Create liquid user
+- name: Create liquid system user
   user:
+    name: liquid
+
+- name: Create liquid postgres user
+  become: yes
+  become_user: postgres
+  postgresql_user:
     name: liquid
