@@ -1,6 +1,6 @@
 SECRET_KEY = '-- secret key --'
 DEBUG = True
-ALLOWED_HOSTS = ['{{ domain }}']
+ALLOWED_HOSTS = ['{{ liquid_domain }}']
 AUTH_PASSWORD_VALIDATORS = []
 CORS_ORIGIN_ALLOW_ALL = True
 
