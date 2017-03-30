@@ -25,20 +25,6 @@
     virtualenv: /opt/hypothesis/venv
     virtualenv_python: python2
 
-- name: Set up database
-  become: yes
-  become_user: postgres
-  postgresql_db:
-    name: hypothesis
-    owner: liquid
-
-- name: Create uuid extension on database
-  become: yes
-  become_user: postgres
-  postgresql_ext:
-    name: uuid-ossp
-    db: hypothesis
-
 - name: Download elasticsearch v1
   unarchive:
     src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.tar.gz
@@ -46,13 +32,7 @@
     remote_src: yes
     creates: /opt/hypothesis/elasticsearch-1.7.2
 
-- name: Migrate database
-  command: bin/hypothesis init
-  become: yes
-  become_user: liquid
-  environment:
-    PATH: "/opt/hypothesis/venv/bin:{{ ansible_env.PATH }}"
-    DATABASE_URL: postgresql:///hypothesis
-    APP_URL: "http://hypothesis.{{ liquid_domain }}"
-  args:
-    chdir: /opt/hypothesis/h
+- name: Create the initialization script
+  template: src=initialize.sh
+            dest=/opt/common/initialize.d/hypothesis.sh
+            mode=755

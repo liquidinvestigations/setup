@@ -33,8 +33,13 @@
   user:
     name: liquid
 
-- name: Create liquid postgres user
-  become: yes
-  become_user: postgres
-  postgresql_user:
-    name: liquid
+- name: Create common folder
+  file: path=/opt/common state=directory mode=0755
+
+- name: Create the initialization script
+  template: src=initialize.sh
+            dest=/opt/common/initialize.sh
+            mode=755
+
+- name: Create folder for init scripts of other modules
+  file: path=/opt/common/initialize.d state=directory mode=0755
