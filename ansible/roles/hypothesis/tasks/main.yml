@@ -32,6 +32,16 @@
     remote_src: yes
     creates: /opt/hypothesis/elasticsearch-1.7.2
 
+- name: Write the elasticsearch configuration file
+  template: src=elasticsearch-config/elasticsearch.yml
+            dest=/opt/hypothesis/elasticsearch-1.7.2/config/elasticsearch.yml
+
+- name: Install elasticsearch ICU plugin
+  command: bin/plugin install elasticsearch/elasticsearch-analysis-icu/2.7.0
+  args:
+    chdir: /opt/hypothesis/elasticsearch-1.7.2
+    creates: /opt/hypothesis/elasticsearch-1.7.2/plugins/analysis-icu
+
 - name: Create the initialization script
   template: src=initialize.d/hypothesis.sh
             dest=/opt/common/initialize.d/hypothesis.sh
