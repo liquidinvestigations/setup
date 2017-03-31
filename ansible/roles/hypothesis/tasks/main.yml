@@ -36,6 +36,16 @@
   template: src=elasticsearch-config/elasticsearch.yml
             dest=/opt/hypothesis/elasticsearch-1.7.2/config/elasticsearch.yml
 
+- name: Change ownership of data and logs folders
+  file:
+    path: "{{ item }}"
+    owner: liquid
+    group: liquid
+    recurse: true
+  with_items:
+    - /opt/hypothesis/elasticsearch-1.7.2/data
+    - /opt/hypothesis/elasticsearch-1.7.2/logs
+
 - name: Install elasticsearch ICU plugin
   command: bin/plugin install elasticsearch/elasticsearch-analysis-icu/2.7.0
   args:
