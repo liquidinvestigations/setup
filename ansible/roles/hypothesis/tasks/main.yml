@@ -33,6 +33,6 @@
     creates: /opt/hypothesis/elasticsearch-1.7.2
 
 - name: Create the initialization script
-  template: src=initialize.sh
+  template: src=initialize.d/hypothesis.sh
             dest=/opt/common/initialize.d/hypothesis.sh
             mode=755
