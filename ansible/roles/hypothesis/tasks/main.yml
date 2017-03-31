@@ -73,3 +73,7 @@
 - name: Create the supervisor configuration file
   template: src=supervisor/hypothesis.conf
             dest=/etc/supervisor/conf.d/hypothesis.conf
+
+- name: Create the nginx configuration file
+  template: src=nginx/hypothesis.conf
+            dest=/etc/nginx/sites-enabled/hypothesis.conf
