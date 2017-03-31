@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+cd /opt/hypothesis/elasticsearch-1.7.2
+export ES_MIN_MEM=128M
+export ES_MAX_MEM=128M
+exec bin/elasticsearch

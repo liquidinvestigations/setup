@@ -46,3 +46,15 @@
   template: src=initialize.d/hypothesis.sh
             dest=/opt/common/initialize.d/hypothesis.sh
             mode=755
+
+- name: Create the libexec folder
+  file: path=/opt/hypothesis/libexec state=directory mode=0755
+
+- name: Create the elasticsearch run script
+  template: src=libexec/elasticsearch
+            dest=/opt/hypothesis/libexec/elasticsearch
+            mode=755
+
+- name: Create the supervisor configuration file
+  template: src=supervisor/hypothesis.conf
+            dest=/etc/supervisor/conf.d/hypothesis.conf
