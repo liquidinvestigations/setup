@@ -2,7 +2,8 @@
 - name: Install the board version of the liquid toolkit in chroot
   hosts: image
   vars_files:
-    - ['vars/defaults.yml', 'vars/config.yml']
+    - vars/defaults.yml
+    - vars/config.yml
   roles:
     - common
     - devel
