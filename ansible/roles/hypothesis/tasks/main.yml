@@ -25,6 +25,16 @@
     virtualenv: /opt/hypothesis/venv
     virtualenv_python: python2
 
+- name: Install npm dependencies
+  npm:
+    path: /opt/hypothesis/h
+
+- name: Build assets
+  command: node_modules/.bin/gulp build
+  args:
+    chdir: /opt/hypothesis/h
+    creates: build
+
 - name: Download elasticsearch v1
   unarchive:
     src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.tar.gz
