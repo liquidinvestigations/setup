@@ -17,7 +17,7 @@
     - python-virtualenv
     - iptables
     - build-essential
-    - openjdk-7-jre-headless
+    - default-jre-headless
     - postgresql
     - postgresql-contrib
     - postgresql-server-dev-all
