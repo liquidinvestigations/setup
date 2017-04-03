@@ -7,5 +7,6 @@
   roles:
     - common
     - devel
+    - node6
     - liquid-core
     - hypothesis
