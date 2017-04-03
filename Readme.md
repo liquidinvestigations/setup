@@ -39,6 +39,7 @@
    # the offset is 264192 * 512 = 135266304
    losetup /dev/loop0 liquid.img -o 135266304
    mount /dev/loop0 /var/local/liquid/target
+   mount --bind /proc /var/local/liquid/target/proc
    resize2fs /dev/loop0
    ```
 
