@@ -4,6 +4,7 @@
   with_items:
     - python2.7-dev
     - rabbitmq-server
+    - libffi-dev
 
 - name: Create the top folder
   file: path=/opt/hypothesis state=directory mode=0755
