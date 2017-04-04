@@ -29,7 +29,7 @@
   file: path=/opt/liquid-core/libexec state=directory mode=0755
 
 - name: Create the runserver script
-  template: src=runserver
+  template: src=libexec/runserver
             dest=/opt/liquid-core/libexec/runserver
             mode=755
 
