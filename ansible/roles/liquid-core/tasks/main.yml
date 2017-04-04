@@ -33,6 +33,11 @@
             dest=/opt/liquid-core/libexec/runserver
             mode=755
 
+- name: Create the create_h_user script
+  template: src=libexec/create_h_user
+            dest=/opt/liquid-core/libexec/create_h_user
+            mode=755
+
 - name: Create the supervisor configuration file
   template: src=supervisor/liquid-core.conf
             dest=/etc/supervisor/conf.d/liquid-core.conf

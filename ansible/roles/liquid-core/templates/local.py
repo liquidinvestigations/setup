@@ -10,3 +10,5 @@ DATABASES = {
         'NAME': '/opt/liquid-core/var/db.sqlite3',
     }
 }
+
+HYPOTHESIS_CREATE_USER_SCRIPT = '/opt/liquid-core/libexec/create_h_user'

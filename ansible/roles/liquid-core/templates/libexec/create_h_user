@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+unset DJANGO_SETTINGS_MODULE
+
+LIQUID_DOMAIN="{{ liquid_domain }}"
+H_USERNAME="$1"
+H_PASSWORD="$2"
+H_EMAIL="$1@$LIQUID_DOMAIN"
+
+exec /opt/hypothesis/libexec/run-h bin/hypothesis user add \
+  --username "$H_USERNAME" \
+  --email "$H_EMAIL" \
+  --password "$H_PASSWORD"
