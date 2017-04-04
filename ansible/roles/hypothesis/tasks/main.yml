@@ -30,6 +30,13 @@
 - name: Install npm dependencies
   npm:
     path: /opt/hypothesis/h
+    production: yes
+
+- name: Rebuild node-sass
+  command: npm rebuild node-sass
+  args:
+    chdir: /opt/hypothesis/h
+    creates: node_modules/node-sass/vendor
 
 - name: Build assets
   command: node_modules/.bin/gulp build
@@ -50,13 +57,14 @@
 
 - name: Change ownership of data and logs folders
   file:
-    path: "{{ item }}"
+    path: "/opt/hypothesis/elasticsearch-1.7.2/{{ item }}"
     owner: liquid
     group: liquid
+    state: directory
     recurse: true
   with_items:
-    - /opt/hypothesis/elasticsearch-1.7.2/data
-    - /opt/hypothesis/elasticsearch-1.7.2/logs
+    - data
+    - logs
 
 - name: Install elasticsearch ICU plugin
   command: bin/plugin install elasticsearch/elasticsearch-analysis-icu/2.7.0
