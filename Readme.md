@@ -35,12 +35,26 @@
 
    ```
    fdisk -lu liquid.img
-   # e.g. sector size 512, 2nd partition starts at sector 264192, so
-   # the offset is 264192 * 512 = 135266304
-   losetup /dev/loop0 liquid.img -o 135266304
-   mount /dev/loop0 /var/local/liquid/target
+   # e.g. sector size 512
+   # 1st partition starts at 2048, offset is 2048 * 512 = 1048576
+   # 2nd partition starts at 264192, offset is 264192 * 512 = 135266304
+   losetup /dev/loop0 liquid.img -o 1048576
+   losetup /dev/loop1 liquid.img -o 135266304
+   mount /dev/loop1 /var/local/liquid/target
+   mount /dev/loop0 /var/local/liquid/target/media/boot
    mount --bind /proc /var/local/liquid/target/proc
-   resize2fs /dev/loop0
+   resize2fs /dev/loop1
+   ```
+
+* Upgrade the base packages, because `bootini` displays an interactive message,
+  and blocks when upgraded from ansible. Also, install python 2.7:
+
+   ```
+   chroot /var/local/liquid/target
+   apt-get update -y
+   apt-get upgrade -y
+   apt-get install -y python2.7
+   exit
    ```
 
 * Run the ansible playbook:
