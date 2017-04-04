@@ -15,7 +15,7 @@
 * Enlarge the image, we need at least 2GB to be safe:
 
    ```
-   truncate liquid-image.img --size=2G
+   truncate liquid.img --size=2G
    fdisk liquid.img
    ```
 
