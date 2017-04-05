@@ -16,7 +16,6 @@
       pkg:
         - nodejs=6.*
       state: installed
-      #state: latest
 
   when: ansible_architecture != 'aarch64'
 
