@@ -25,6 +25,11 @@
   args:
     chdir: /opt/liquid-core/liquid-core
 
+- name: Collect django static files
+  shell: ../venv/bin/python ./manage.py collectstatic --noinput
+  args:
+    chdir: /opt/liquid-core/liquid-core
+
 - name: Create the libexec folder
   file: path=/opt/liquid-core/libexec state=directory mode=0755
 
