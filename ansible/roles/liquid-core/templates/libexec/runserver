@@ -3,4 +3,7 @@ set -e
 
 cd /opt/liquid-core/liquid-core
 source /opt/liquid-core/venv/bin/activate
-exec ./manage.py runserver 11903
+exec waitress-serve \
+  --port 11903 \
+  --host 127.0.0.1 \
+  liquidcore.site.wsgi:application
