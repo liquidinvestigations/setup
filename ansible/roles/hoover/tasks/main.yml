@@ -1,0 +1,10 @@
+---
+- name: Create the top folder
+  file: path=/opt/hoover state=directory mode=0755
+
+- name: Run hoover initial setup
+  shell: "echo | python3 <(curl -sL https://github.com/hoover/setup/raw/master/install.py)"
+  args:
+    executable: /bin/bash
+    chdir: /opt/hoover
+    creates: hoover
