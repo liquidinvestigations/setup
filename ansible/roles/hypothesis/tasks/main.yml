@@ -12,10 +12,11 @@
 - name: Download the source code
   git: repo=https://github.com/hypothesis/h.git
        dest=/opt/hypothesis/h
+       version=b90a536aa6751bbd27ee5ae4294c69292d349cba
 
 - name: Install virtualenv with latest setuptools and pip
   pip:
-    name: ['setuptools', 'pip', 'pyparsing==2.1.5']
+    name: ['setuptools', 'pip', 'pyparsing==2.1.10']
     extra_args: '--upgrade'
     virtualenv: /opt/hypothesis/venv
     virtualenv_python: python2
