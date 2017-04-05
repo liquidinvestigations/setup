@@ -8,5 +8,6 @@
     - common
     - devel
     - node6
+    - python3
     - liquid-core
     - hypothesis
