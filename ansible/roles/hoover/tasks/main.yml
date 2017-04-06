@@ -3,12 +3,69 @@
   file: path=/opt/hoover state=directory mode=0755
 
 - name: Run hoover initial setup
-  shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
+  shell: "python3.6 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
   environment:
+    HOOVER_HOME: "/opt/hoover"
     HOOVER_BOOTSTRAP_NO_DB: "True"
-    HOOVER_ALLOWED_HOSTS: "{{ liquid_domain }}"
+    HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
     HOOVER_SETUP_BRANCH: "automate-hoover-script"
+    HOOVER_ELASTICSEARCH_URL: "localhost:14352"
   args:
     executable: /bin/bash
-    chdir: /opt
-    creates: hoover
+    chdir: /opt/hoover
+    creates: /opt/hoover
+
+- name: Download elasticsearch v2
+  unarchive:
+    src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.3.tar.gz
+    dest: /opt/hoover
+    remote_src: yes
+    creates: /opt/hoover/elasticsearch-2.4.3
+
+- name: Write the elasticsearch configuration file
+  template: src=elasticsearch-config/elasticsearch.yml
+            dest=/opt/hoover/elasticsearch-2.4.3/config/elasticsearch.yml
+
+- name: Change ownership of data and logs folders
+  file:
+    path: "/opt/hoover/elasticsearch-2.4.3/{{ item }}"
+    owner: liquid
+    group: liquid
+    state: directory
+    recurse: true
+  with_items:
+    - data
+    - logs
+
+- name: Create the supervisor configuration file
+  template: src=supervisor/hoover.conf
+            dest=/etc/supervisor/conf.d/hoover.conf
+
+- name: Create the nginx configuration file
+  template: src=nginx/hoover.conf
+            dest=/etc/nginx/sites-enabled/hoover.conf
+
+- name: Create the libexec folder
+  file: path=/opt/hoover/libexec state=directory mode=0755
+
+- name: Create the elasticsearch run script
+  template: src=libexec/elasticsearch
+            dest=/opt/hoover/libexec/elasticsearch
+            mode=755
+
+- name: Create the runserver-search helper
+  template: src=libexec/runserver-search
+            dest=/opt/hoover/libexec/runserver-search
+            mode=755
+
+- name: Create the runserver-snoop helper
+  template: src=libexec/runserver-snoop
+            dest=/opt/hoover/libexec/runserver-snoop
+            mode=755
+
+- name: Create the initialization script
+  template: src=initialize.d/hoover.sh
+            dest=/opt/common/initialize.d/hoover.sh
+            mode=755
+
+
