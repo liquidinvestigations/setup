@@ -3,7 +3,12 @@
   file: path=/opt/hoover state=directory mode=0755
 
 - name: Run hoover initial setup
-  shell: "echo | python3 <(curl -sL https://github.com/hoover/setup/raw/master/install.py)"
+  shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
+  environment:
+    HOOVER_HOME: "/opt/hoover"
+    HOOVER_BOOTSTRAP_NO_DB: "True"
+    HOOVER_ALLOWED_HOSTS: "{{ liquid_domain }}"
+    HOOVER_SETUP_BRANCH: "automate-hoover-script"
   args:
     executable: /bin/bash
     chdir: /opt/hoover
