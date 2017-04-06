@@ -45,3 +45,14 @@
 
 - name: Create folder for init scripts of other modules
   file: path=/opt/common/initialize.d state=directory mode=0755
+
+- name: Create the boot script
+  template: src=boot.sh
+            dest=/opt/common/boot.sh
+            mode=755
+
+- name: Start boot script
+  lineinfile:
+    dest: /etc/rc.local
+    insertbefore: "exit 0"
+    line: "/opt/common/boot.py >> /var/log/rc.local.log 2>&1"
