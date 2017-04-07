@@ -1,9 +1,27 @@
-## Requirements
+# Liquid-setup
+This repository contains [ansible](http://docs.ansible.com/ansible/) scripts
+that set up the software stack for liquid investigations. It's designed to work
+in two scenarios: installation on a server or VPS, and preparing an OS image
+for an ARM64 microboard.
 
+
+## Requirements
 * ansible 2.2 or newer
 
-## Set up a microboard image based on a fresh ubuntu image:
 
+## Configuration
+The ansible playbooks read configuration from `ansible/vars/defaults.yml` and
+`ansible/vars/config.yml`. The `config.yml` file does not exist initially, so
+you need to create it:
+
+```shell
+touch ansible/vars/config.yml
+```
+
+You may use it to override any variables you want from `config.yml`.
+
+
+## Set up a microboard image based on a fresh ubuntu image:
 * Get a fresh Ubuntu Xenial image from `http://de.eu.odroid.in/ubuntu_16.04lts/`:
 
    ```
@@ -64,11 +82,13 @@
    sudo ansible-playbook board_chroot.yml
    ```
 
+
 ## Upgrade an existing installation on a microboard:
 ```
 cd liquid-setup/ansible
 sudo ansible-playbook board_local.yml
 ```
+
 
 ## Set up the bundle on a cloud server:
 ```
