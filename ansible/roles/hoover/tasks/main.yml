@@ -9,7 +9,8 @@
     HOOVER_BOOTSTRAP_NO_DB: "True"
     HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
     HOOVER_SETUP_BRANCH: "automate-hoover-script"
-    HOOVER_ELASTICSEARCH_URL: "localhost:14352"
+    HOOVER_ELASTICSEARCH_URL: "http://localhost:14352"
+    HOOVER_TIKA_URL: "http://localhost:15423"
   args:
     executable: /bin/bash
     chdir: /opt/hoover
@@ -36,6 +37,11 @@
   with_items:
     - data
     - logs
+
+- name: Download Apache Tika
+  get_url:
+    dest: /opt/hoover/
+    url: http://apache.javapipe.com/tika/tika-server-1.14.jar
 
 - name: Create the supervisor configuration file
   template: src=supervisor/hoover.conf
@@ -68,4 +74,8 @@
             dest=/opt/common/initialize.d/hoover.sh
             mode=755
 
+- name: Create the tika run script
+  template: src=libexec/tika
+            dest=/opt/hoover/libexec/tika
+            mode=755
 
