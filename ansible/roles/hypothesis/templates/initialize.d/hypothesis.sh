@@ -3,8 +3,10 @@ set -e
 
 cd /opt/hypothesis
 
-if [ ! -e libexec/secret_key.sh ]; then
-  echo "export SECRET_KEY='$(openssl rand -base64 32 | tr -d '\n')'" > libexec/secret_key.sh
+if [ ! -e libexec/secrets.sh ]; then
+  echo "export SECRET_KEY='$(openssl rand -base64 32 | tr -d '\n')'" >> libexec/secrets.sh
+  echo "export CLIENT_ID='$(openssl rand -base64 32 | tr -d '\n')'" >> libexec/secrets.sh
+  echo "export CLIENT_SECRET='$(openssl rand -base64 32 | tr -d '\n')'" >> libexec/secrets.sh
 fi
 
 supervisorctl start hypothesis-elasticsearch

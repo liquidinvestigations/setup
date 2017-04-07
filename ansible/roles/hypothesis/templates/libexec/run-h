@@ -3,7 +3,7 @@ set -e
 
 cd /opt/hypothesis/h
 source ../venv/bin/activate
-source ../libexec/secret_key.sh
+source ../libexec/secrets.sh
 
 export DATABASE_URL="postgresql:///hypothesis"
 export APP_URL="http://hypothesis.{{ liquid_domain }}"
