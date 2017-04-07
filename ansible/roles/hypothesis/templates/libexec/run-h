@@ -7,6 +7,7 @@ source ../libexec/secret_key.sh
 
 export DATABASE_URL="postgresql:///hypothesis"
 export APP_URL="http://hypothesis.{{ liquid_domain }}"
+export CLIENT_URL="http://client.hypothesis.{{ liquid_domain }}"
 export ELASTICSEARCH_HOST="http://127.0.0.1:14312"
 
 exec "$@"

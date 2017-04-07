@@ -45,6 +45,8 @@
     chdir: /opt/hypothesis/h
     creates: build
 
+- include: tasks/client.yml
+
 - name: Download elasticsearch v1
   unarchive:
     src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.tar.gz
