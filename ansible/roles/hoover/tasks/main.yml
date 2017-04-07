@@ -2,6 +2,23 @@
 - name: Create the top folder
   file: path=/opt/hoover state=directory mode=0755
 
+- name: Install required system packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - python-psycopg2
+    - libmagic-dev
+    - python3-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - p7zip-full
+    - p7zip-rar
+    - pst-utils
+    - cpanminus # for cpanm ansible module
+
+- name: Install msgconvert from CPAN
+  cpanm:
+      name: Email::Outlook::Message
+
 - name: Run hoover initial setup
   shell: "python3.6 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
   environment:
