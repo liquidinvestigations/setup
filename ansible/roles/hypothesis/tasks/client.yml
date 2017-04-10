@@ -1,6 +1,6 @@
 ---
 - name: Download pre-built client code
-  git: repo=https://github.com/hoover/liquid-h-client-build.git
+  git: repo=https://github.com/liquidinvestigations/h-client-build.git
        dest=/opt/hypothesis/h-client-build
 
 - name: Bake the boot script

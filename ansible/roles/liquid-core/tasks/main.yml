@@ -3,7 +3,7 @@
   file: path=/opt/liquid-core state=directory mode=0755
 
 - name: Download the source code
-  git: repo=https://github.com/hoover/liquid-core.git
+  git: repo=https://github.com/liquidinvestigations/core.git
        dest=/opt/liquid-core/liquid-core
 
 - name: Create the configuration file
