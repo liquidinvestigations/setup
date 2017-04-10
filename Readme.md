@@ -30,10 +30,10 @@ You may use it to override any variables you want from `config.yml`.
    mv ubuntu64-16.04-minimal-odroid-c2-20160815.img liquid.img
    ```
 
-* Enlarge the image, we need at least 2GB to be safe:
+* Enlarge the image, we need at least 3GB to be safe:
 
    ```
-   truncate liquid.img --size=2G
+   truncate liquid.img --size=3G
    fdisk liquid.img
    ```
 
@@ -71,7 +71,8 @@ You may use it to override any variables you want from `config.yml`.
    chroot /var/local/liquid/target
    apt-get update -y
    apt-get upgrade -y
-   apt-get install -y python2.7
+   apt-get install -y python
+   apt-get clean
    exit
    ```
 
