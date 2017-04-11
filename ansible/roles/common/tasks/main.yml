@@ -56,3 +56,9 @@
     dest: /etc/rc.local
     insertbefore: "exit 0"
     line: "/opt/common/boot.py >> /var/log/rc.local.log 2>&1"
+
+- name: Nginx hash bucket size
+  lineinfile:
+    dest: /etc/nginx/nginx.conf
+    regexp: 'server_names_hash_bucket_size'
+    line: '	server_names_hash_bucket_size 64;'
