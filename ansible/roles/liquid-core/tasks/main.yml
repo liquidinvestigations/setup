@@ -15,7 +15,7 @@
   pip:
     requirements: /opt/liquid-core/liquid-core/requirements.txt
     virtualenv: /opt/liquid-core/venv
-    virtualenv_python: python3.6
+    virtualenv_python: python3
 
 - name: Run migrations
   shell: ../venv/bin/python ./manage.py migrate

@@ -25,7 +25,7 @@
       name: Email::Outlook::Message
 
 - name: Run hoover initial setup
-  shell: "python3.6 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
+  shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
   environment:
     HOOVER_HOME: "/opt/hoover"
     HOOVER_BOOTSTRAP_NO_DB: "True"
