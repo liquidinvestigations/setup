@@ -22,6 +22,10 @@ You may use it to override any variables you want from `config.yml`.
 
 
 ## Set up a microboard image based on a fresh ubuntu image:
+* Make sure there are no services (postgresql, elasticsearch, etc) running on
+  the host system as they may interfere with packages installed in the chroot
+  image.
+
 * Get a fresh Ubuntu Xenial image from `http://de.eu.odroid.in/ubuntu_16.04lts/`:
 
    ```
