@@ -14,6 +14,12 @@
        dest=/opt/hypothesis/h
        version=b90a536aa6751bbd27ee5ae4294c69292d349cba
 
+- name: Change ownership of h folder
+  file:
+    path: /opt/hypothesis/h
+    owner: liquid
+    group: liquid
+
 - name: Install virtualenv with latest setuptools and pip
   pip:
     name: ['setuptools', 'pip', 'pyparsing==2.1.10']
