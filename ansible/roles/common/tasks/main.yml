@@ -55,7 +55,7 @@
   lineinfile:
     dest: /etc/rc.local
     insertbefore: "exit 0"
-    line: "/opt/common/boot.py >> /var/log/rc.local.log 2>&1"
+    line: "/opt/common/boot.sh >> /var/log/rc.local.log 2>&1"
 
 - name: Nginx hash bucket size
   lineinfile:
