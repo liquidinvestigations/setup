@@ -5,6 +5,7 @@ cd /opt/hypothesis/h
 source ../venv/bin/activate
 source ../libexec/secrets.sh
 
+export PYTHONPATH="${PWD}"
 export DATABASE_URL="postgresql:///hypothesis"
 export APP_URL="http://hypothesis.{{ liquid_domain }}"
 export CLIENT_URL="http://client.hypothesis.{{ liquid_domain }}"
