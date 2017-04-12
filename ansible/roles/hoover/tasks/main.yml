@@ -49,17 +49,13 @@
   template: src=elasticsearch-config/elasticsearch.yml
             dest=/opt/hoover/elasticsearch-2.4.3/config/elasticsearch.yml
 
-- name: Change ownership of data and logs folders
+- name: Change ownership of elasticsearch data and logs folders
   file:
-    path: "/opt/hoover/elasticsearch-2.4.3/{{ item }}"
+    path: "/opt/hoover/elasticsearch-2.4.3"
     owner: liquid
     group: liquid
     state: directory
     recurse: true
-  with_items:
-    - data
-    - logs
-    - plugins
 
 - name: Download Apache Tika
   get_url:
