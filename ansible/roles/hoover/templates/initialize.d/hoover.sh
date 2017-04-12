@@ -69,3 +69,9 @@ EOF
 
 supervisorctl stop hoover-snoop
 supervisorctl stop hoover-elasticsearch
+
+sudo -u liquid bash <<EOF
+. /opt/hoover/venvs/snoop/bin/activate
+cd /opt/hoover/snoop
+py.test
+EOF

@@ -109,3 +109,7 @@
   git:
     repo: https://github.com/hoover/testdata.git
     dest: /opt/hoover/testdata
+
+- name: Create the testing_local.py config for snoop
+  template: src=hoover-snoop-config/testing_local.py
+            dest=/opt/hoover/snoop/snoop/site/settings/testing_local.py
