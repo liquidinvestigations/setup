@@ -59,6 +59,7 @@
   with_items:
     - data
     - logs
+    - plugins
 
 - name: Download Apache Tika
   get_url:
