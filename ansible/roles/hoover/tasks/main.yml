@@ -77,6 +77,9 @@
 - name: Create the libexec folder
   file: path=/opt/hoover/libexec state=directory mode=0755
 
+- name: Set permissions on the cache folder
+  file: path=/opt/hoover/cache  state=directory mode=0755 owner=liquid group=liquid recurse=true
+
 - name: Create the elasticsearch run script
   template: src=libexec/elasticsearch
             dest=/opt/hoover/libexec/elasticsearch
