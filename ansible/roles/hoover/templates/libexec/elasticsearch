@@ -2,6 +2,5 @@
 set -e
 
 cd /opt/hoover/elasticsearch-2.4.3
-export ES_MIN_MEM=256M
-export ES_MAX_MEM=256M
+export ES_HEAP_SIZE=256M
 exec bin/elasticsearch
