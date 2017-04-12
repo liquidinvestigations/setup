@@ -102,3 +102,7 @@
             dest=/opt/hoover/libexec/tika
             mode=755
 
+- name: Clone the testdata repo
+  git:
+    repo: https://github.com/hoover/testdata.git
+    dest: /opt/hoover/testdata
