@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+cd /opt/hoover/elasticsearch-2.4.3
+export ES_HEAP_SIZE=256M
+exec bin/elasticsearch

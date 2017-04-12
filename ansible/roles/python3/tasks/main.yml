@@ -23,4 +23,18 @@
       dest: /usr/local/bin/python3
       state: link
 
+  - name: Download virtualenv 15.1.0
+    unarchive:
+      src: https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz
+      dest: /opt
+      remote_src: yes
+      creates: /opt/virtualenv-15.1.0
+
+  - name: Install virtualenv 15.1.0 from source
+    shell: "python3 setup.py install"
+    args:
+      executable: /bin/bash
+      chdir: /opt/virtualenv-15.1.0
+
+
   when: ansible_distribution_release == 'jessie'

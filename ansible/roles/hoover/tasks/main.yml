@@ -1,0 +1,111 @@
+---
+- apt_repository:
+    repo: "{{item}}"
+    filename: multiverse
+  with_items:
+    - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}} multiverse'
+    - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}}-updates multiverse'
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install required system packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - python-psycopg2
+    - libmagic-dev
+    - python3-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - p7zip-full
+    - p7zip-rar
+    - pst-utils
+    - cpanminus # for cpanm ansible module
+
+- name: Install msgconvert from CPAN
+  cpanm:
+      name: Email::Outlook::Message
+
+- name: Run hoover initial setup
+  shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
+  environment:
+    HOOVER_HOME: "/opt/hoover"
+    HOOVER_BOOTSTRAP_NO_DB: "True"
+    HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
+    HOOVER_SETUP_BRANCH: "automate-hoover-script"
+    HOOVER_ES_URL: "http://localhost:14352"
+    HOOVER_TIKA_URL: "http://localhost:15423"
+  args:
+    executable: /bin/bash
+    chdir: /opt
+    creates: /opt/hoover
+
+- name: Download elasticsearch v2
+  unarchive:
+    src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.3.tar.gz
+    dest: /opt/hoover
+    remote_src: yes
+    creates: /opt/hoover/elasticsearch-2.4.3
+
+- name: Write the elasticsearch configuration file
+  template: src=elasticsearch-config/elasticsearch.yml
+            dest=/opt/hoover/elasticsearch-2.4.3/config/elasticsearch.yml
+
+- name: Change ownership of elasticsearch data and logs folders
+  file:
+    path: "/opt/hoover/elasticsearch-2.4.3"
+    owner: liquid
+    group: liquid
+    state: directory
+    recurse: true
+
+- name: Download Apache Tika
+  get_url:
+    dest: /opt/hoover/
+    url: http://apache.javapipe.com/tika/tika-server-1.14.jar
+
+- name: Create the supervisor configuration file
+  template: src=supervisor/hoover.conf
+            dest=/etc/supervisor/conf.d/hoover.conf
+
+- name: Create the nginx configuration file
+  template: src=nginx/hoover.conf
+            dest=/etc/nginx/sites-enabled/hoover.conf
+
+- name: Create the libexec folder
+  file: path=/opt/hoover/libexec state=directory mode=0755
+
+- name: Set permissions on the cache folder
+  file: path=/opt/hoover/cache  state=directory mode=0755 owner=liquid group=liquid recurse=true
+
+- name: Create the elasticsearch run script
+  template: src=libexec/elasticsearch
+            dest=/opt/hoover/libexec/elasticsearch
+            mode=755
+
+- name: Create the runserver-search helper
+  template: src=libexec/runserver-search
+            dest=/opt/hoover/libexec/runserver-search
+            mode=755
+
+- name: Create the runserver-snoop helper
+  template: src=libexec/runserver-snoop
+            dest=/opt/hoover/libexec/runserver-snoop
+            mode=755
+
+- name: Create the initialization script
+  template: src=initialize.d/hoover.sh
+            dest=/opt/common/initialize.d/hoover.sh
+            mode=755
+
+- name: Create the tika run script
+  template: src=libexec/tika
+            dest=/opt/hoover/libexec/tika
+            mode=755
+
+- name: Clone the testdata repo
+  git:
+    repo: https://github.com/hoover/testdata.git
+    dest: /opt/hoover/testdata
+
+- name: Create the testing_local.py config for snoop
+  template: src=hoover-snoop-config/testing_local.py
+            dest=/opt/hoover/snoop/snoop/site/settings/testing_local.py
