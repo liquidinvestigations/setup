@@ -31,7 +31,7 @@
     HOOVER_BOOTSTRAP_NO_DB: "True"
     HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
     HOOVER_SETUP_BRANCH: "automate-hoover-script"
-    HOOVER_ELASTICSEARCH_URL: "http://localhost:14352"
+    HOOVER_ES_URL: "http://localhost:14352"
     HOOVER_TIKA_URL: "http://localhost:15423"
   args:
     executable: /bin/bash
