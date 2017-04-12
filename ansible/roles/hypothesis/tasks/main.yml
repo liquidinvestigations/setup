@@ -12,7 +12,7 @@
 - name: Download the source code
   git: repo=https://github.com/hypothesis/h.git
        dest=/opt/hypothesis/h
-       version=b90a536aa6751bbd27ee5ae4294c69292d349cba
+       version=53046f652c801b85e792c0020fa71f7493b249da
 
 - name: Change ownership of h folder
   file:
