@@ -42,9 +42,19 @@
             dest=/opt/liquid-core/libexec/runserver
             mode=755
 
-- name: Create the create_h_user script
-  template: src=libexec/create_h_user
-            dest=/opt/liquid-core/libexec/create_h_user
+- name: Create the h_user_create script
+  template: src=libexec/h_user_create
+            dest=/opt/liquid-core/libexec/h_user_create
+            mode=755
+
+- name: Create the h_user_passwd script
+  template: src=libexec/h_user_passwd
+            dest=/opt/liquid-core/libexec/h_user_passwd
+            mode=755
+
+- name: Create the h_user_delete script
+  template: src=libexec/h_user_delete
+            dest=/opt/liquid-core/libexec/h_user_delete
             mode=755
 
 - name: Create the supervisor configuration file

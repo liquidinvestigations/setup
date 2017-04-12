@@ -11,5 +11,10 @@ DATABASES = {
     }
 }
 
-HYPOTHESIS_CREATE_USER_SCRIPT = '/opt/liquid-core/libexec/create_h_user'
+HYPOTHESIS_USER_SCRIPTS = {
+    'create': '/opt/liquid-core/libexec/h_user_create',
+    'delete': '/opt/liquid-core/libexec/h_user_delete',
+    'passwd': '/opt/liquid-core/libexec/h_user_passwd',
+}
+
 HYPOTHESIS_APP_URL = 'http://hypothesis.{{ liquid_domain }}'

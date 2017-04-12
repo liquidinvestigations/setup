@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+unset DJANGO_SETTINGS_MODULE
+
+H_USERNAME="$1"
+H_PASSWORD="$2"
+
+exec /opt/hypothesis/libexec/run-h bin/hypothesis user password \
+  "$H_USERNAME" \
+  --password "$H_PASSWORD"
