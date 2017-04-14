@@ -24,19 +24,25 @@
   cpanm:
       name: Email::Outlook::Message
 
-- name: Run hoover initial setup
-  shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
-  environment:
-    HOOVER_HOME: "/opt/hoover"
-    HOOVER_BOOTSTRAP_NO_DB: "True"
-    HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
-    HOOVER_SETUP_BRANCH: "automate-hoover-script"
-    HOOVER_ES_URL: "http://localhost:14352"
-    HOOVER_TIKA_URL: "http://localhost:15423"
-  args:
-    executable: /bin/bash
-    chdir: /opt
-    creates: /opt/hoover
+- block:
+  - name: Run hoover initial setup
+    shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
+    environment:
+      HOOVER_HOME: "/opt/hoover"
+      HOOVER_BOOTSTRAP_NO_DB: "True"
+      HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
+      HOOVER_SETUP_BRANCH: "automate-hoover-script"
+      HOOVER_ES_URL: "http://localhost:14352"
+      HOOVER_TIKA_URL: "http://localhost:15423"
+    args:
+      executable: /bin/bash
+      chdir: /opt
+      creates: /opt/hoover
+  rescue:
+    - name: Delete the hoover folder after failed install attempt
+      shell: "rm -rf /opt/hoover"
+    - name: Fail the task because Hoover failed to install
+      command: /bin/false
 
 - name: Download elasticsearch v2
   unarchive:
