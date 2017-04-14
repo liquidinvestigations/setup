@@ -17,6 +17,11 @@
     virtualenv: /opt/liquid-core/venv
     virtualenv_python: python3
 
+- name: Create the var folder
+  file:
+    path: /opt/liquid-core/var
+    state: directory
+
 - name: Run migrations
   shell: ../venv/bin/python ./manage.py migrate
   args:
