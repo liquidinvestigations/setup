@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 cd /opt/hypothesis
 
@@ -12,6 +13,7 @@ fi
 supervisorctl start hypothesis-elasticsearch
 
 sudo -u liquid bash <<EOF
+set -x
 createdb hypothesis
 psql hypothesis -c 'create extension if not exists "uuid-ossp";'
 

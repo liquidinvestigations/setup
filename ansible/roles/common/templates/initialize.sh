@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+set -x
+
+date
 
 supervisor_up() {
   ! supervisorctl status | grep -q 'supervisor\.sock no such file'
@@ -14,3 +17,5 @@ for file in /opt/common/initialize.d/*
 do
   "$file"
 done
+
+date

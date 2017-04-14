@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 cd /opt/hoover
 
@@ -15,10 +16,12 @@ function wait_url {
     done
 }
 
+service postgresql start
 supervisorctl start hoover-elasticsearch
 
 # create and migrate dbs
 sudo -u liquid bash <<EOF
+set -x
 psql -lqt | cut -d \| -f 1 | grep -qw hoover-search || createdb hoover-search
 psql -lqt | cut -d \| -f 1 | grep -qw hoover-snoop || createdb hoover-snoop
 /opt/hoover/bin/hoover search migrate
@@ -35,6 +38,7 @@ supervisorctl start hoover-snoop
 
 # create the testdata collection and walk / digest it
 sudo -u liquid bash <<EOF
+set -x
 /opt/hoover/bin/hoover snoop createcollection /opt/hoover/testdata testdata testdata "Hoover Test Data", "Hoover Test Data"
 /opt/hoover/bin/hoover snoop walk testdata
 /opt/hoover/bin/hoover snoop digestqueue
@@ -45,6 +49,7 @@ tika_url="http://localhost:15423"
 wait_url $tika_url
 
 sudo -u liquid bash <<EOF
+set -x
 /opt/hoover/bin/hoover snoop worker digest
 EOF
 
@@ -55,6 +60,7 @@ es_url="http://localhost:14352"
 wait_url $es_url
 
 sudo -u liquid bash <<EOF
+set -x
 /opt/hoover/bin/hoover snoop resetindex testdata
 EOF
 
@@ -63,6 +69,7 @@ wait_url $snoop_url/testdata/json
 
 
 sudo -u liquid bash <<EOF
+set -x
 /opt/hoover/bin/hoover search addcollection testdata "$snoop_url/testdata/json"
 /opt/hoover/bin/hoover search update testdata
 EOF
@@ -71,7 +78,10 @@ supervisorctl stop hoover-snoop
 supervisorctl stop hoover-elasticsearch
 
 sudo -u liquid bash <<EOF
+set -x
 . /opt/hoover/venvs/snoop/bin/activate
 cd /opt/hoover/snoop
-py.test
+#py.test
 EOF
+
+service postgresql stop
