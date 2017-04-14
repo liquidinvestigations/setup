@@ -26,12 +26,11 @@
 
 - block:
   - name: Run hoover initial setup
-    shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/automate-hoover-script/install.py)"
+    shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/master/install.py)"
     environment:
       HOOVER_HOME: "/opt/hoover"
       HOOVER_BOOTSTRAP_NO_DB: "True"
       HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
-      HOOVER_SETUP_BRANCH: "automate-hoover-script"
       HOOVER_ES_URL: "http://localhost:14352"
       HOOVER_TIKA_URL: "http://localhost:15423"
     args:
