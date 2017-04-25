@@ -1,4 +1,4 @@
-# Liquid-setup
+# Liquid Investigations: Software Stack Setup
 This repository contains [ansible](http://docs.ansible.com/ansible/) scripts
 that set up the software stack for liquid investigations. It's designed to work
 in two scenarios: installation on a server or VPS, and preparing an OS image
