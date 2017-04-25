@@ -4,9 +4,13 @@ that set up the software stack for liquid investigations. It's designed to work
 in two scenarios: installation on a server or VPS, and preparing an OS image
 for an ARM64 microboard.
 
+Find more information about the Liquid Investigations project on the
+[home page](https://liquidinvestigations.org/wordpress).
+
 
 ## Requirements
 * ansible 2.2 or newer
+* ARM Boards: Ubuntu 16.04 LTS (Xenial), Cloud Servers: Debian 8.7 (Jessie)
 
 
 ## Configuration
