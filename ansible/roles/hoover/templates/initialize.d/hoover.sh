@@ -16,7 +16,6 @@ function wait_url {
     done
 }
 
-service postgresql start
 supervisorctl start hoover-elasticsearch
 
 # create and migrate dbs
@@ -83,5 +82,3 @@ set -x
 cd /opt/hoover/snoop
 #py.test
 EOF
-
-service postgresql stop
