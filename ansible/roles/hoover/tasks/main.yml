@@ -3,9 +3,17 @@
     repo: "{{item}}"
     filename: multiverse
   with_items:
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+  when: ansible_distribution == 'Ubuntu' and ansible_architecture != 'aarch64'
+
+- apt_repository:
+    repo: "{{item}}"
+    filename: multiverse
+  with_items:
     - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}} multiverse'
     - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}}-updates multiverse'
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu' and ansible_architecture == 'aarch64'
 
 - name: Install required system packages
   apt: name={{ item }} state=latest
