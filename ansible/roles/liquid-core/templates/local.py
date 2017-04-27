@@ -17,4 +17,5 @@ HYPOTHESIS_USER_SCRIPTS = {
     'passwd': '/opt/liquid-core/libexec/h_user_passwd',
 }
 
+HOOVER_APP_URL = 'http://hoover.{{ liquid_domain }}'
 HYPOTHESIS_APP_URL = 'http://hypothesis.{{ liquid_domain }}'
