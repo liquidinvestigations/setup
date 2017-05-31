@@ -25,7 +25,7 @@ touch ansible/vars/config.yml
 You may use it to override any variables you want from `config.yml`.
 
 
-## Set up a microboard image based on a fresh ubuntu image:
+### Set up a microboard image based on a fresh ubuntu image:
 * Make sure there are no services (postgresql, elasticsearch, etc) running on
   the host system as they may interfere with packages installed in the chroot
   image.
@@ -92,17 +92,35 @@ You may use it to override any variables you want from `config.yml`.
    ```
 
 
-## Upgrade an existing installation on a microboard:
+### Upgrade an existing installation on a microboard:
 ```
 cd liquid-setup/ansible
 sudo ansible-playbook board_local.yml
 ```
 
 
-## Set up the bundle on a cloud server:
+### Set up the bundle on a cloud server:
 ```
 cd liquid-setup/ansible
 sudo ansible-playbook server.yml
 ```
 
 Note: `non-free` package sources must be used for Debian.
+
+
+## First boot
+On first boot, the bundle will configure databases, and import the
+[testdata](https://github.com/hoover/testdata) collection into Hoover. This
+will take a few minutes. You can follow the progress in the log file:
+
+```
+tail -f /var/log/rc.local.log
+```
+
+When the initialization scripts compete successfully, they will create the file
+`/opt/common/first_boot_done`, so they don't run on the next boot.
+
+### hotspot
+After the first-boot scripts complete, the system will attempt to create a
+wireless hotspot, if it detecs any AP-capable wireless interfaces. The SSID is
+`liquid`, password `chocolate`.
