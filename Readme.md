@@ -16,10 +16,10 @@ Find more information about the Liquid Investigations project on the
 ## Configuration
 The ansible playbooks read configuration from `ansible/vars/defaults.yml` and
 `ansible/vars/config.yml`. The `config.yml` file does not exist initially, so
-you need to create it:
+you need to create it. Let's set a custom domain name for our build:
 
 ```shell
-touch ansible/vars/config.yml
+echo "liquid_domain: odroid.liquid" > ansible/vars/config.yml
 ```
 
 You may use it to override any variables you want from `config.yml`.
@@ -109,7 +109,7 @@ Note: `non-free` package sources must be used for Debian.
 
 
 ## First boot
-On first boot, the bundle will configure databases, and import the
+On first (re)boot, the bundle will configure databases, and import the
 [testdata](https://github.com/hoover/testdata) collection into Hoover. This
 will take a few minutes. You can follow the progress in the log file:
 
@@ -124,3 +124,11 @@ When the initialization scripts compete successfully, they will create the file
 After the first-boot scripts complete, the system will attempt to create a
 wireless hotspot, if it detecs any AP-capable wireless interfaces. The SSID is
 `liquid`, password `chocolate`.
+
+### Hoover and Hypothesis
+By default, Hoover and Hypothesis are not started. To start them:
+
+```
+supervisorctl start hoover-elasticsearch hoover-search hoover-snoop hoover-tika
+supervisorctl start hypothesis-beat hypothesis-elasticsearch hypothesis-web hypothesis-websocket hypothesis-worker
+```
