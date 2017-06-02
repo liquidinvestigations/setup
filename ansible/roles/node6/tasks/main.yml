@@ -38,3 +38,24 @@
     with_items:
       - node
       - npm
+
+- when: ansible_architecture == 'armv7l'
+  block:
+  - name: Create node_6.x folder
+    file: path=/opt/node_6.x state=directory mode=0755
+
+  - name: Download nodejs v6.10.2
+    unarchive:
+      src: https://nodejs.org/dist/v6.10.1/node-v6.10.1-linux-armv7l.tar.gz
+      dest: /opt/node_6.x
+      remote_src: yes
+      creates: /opt/node_6.x/node-v6.10.1-linux-armv7l
+
+  - name: Create symlinks in /usr/local/bin
+    file:
+      src: /opt/node_6.x/node-v6.10.1-linux-armv7l/bin/{{ item }}
+      dest: /usr/local/bin/{{ item }}
+      state: link
+    with_items:
+      - node
+      - npm
