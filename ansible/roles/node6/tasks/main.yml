@@ -1,5 +1,6 @@
 ---
-- block:
+- when: ansible_architecture == 'x86_64'
+  block:
   - name: Import GPG key
     apt_key:
       url: https://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0x1655A0AB68576280
@@ -17,9 +18,8 @@
         - nodejs=6.*
       state: installed
 
-  when: ansible_architecture != 'aarch64'
-
-- block:
+- when: ansible_architecture == 'aarch64'
+  block:
   - name: Create node_6.x folder
     file: path=/opt/node_6.x state=directory mode=0755
 
@@ -38,5 +38,3 @@
     with_items:
       - node
       - npm
-
-  when: ansible_architecture == 'aarch64'
