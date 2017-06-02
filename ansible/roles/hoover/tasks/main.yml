@@ -5,7 +5,7 @@
   with_items:
     - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
     - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
-  when: ansible_distribution == 'Ubuntu' and ansible_architecture != 'aarch64'
+  when: ansible_distribution == 'Ubuntu' and ansible_architecture == 'x86_64'
 
 - apt_repository:
     repo: "{{item}}"
@@ -13,7 +13,7 @@
   with_items:
     - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}} multiverse'
     - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}}-updates multiverse'
-  when: ansible_distribution == 'Ubuntu' and ansible_architecture == 'aarch64'
+  when: ansible_distribution == 'Ubuntu' and ansible_architecture in ['armv7l', 'aarch64']
 
 - name: Install required system packages
   apt: name={{ item }} state=latest
