@@ -3,7 +3,8 @@
   apt:
     update_cache: yes
     cache_valid_time: 14400
-    upgrade: dist
+    # TODO create a flag for apt-get upgrade
+    #upgrade: dist
 
 - name: Install base packages
   apt: name={{ item }} state=latest
