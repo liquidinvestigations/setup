@@ -66,9 +66,9 @@ You may use it to override any variables you want from `config.yml`.
    # 2nd partition starts at 264192, offset is 264192 * 512 = 135266304
    losetup /dev/loop0 liquid.img -o 1048576
    losetup /dev/loop1 liquid.img -o 135266304
-   mount /dev/loop1 /var/local/liquid/target
-   mount /dev/loop0 /var/local/liquid/target/media/boot
-   mount --bind /proc /var/local/liquid/target/proc
+   mount /dev/loop1 /mnt/target
+   mount /dev/loop0 /mnt/target/media/boot
+   mount --bind /proc /mnt/target/proc
    resize2fs /dev/loop1
    ```
 
@@ -76,7 +76,7 @@ You may use it to override any variables you want from `config.yml`.
   and blocks when upgraded from ansible. Also, install python 2.7:
 
    ```
-   chroot /var/local/liquid/target
+   chroot /mnt/target
    apt-get update -y
    apt-get upgrade -y
    apt-get install -y python
