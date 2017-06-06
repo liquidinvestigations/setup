@@ -77,7 +77,7 @@ You may use it to override any variables you want from `config.yml`.
 
    ```
    chroot /mnt/target
-   apt-get update -y
+   apt-get update
    apt-get upgrade -y
    apt-get install -y python
    apt-get clean
