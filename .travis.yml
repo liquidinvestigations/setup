@@ -10,6 +10,7 @@ script:
   - curl https://liquidinvestigations.org/images/ubuntu64-16.04-minimal-odroid-c2-20160815-4G.img.xz | xzcat > odroid-c2.img
 
   - sudo losetup /dev/loop0 odroid-c2.img -o 135266304
+  - sudo mkdir -p /mnt/target
   - sudo mount /dev/loop0 /mnt/target
   - sudo mount --bind /proc /mnt/target/proc
 
@@ -19,10 +20,12 @@ script:
   - sudo chroot /mnt/target apt-get update
   - sudo chroot /mnt/target apt-get install -y python
   - sudo chroot /mnt/target apt-get clean
+
   - cd ansible
   - sudo ansible-playbook board_chroot.yml
+  - cd ..
+  - ls -l
 
   - sudo rm /mnt/target/usr/bin
   - sudo umount /mnt/target
   - sudo losetup -d /dev/loop0
-  - ls -l
