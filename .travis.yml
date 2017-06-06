@@ -1,0 +1,28 @@
+language: python
+python: "2.7"
+sudo: required
+
+install:
+  - sudo apt-get install -qq qemu-user-static
+  - pip install ansible
+
+script:
+  - curl https://liquidinvestigations.org/images/ubuntu64-16.04-minimal-odroid-c2-20160815-4G.img.xz | xzcat > odroid-c2.img
+
+  - sudo losetup /dev/loop0 odroid-c2.img -o 135266304
+  - sudo mount /dev/loop0 /mnt/target
+  - sudo mount --bind /proc /mnt/target/proc
+
+  - sudo cp $(which qemu-arm-static) /mnt/target/usr/bin
+  - sudo echo "nameserver 8.8.8.8" > /mnt/target/etc/resolv.conf
+
+  - sudo chroot /mnt/target apt-get update
+  - sudo chroot /mnt/target apt-get install -y python
+  - sudo chroot /mnt/target apt-get clean
+  - cd ansible
+  - sudo ansible-playbook board_chroot.yml
+
+  - sudo rm /mnt/target/usr/bin
+  - sudo umount /mnt/target
+  - sudo losetup -d /dev/loop0
+  - ls -l
