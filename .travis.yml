@@ -15,7 +15,7 @@ script:
   - sudo mount --bind /proc /mnt/target/proc
 
   - sudo cp $(which qemu-arm-static) /mnt/target/usr/bin
-  - sudo echo "nameserver 8.8.8.8" > /mnt/target/etc/resolv.conf
+  - echo "nameserver 8.8.8.8" | sudo tee /mnt/target/etc/resolv.conf
 
   - sudo chroot /mnt/target apt-get update
   - sudo chroot /mnt/target apt-get install -y python
