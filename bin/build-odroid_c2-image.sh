@@ -6,7 +6,7 @@
 
 set -e
 
-SETUPDIR=/tmp/liquid-setup
+SETUPDIR=/mnt/shared/setup
 TARGET=/mnt/target
 TEMPDIR=/tmp
 OUTPUT=/mnt/shared/output
@@ -16,8 +16,6 @@ set -x
 apt-add-repository -y ppa:ansible/ansible
 apt-get update
 apt-get install -y ansible git pv
-
-git clone https://github.com/liquidinvestigations/setup $SETUPDIR
 
 curl https://liquidinvestigations.org/images/ubuntu64-16.04-minimal-odroid-c2-20160815-4G.img.xz | xzcat > $TEMPDIR/odroid-c2.img
 
