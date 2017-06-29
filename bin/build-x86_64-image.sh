@@ -34,6 +34,7 @@ mount --bind /proc $TARGET/proc
 mount --bind /dev $TARGET/dev
 rm -f $TARGET/etc/resolv.conf
 echo "nameserver 8.8.8.8" > $TARGET/etc/resolv.conf
+touch $TARGET/etc/cloud/cloud-init.disabled
 
 chroot $TARGET apt-get update
 chroot $TARGET apt-get install -y python
