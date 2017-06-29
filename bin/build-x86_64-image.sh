@@ -48,6 +48,9 @@ ansible-playbook board_chroot.yml
 # console= setting referencing non-existant port can cause hangs during boot:
 # https://bugs.launchpad.net/cloud-images/+bug/1573095
 sed -i 's/console=hvc0 *//g' $TARGET/boot/grub/menu.lst
+for i in $TARGET/boot/grub/grub.cfg $TARGET/etc/default/grub $TARGET/etc/default/grub.d/50-cloudimg-settings.cfg ; do
+sed -i 's/ *console=ttyS0//g' $i
+done
 
 umount $TARGET/proc
 umount $TARGET/dev
