@@ -82,3 +82,7 @@ set -x
 cd /opt/hoover/snoop
 #py.test
 EOF
+
+# Start services now, and autostart on subsequent boots
+supervisorctl start hoover-elasticsearch hoover-search hoover-snoop hoover-tika
+sed -i '/autostart = false/d' /etc/supervisor/conf.d/hoover.conf

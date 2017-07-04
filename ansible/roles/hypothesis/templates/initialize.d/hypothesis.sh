@@ -25,4 +25,6 @@ export ELASTICSEARCH_HOST="http://127.0.0.1:14312"
 bin/hypothesis init
 EOF
 
-supervisorctl stop hypothesis-elasticsearch
+# Start remaining services now, and autostart on subsequent boots
+supervisorctl start hypothesis-beat hypothesis-web hypothesis-websocket hypothesis-worker
+sed -i '/autostart = false/d' /etc/supervisor/conf.d/hypothesis.conf
