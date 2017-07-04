@@ -16,7 +16,7 @@ set -x
 
 apt-add-repository -y ppa:ansible/ansible
 apt-get update
-apt-get install -y ansible git pv qemu-utils
+apt-get install -y ansible git qemu-utils
 
 curl https://cloud-images.ubuntu.com/releases/16.04/release/ubuntu-16.04-server-cloudimg-amd64-disk1.img > /mnt/shared/ubuntu-x86_64-cow2.img
 qemu-img convert -f qcow2 -O raw /mnt/shared/ubuntu-x86_64-cow2.img $IMAGE
@@ -55,6 +55,3 @@ umount $TARGET/proc
 umount $TARGET/dev
 umount $TARGET
 losetup -d /dev/loop0
-
-mkdir -p $OUTPUT
-pv < $IMAGE | xz -0 > $OUTPUT/x86_64-liquid.img.xz
