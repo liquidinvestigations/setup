@@ -64,9 +64,12 @@ attempt to create a wireless hotspot, if it detecs any AP-capable wireless
 interfaces. The SSID is `liquid`, password `chocolate`.
 
 ### Hoover and Hypothesis
-By default, Hoover and Hypothesis are not started. To start them:
+Hoover and Hypothesis are started after first boot setup and automatically
+started on subsequent boots.
 
-```
-supervisorctl start hoover-elasticsearch hoover-search hoover-snoop hoover-tika
-supervisorctl start hypothesis-beat hypothesis-elasticsearch hypothesis-web hypothesis-websocket hypothesis-worker
-```
+They are accessible at subdomains of `liquid_domain` which was set above:
+http://hoover.liquid.example.com and http://hypothesis.liquid.example.com
+When running from a VM you may need to set up the VM network configuration
+and put those hosts in your hosts file.
+
+The services can be managed via `supervisorctl`.
