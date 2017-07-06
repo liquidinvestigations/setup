@@ -37,7 +37,8 @@ some adaptations, YMMV.
 
 ```shell
 $ add-apt-repository ppa:ansible/ansible -y # for Ansible 2.2 or newer
-$ apt install ansible
+$ apt-get update
+$ apt install ansible -y
 $ cd /opt
 $ git clone https://github.com/liquidinvestigations/setup
 $ cd setup/ansible
