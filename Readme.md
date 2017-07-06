@@ -29,6 +29,15 @@ $ ./buildbot run shared/setup/bin/build-x86_64-image.sh
 
 If all goes well, the image should be saved in the `shared/output` folder.
 
+#### Convert the image
+The build scripts produce "raw" images. You can convert them to VMware or
+VirtualBox format. Append `-p` to get progress report.
+
+```sh
+qemu-img convert liquid-20170627-x86_64.img -O vmdk liquid-20170627-x86_64.vmdk
+qemu-img convert liquid-20170627-x86_64.img -O vmi liquid-20170627-x86_64.vmi
+```
+
 
 
 ### Set up on existing server
