@@ -42,7 +42,7 @@ chroot $TARGET apt-get clean
 
 cd $SETUPDIR/ansible
 touch vars/config.yml
-ansible-playbook board_chroot.yml
+ansible-playbook image_chroot.yml
 
 # console= setting referencing non-existant port can cause hangs during boot:
 # https://bugs.launchpad.net/cloud-images/+bug/1573095
