@@ -31,7 +31,7 @@ chroot $TARGET apt-get clean
 
 cd $SETUPDIR/ansible
 touch vars/config.yml
-ansible-playbook board_chroot.yml
+ansible-playbook image_chroot.yml
 
 umount $TARGET/proc
 umount $TARGET
