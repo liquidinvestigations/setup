@@ -1,21 +1,5 @@
 ---
-- name: Create folder
-  file:
-    path: /opt/dokuwiki
-    state: directory
-    mode: 0755
-
-- name: Write compose file
-  template:
-    src: docker-compose.yml
-    dest: /opt/dokuwiki/docker-compose.yml
-    mode: 644
-
-- name: Build docker image
-  docker_service:
-    project_src: /opt/dokuwiki
-    build: true
-    stopped: true
+- include: tasks/docker.yml
 
 - name: Create supervisor config
   template: src=supervisor/dokuwiki.conf
