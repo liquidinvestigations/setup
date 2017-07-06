@@ -16,3 +16,8 @@
     project_src: /opt/dokuwiki
     build: true
     stopped: true
+
+- name: Create nginx config
+  template:
+    src: nginx/dokuwiki.conf
+    dest: /etc/nginx/sites-enabled/dokuwiki.conf
