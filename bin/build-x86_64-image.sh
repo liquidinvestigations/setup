@@ -60,3 +60,5 @@ umount $TARGET/proc
 umount $TARGET/dev
 umount $TARGET
 losetup -d /dev/loop0
+
+echo "done; image saved in $IMAGE"
