@@ -6,6 +6,16 @@
     # TODO create a flag for apt-get upgrade
     #upgrade: dist
 
+- name: Set up machine hostname
+  hostname:
+    name: "{{ liquid_domain.split('.')[0] }}"
+
+- name: Put hostname in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: '127.0.0.1 {{ liquid_domain.split(".")[0] }}'
+    state: present
+
 - name: Install base packages
   apt: name={{ item }} state=latest
   with_items:
@@ -63,3 +73,18 @@
     dest: /etc/nginx/nginx.conf
     regexp: 'server_names_hash_bucket_size'
     line: '	server_names_hash_bucket_size 64;'
+
+- name: nginx default site conf
+  template: src=nginx/default
+            dest=/etc/nginx/sites-enabled/default
+
+- name: remove default nginx site html page
+  file:
+    path: "/var/www/html/{{ item }}"
+    state: absent
+  with_fileglob:
+    - "index.*.html"
+
+- name: nginx default site html page
+  template: src=nginx/index.html
+            dest=/var/www/html/index.html
