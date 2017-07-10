@@ -1,0 +1,6 @@
+---
+- name: Install docker
+  apt: name={{ item }} state=latest
+  with_items:
+    - docker.io
+    - docker-compose

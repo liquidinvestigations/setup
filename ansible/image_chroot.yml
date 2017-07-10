@@ -1,15 +1,19 @@
 ---
 - name: Install the board version of the liquid toolkit in chroot
   hosts: image
+  vars:
+    build_docker_images: false
   vars_files:
     - vars/defaults.yml
     - vars/config.yml
   roles:
     - common
     - devel
+    - docker
     - node6
     - python3
     - liquid-core
     - hotspot
     - hoover
     - hypothesis
+    - dokuwiki

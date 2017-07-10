@@ -1,0 +1,11 @@
+---
+- include: tasks/docker.yml
+
+- name: Create supervisor config
+  template: src=supervisor/dokuwiki.conf
+            dest=/etc/supervisor/conf.d/dokuwiki.conf
+
+- name: Create nginx config
+  template:
+    src: nginx/dokuwiki.conf
+    dest: /etc/nginx/sites-enabled/dokuwiki.conf

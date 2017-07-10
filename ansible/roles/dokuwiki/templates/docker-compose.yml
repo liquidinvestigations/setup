@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+
+  dokuwiki:
+    image: istepanov/dokuwiki:2.0
+    volumes:
+      - dokuwiki:/var/dokuwiki-storage
+    ports:
+      - 61906:80
+
+volumes:
+  dokuwiki: {}
