@@ -17,7 +17,7 @@ apt-add-repository -y ppa:ansible/ansible
 apt-get update
 apt-get install -y ansible git pv
 
-curl https://liquidinvestigations.org/images/minimal/ubuntu64-16.04-minimal-odroid-c2-20160815-4G.img.xz | xzcat > $TEMPDIR/odroid-c2.img
+curl https://liquidinvestigations.org/images/base_images/ubuntu64-16.04-minimal-odroid-c2-20160815-4G.img.xz | xzcat > $TEMPDIR/odroid-c2.img
 
 losetup /dev/loop0 $TEMPDIR/odroid-c2.img -o 135266304
 mkdir -p $TARGET
