@@ -22,7 +22,7 @@ cd $SETUPDIR/ansible
 touch vars/config.yml
 ansible-playbook image_host_docker.yml
 
-curl https://cloud-images.ubuntu.com/releases/16.04/release/ubuntu-16.04-server-cloudimg-amd64-disk1.img > /mnt/shared/ubuntu-x86_64-cow2.img
+curl https://liquidinvestigations.org/images/base_images/ubuntu-16.04-server-cloudimg-amd64-disk1.img > /mnt/shared/ubuntu-x86_64-cow2.img
 qemu-img convert -f qcow2 -O raw /mnt/shared/ubuntu-x86_64-cow2.img $IMAGE
 
 truncate -s 4G $IMAGE
