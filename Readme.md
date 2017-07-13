@@ -83,3 +83,11 @@ When running from a VM you may need to set up the VM network configuration
 and put those hosts in your hosts file.
 
 The services can be managed via `supervisorctl`.
+
+## Development notes
+
+The `devel` role sets up the following:
+
+- user: `liquid`, password: `liquid`
+- sudo access
+- sshd on port 22 that accepts password authentication
