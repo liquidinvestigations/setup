@@ -91,3 +91,5 @@ The `devel` role sets up the following:
 - user: `liquid`, password: `liquid`
 - sudo access
 - sshd on port 22 that accepts password authentication
+
+The `devel` role can be enabled by putting `devel: true` into `vars/config.yml`.
