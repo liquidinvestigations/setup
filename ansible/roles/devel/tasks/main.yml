@@ -9,6 +9,8 @@
     - tcpdump
     - vim
     - openssh-server
+    - htop
+    - zsh
 
 - name: Set up a default password for the liquid user
   command: bash -c "echo liquid:liquid | chpasswd"
