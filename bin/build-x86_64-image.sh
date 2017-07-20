@@ -8,6 +8,7 @@ set -e
 
 SETUPDIR=/mnt/shared/setup
 TARGET=/mnt/target
+DOWNLOADED_IMAGE=/mnt/shared/ubuntu-x86_64-cow2.img
 IMAGE=/mnt/shared/ubuntu-x86_64-raw.img
 
 set -x
@@ -16,8 +17,8 @@ apt-add-repository -y ppa:ansible/ansible
 apt-get update
 apt-get install -y ansible git qemu-utils
 
-curl https://liquidinvestigations.org/images/base_images/ubuntu-16.04-server-cloudimg-amd64-disk1.img > /mnt/shared/ubuntu-x86_64-cow2.img
-qemu-img convert -f qcow2 -O raw /mnt/shared/ubuntu-x86_64-cow2.img $IMAGE
+curl https://liquidinvestigations.org/images/base_images/ubuntu-16.04-server-cloudimg-amd64-disk1.img > $DOWNLOADED_IMAGE
+qemu-img convert -f qcow2 -O raw $DOWNLOADED_IMAGE $IMAGE
 
 truncate -s 4G $IMAGE
 # This assumes there is only one partition in the image.
