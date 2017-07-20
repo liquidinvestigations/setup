@@ -64,16 +64,6 @@
     src: supervisor/discover.conf
     dest: /etc/supervisor/conf.d/discover.conf
 
-- name: Create the supervisor conf for dnsmasq-dns
-  template:
-    src: supervisor/dnsmasq-dns.conf
-    dest: /etc/supervisor/conf.d/dnsmasq-dns.conf
-
-- name: Create the supervisor conf for avahi-daemon
-  template:
-    src: supervisor/avahi-daemon.conf
-    dest: /etc/supervisor/conf.d/avahi-daemon.conf
-
 - name: Create /var/lib/liquid/conf/discover directory
   file:
     path: /var/lib/liquid/conf/discover
