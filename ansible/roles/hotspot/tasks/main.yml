@@ -12,11 +12,6 @@
     name: hostapd
     enabled: no
 
-- name: Don't run dnsmasq as system service
-  service:
-    name: dnsmasq
-    enabled: no
-
 - name: Create the hotspot folder
   file: path=/opt/hotspot state=directory mode=0755
 
