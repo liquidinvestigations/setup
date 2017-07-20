@@ -40,7 +40,6 @@
   template:
     src: local.py
     dest: /opt/discover/discover/settings/local.py
-    mode: 755
 
 - name: Install requirements for discover
   pip:
