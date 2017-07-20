@@ -69,6 +69,11 @@
     src: supervisor/dnsmasq-dns.conf
     dest: /etc/supervisor/conf.d/dnsmasq-dns.conf
 
+- name: Create the supervisor conf for avahi-daemon
+  template:
+    src: supervisor/avahi-daemon.conf
+    dest: /etc/supervisor/conf.d/avahi-daemon.conf
+
 - name: Create /var/lib/liquid/conf/discover directory
   file:
     path: /var/lib/liquid/conf/discover
@@ -78,3 +83,8 @@
   file:
     path: /var/lib/liquid/conf/discover/dnsmasq.conf
     state: touch
+
+- name: Don't enable avahi-daemon as a system service
+  service:
+    name: avahi-daemon
+    enabled: no
