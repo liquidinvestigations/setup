@@ -20,3 +20,5 @@ HYPOTHESIS_USER_SCRIPTS = {
 HOOVER_APP_URL = 'http://hoover.{{ liquid_domain }}'
 HYPOTHESIS_APP_URL = 'http://hypothesis.{{ liquid_domain }}'
 DOKUWIKI_APP_URL = 'http://dokuwiki.{{ liquid_domain }}'
+LIQUID_DOMAIN = '{{ liquid_domain }}'
+DISCOVERY_URL = 'http://localhost:13777'
