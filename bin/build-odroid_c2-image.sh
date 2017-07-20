@@ -16,11 +16,17 @@ apt-add-repository -y ppa:ansible/ansible
 apt-get update
 apt-get install -y ansible git pv
 
-curl https://liquidinvestigations.org/images/base_images/ubuntu64-16.04-minimal-odroid-c2-20160815-4G.img.xz | xzcat > $IMAGE
+curl https://liquidinvestigations.org/images/base_images/ubuntu64-16.04-minimal-odroid-c2-20160815.img.xz | xzcat > $IMAGE
+
+truncate -s 4G $IMAGE
+# This assumes there is only one partition in the image.
+# Keep start sector and type, but use all sectors up to the end of the image.
+sfdisk -d $IMAGE | sed 's/size=[^,]\+, type=83/type=83/' | sfdisk $IMAGE
 
 losetup /dev/loop0 $IMAGE -o 135266304
 mkdir -p $TARGET
 mount /dev/loop0 $TARGET
+resize2fs /dev/loop0
 mount --bind /proc $TARGET/proc
 rm -f $TARGET/etc/resolv.conf
 echo "nameserver 8.8.8.8" > $TARGET/etc/resolv.conf
