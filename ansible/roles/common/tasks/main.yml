@@ -46,6 +46,10 @@
   user:
     name: liquid
 
+- name: Create the supervisor global config
+  template: src=supervisor/supervisor.conf
+            dest=/etc/supervisor/supervisor.conf
+
 - name: Create common folder
   file: path=/opt/common state=directory mode=0755
 
