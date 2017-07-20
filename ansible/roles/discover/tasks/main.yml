@@ -69,11 +69,6 @@
     src: supervisor/dnsmasq-dns.conf
     dest: /etc/supervisor/conf.d/dnsmasq-dns.conf
 
-- name: Create /var/lib/liquid/conf directory
-  file:
-    path: /var/lib/liquid/conf
-    state: directory
-
 - name: Create /var/lib/liquid/conf/discover directory
   file:
     path: /var/lib/liquid/conf/discover
