@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /opt/discover/discover
+exec /opt/discover/venv/bin/python discover.py

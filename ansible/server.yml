@@ -14,5 +14,6 @@
     - python3
     - liquid-core
     - hoover
+    - discover
     - hypothesis
     - dokuwiki
