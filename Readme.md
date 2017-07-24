@@ -24,10 +24,11 @@ arm64 image instead of an x86_64 image):
 ```shell
 $ git clone https://github.com/liquidinvestigations/setup ./shared/setup
 $ echo 'liquid_domain: liquid.example.com' > ./shared/setup/ansible/vars/config.yml
-$ ./buildbot run shared/setup/bin/build-x86_64-image.sh
+$ ./buildbot run shared/setup/bin/build_image cloud
 ```
 
-If all goes well, the image should be saved in the `shared/output` folder.
+If all goes well, the image should be saved in the `shared/output` folder. You
+can add the `--debug` flag to introspect any failures.
 
 #### Convert the image
 The build scripts produce "raw" images. You can convert them to VMware or
