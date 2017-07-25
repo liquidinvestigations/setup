@@ -31,7 +31,7 @@ class Builder_cloud(BaseBuilder):
         run([
             'sed', '-i',
             's/console=hvc0 *//g',
-            target.mount_point / 'boot/grub/menu.lst',
+            str(target.mount_point / 'boot/grub/menu.lst'),
         ])
 
         grub_files = [
