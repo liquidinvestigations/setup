@@ -4,3 +4,9 @@
   with_items:
     - docker.io
     - docker-compose
+
+- name: Make sure dockerd is running
+  when: build_docker_images
+  service:
+    name: docker
+    state: started
