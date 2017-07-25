@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+import sys
+from pathlib import Path
+import subprocess
+
+name = sys.argv[1]
+args = sys.argv[2:]
+scripts_d = Path('/opt/common/hooks') / '{}.d'.format(name)
+for callback in scripts_d.iterdir():
+    print('+', callback.name, file=sys.stderr)
+    subprocess.run([str(callback)] + args)
