@@ -43,7 +43,7 @@ class Builder_cloud(BaseBuilder):
             path = target.mount_point / rel_path
             run(['sed ', 'i', 's/ *console=ttyS0//g', str(path)])
 
-    def install_in_chroot(self, target):
-        super().install_in_chroot(target)
+    def install(self, target):
+        super().install(target)
         self._patch_serial_console(target)
         (target.mount_point / 'etc/cloud/cloud-init.disabled').touch()
