@@ -33,6 +33,12 @@ class Builder_odroid_xu4(BaseBuilder):
 
         return (image, 135266304)
 
+    def _fix_network(self, target):
+        run(['apt-get', 'purge', '--auto-remove', 'network-manager'])
+        eth0_conf = target.mount_point / 'etc/network/interfaces.d/eth0'
+        with eth0_conf.open('w', encoding='utf8') as f:
+            f.write('auto eth0\niface eth0 inet dhcp\n')
+
     def install(self, target):
         super().install(target)
-        run(['apt-get', 'purge', '--auto-remove', 'network-manager'])
+        self._fix_network(target)
