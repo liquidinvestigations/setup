@@ -23,7 +23,6 @@
   service:
     name: dnsmasq
     enabled: no
-    state: stopped
 
 - name: Create the /opt/discover folder
   file:
