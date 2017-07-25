@@ -106,3 +106,13 @@
 - name: Create the nginx configuration file
   template: src=nginx/hypothesis.conf
             dest=/etc/nginx/sites-enabled/hypothesis.conf
+
+- name: Subscribe to hooks
+  template:
+    src: hooks/{{ item }}.d/hypothesis
+    dest: /opt/common/hooks/{{ item }}.d/hypothesis
+    mode: 0755
+  with_items:
+    - user-created
+    - user-passwd
+    - user-deleted
