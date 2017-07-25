@@ -1,4 +1,4 @@
-from ..tools import download, xzcat
+from ..tools import download, xzcat, run
 from .base import BaseBuilder, SHARED
 
 
@@ -32,3 +32,7 @@ class Builder_odroid_xu4(BaseBuilder):
         xzcat(base_image, image)
 
         return (image, 135266304)
+
+    def install(self, target):
+        super().install(target)
+        run(['apt-get', 'purge', '--auto-remove', 'network-manager'])
