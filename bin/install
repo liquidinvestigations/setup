@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $BIN/../ansible
+
+set -x
+touch vars/config.yml
+ansible-playbook server.yml

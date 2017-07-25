@@ -51,9 +51,8 @@ $ apt-get update
 $ apt install ansible -y
 $ cd /opt
 $ git clone https://github.com/liquidinvestigations/setup
-$ cd setup/ansible
-$ echo 'liquid_domain: liquid.example.com' > ./vars/config.yml
-$ ansible-playbook server.yml
+$ cd setup
+$ bin/install
 ```
 
 
