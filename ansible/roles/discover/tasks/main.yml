@@ -57,7 +57,7 @@
   template:
     src: libexec/runserver
     dest: /opt/discover/libexec/runserver
-    mode: 755
+    mode: 0755
 
 - name: Create the supervisor conf for discover
   template:
