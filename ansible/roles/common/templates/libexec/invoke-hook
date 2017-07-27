@@ -5,9 +5,13 @@ import os
 from pathlib import Path
 import subprocess
 
+def log(*args):
+    print(*args, file=sys.stderr)
+    sys.stderr.flush()
+
 name = sys.argv[1]
 args = sys.argv[2:]
 scripts_d = Path('/opt/common/hooks') / '{}.d'.format(name)
 for callback in scripts_d.iterdir():
-    print('+', callback.name, file=sys.stderr)
+    log('+', callback.name)
     subprocess.run([str(callback)] + args, env=dict(os.environ, HOOK=name))
