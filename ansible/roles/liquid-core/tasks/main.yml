@@ -47,21 +47,6 @@
             dest=/opt/liquid-core/libexec/runserver
             mode=755
 
-- name: Create the h_user_create script
-  template: src=libexec/h_user_create
-            dest=/opt/liquid-core/libexec/h_user_create
-            mode=755
-
-- name: Create the h_user_passwd script
-  template: src=libexec/h_user_passwd
-            dest=/opt/liquid-core/libexec/h_user_passwd
-            mode=755
-
-- name: Create the h_user_delete script
-  template: src=libexec/h_user_delete
-            dest=/opt/liquid-core/libexec/h_user_delete
-            mode=755
-
 - name: Create the supervisor configuration file
   template: src=supervisor/liquid-core.conf
             dest=/etc/supervisor/conf.d/liquid-core.conf
@@ -69,3 +54,13 @@
 - name: Create the nginx configuration file
   template: src=nginx/liquid-core.conf
             dest=/etc/nginx/sites-enabled/liquid-core.conf
+
+- name: Create folders for hooks
+  file:
+    path: /opt/common/hooks/{{ item }}.d
+    state: directory
+    mode: 0755
+  with_items:
+    - user-created
+    - user-deleted
+    - user-passwd

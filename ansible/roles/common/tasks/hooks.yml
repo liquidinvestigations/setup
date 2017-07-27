@@ -1,0 +1,11 @@
+---
+- name: Create the invoke-hook script
+  template:
+    src: libexec/invoke-hook
+    dest: /opt/common/libexec/invoke-hook
+    mode: 0755
+
+- name: Create /opt/common/hooks directory
+  file:
+    path: /opt/common/hooks
+    state: directory

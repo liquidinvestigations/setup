@@ -102,3 +102,10 @@
 - name: nginx default site html page
   template: src=nginx/index.html
             dest=/var/www/html/index.html
+
+- name: Create /opt/common/libexec directory
+  file:
+    path: /opt/common/libexec
+    state: directory
+
+- include: tasks/hooks.yml
