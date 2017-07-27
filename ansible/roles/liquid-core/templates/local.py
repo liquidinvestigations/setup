@@ -11,11 +11,7 @@ DATABASES = {
     }
 }
 
-HYPOTHESIS_USER_SCRIPTS = {
-    'create': '/opt/liquid-core/libexec/h_user_create',
-    'delete': '/opt/liquid-core/libexec/h_user_delete',
-    'passwd': '/opt/liquid-core/libexec/h_user_passwd',
-}
+INVOKE_HOOK = '/opt/common/libexec/invoke-hook'
 
 HOOVER_APP_URL = 'http://hoover.{{ liquid_domain }}'
 HYPOTHESIS_APP_URL = 'http://hypothesis.{{ liquid_domain }}'
