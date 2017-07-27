@@ -16,3 +16,13 @@
     src: initialize.d/dokuwiki
     dest: /opt/common/initialize.d/dokuwiki
     mode: 0755
+
+- name: Subscribe to hooks
+  copy:
+    src: hooks/user
+    dest: /opt/common/hooks/{{ item }}.d/dokuwiki
+    mode: 0755
+  with_items:
+    - user-created
+    - user-passwd
+    - user-deleted
