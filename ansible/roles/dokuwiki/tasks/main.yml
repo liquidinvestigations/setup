@@ -10,3 +10,9 @@
   template:
     src: nginx/dokuwiki.conf
     dest: /etc/nginx/sites-enabled/dokuwiki.conf
+
+- name: Create the initialization script
+  copy:
+    src: initialize.d/dokuwiki
+    dest: /opt/common/initialize.d/dokuwiki
+    mode: 0755
