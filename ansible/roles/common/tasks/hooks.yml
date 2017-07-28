@@ -9,3 +9,8 @@
   file:
     path: /opt/common/hooks
     state: directory
+
+- name: Configure sudo rights for liquid
+  copy:
+    src: sudoers.d/liquid
+    dest: /etc/sudoers.d/liquid

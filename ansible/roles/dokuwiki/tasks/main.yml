@@ -2,10 +2,37 @@
 - include: tasks/docker.yml
 
 - name: Create supervisor config
-  template: src=supervisor/dokuwiki.conf
-            dest=/etc/supervisor/conf.d/dokuwiki.conf
+  copy:
+    src: supervisor/dokuwiki.conf
+    dest: /etc/supervisor/conf.d/dokuwiki.conf
 
 - name: Create nginx config
   template:
     src: nginx/dokuwiki.conf
     dest: /etc/nginx/sites-enabled/dokuwiki.conf
+
+- name: Create the initialization script
+  copy:
+    src: initialize.d/dokuwiki
+    dest: /opt/common/initialize.d/dokuwiki
+    mode: 0755
+
+- name: Create folders for hooks
+  file:
+    path: /opt/common/hooks/{{ item }}.d
+    state: directory
+    mode: 0755
+  with_items:
+    - user-created
+    - user-deleted
+    - user-passwd
+
+- name: Subscribe to hooks
+  copy:
+    src: hooks/user
+    dest: /opt/common/hooks/{{ item }}.d/dokuwiki
+    mode: 0755
+  with_items:
+    - user-created
+    - user-passwd
+    - user-deleted
