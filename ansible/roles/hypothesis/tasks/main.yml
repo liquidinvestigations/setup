@@ -108,8 +108,8 @@
             dest=/etc/nginx/sites-enabled/hypothesis.conf
 
 - name: Subscribe to hooks
-  template:
-    src: hooks/{{ item }}.d/hypothesis
+  copy:
+    src: hooks/user
     dest: /opt/common/hooks/{{ item }}.d/hypothesis
     mode: 0755
   with_items:

@@ -1,9 +1,0 @@
-#!/bin/bash
-set -e
-
-
-username="$1"
-
-unset DJANGO_SETTINGS_MODULE
-exec /opt/hypothesis/libexec/run-h bin/hypothesis user delete \
-  "$username"

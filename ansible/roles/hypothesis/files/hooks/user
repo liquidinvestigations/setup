@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+import os
+
+LIQUID_DOMAIN = "{{ liquid_domain }}"
+
+hook = os.environ['HOOK']
+[username] = sys.argv[1:]
+email = '{}@{}'.format(username, LIQUID_DOMAIN)
+
+env = dict(os.environ)
+env.pop('DJANGO_SETTINGS_MODULE', None)
+
+
+def h_user(user_args):
+    base_args = [
+        '/usr/bin/sudo', '-u', 'liquid',
+        '/opt/hypothesis/libexec/run-h',
+        'bin/hypothesis', 'user',
+    ]
+    args = base_args + user_args
+    os.execve(args[0], args, env)
+
+
+def created():
+    password = json.loads(env.pop('LIQUID_HOOK_DATA'))['password']
+    h_user([
+        'add',
+        '--username', username,
+        '--email', email,
+        '--password', password,
+    ])
+
+
+def password():
+    password = json.loads(env.pop('LIQUID_HOOK_DATA'))['password']
+    h_user([
+        'password',
+        username,
+        '--password', password,
+    ])
+
+
+def deleted():
+    h_user([
+        'delete',
+        username,
+    ])
+
+
+hook_map = {
+    'user-{}'.format(fn.__name__): fn
+    for fn in [created, password, deleted]
+}
+
+hook_map[hook]()
