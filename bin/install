@@ -1,10 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-set -e
+from pathlib import Path
+import os
+from subprocess import run, PIPE
 
-BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $BIN/../ansible
+def which_ansible_playbook():
+    return run(['which', 'ansible-playbook'], stdout=PIPE).stdout.strip()
 
-set -x
-touch vars/config.yml
-ansible-playbook server.yml
+ansible_playbook = which_ansible_playbook()
+if not ansible_playbook:
+    print("ansible not found; installing...")
+    run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
+    run(['apt-get', 'update'])
+    run(['apt-get', 'install', '-y', 'ansible', 'git', 'qemu-utils'])
+    ansible_playbook = which_ansible_playbook()
+
+assert ansible_playbook
+
+setup = Path(__file__).resolve().parent.parent
+(setup / 'ansible' / 'vars' / 'config.yml').touch()
+
+os.chdir(str(setup / 'ansible'))
+os.execv(ansible_playbook, [ansible_playbook, 'server.yml'])
