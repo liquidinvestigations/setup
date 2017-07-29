@@ -11,3 +11,4 @@
   tasks:
     - include: roles/dokuwiki/tasks/docker.yml
     - include: roles/matrix/tasks/docker.yml
+    - include: roles/davros/tasks/docker.yml

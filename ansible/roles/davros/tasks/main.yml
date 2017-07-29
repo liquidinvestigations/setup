@@ -1,0 +1,12 @@
+---
+- include: tasks/docker.yml
+
+- name: Create supervisor config
+  copy:
+    src: supervisor/davros.conf
+    dest: /etc/supervisor/conf.d/davros.conf
+
+- name: Create nginx config
+  template:
+    src: nginx/davros.conf
+    dest: /etc/nginx/sites-enabled/davros.conf
