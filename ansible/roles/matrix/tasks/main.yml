@@ -26,8 +26,6 @@
     mode: 0755
   with_items:
     - user-created
-    - user-passwd
-    - user-deleted
 
 - name: Copy the requirements file
   copy:
