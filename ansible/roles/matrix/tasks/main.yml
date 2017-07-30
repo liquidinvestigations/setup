@@ -19,11 +19,15 @@
     state: directory
     mode: 0755
 
-- name: Create the libexec folder
-  file:
-    path: /opt/matrix/libexec
-    state: directory
+- name: Subscribe to hooks
+  copy:
+    src: hooks/user
+    dest: /opt/common/hooks/{{ item }}.d/matrix
     mode: 0755
+  with_items:
+    - user-created
+    - user-passwd
+    - user-deleted
 
 - name: Copy the requirements file
   copy:
