@@ -2,14 +2,13 @@
 - name: Install required packages
   apt: name={{ item }} state=latest
   with_items:
-    - ld-essential
+    - build-essential
     - python2.7-dev
     - libffi-dev 
     - python-pip
     - python-setuptools
     - sqlite3 
     - libssl-dev
-    - python-virtualenv
     - libjpeg-dev
     - libxslt1-dev
 
