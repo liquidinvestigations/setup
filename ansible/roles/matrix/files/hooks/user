@@ -8,9 +8,9 @@ password = json.loads(os.environ['LIQUID_HOOK_DATA'])['password']
 
 cmd = [
     "/opt/matrix/synapse/bin/python",
-    "/opt/matrix/synapse/scripts/register_new_matrix_user",
+    "/opt/matrix/synapse/local/bin/register_new_matrix_user",
     "--config", "/opt/matrix/synapse/homeserver.yaml",
-    "--username", username,
+    "--user", username,
     "--password", password,
     "--admin",  # required because of https://github.com/matrix-org/synapse/issues/2310
     "http://localhost:55156",
