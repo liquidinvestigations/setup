@@ -13,7 +13,7 @@
 #tls_dh_params_path: "/opt/ops/https/certs/matrix.{{ liquid_domain }}.tls.dh"
 
 # Don't bind to the https port
-no_tls: True
+no_tls: False
 
 # List of allowed TLS fingerprints for this server to publish along
 # with the signing keys for this server. Other matrix servers that
@@ -59,7 +59,7 @@ web_client: True
 # web_client_location: "/path/to/web/root"
 
 # The public-facing base URL for the client API (not including _matrix/...)
-# public_baseurl: https://example.com:8448/
+public_baseurl: "https://matrix.{{ liquid_domain }}"
 
 # Set the soft limit on the number of file descriptors synapse can use
 # Zero is used to indicate synapse should set the soft limit to the
@@ -83,7 +83,7 @@ listeners:
     bind_addresses: ['0.0.0.0']
     type: http
 
-    x_forwarded: false
+    x_forwarded: true
 
     resources:
       - names: [client, webclient]
