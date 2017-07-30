@@ -39,7 +39,9 @@
 
 - name: Run the default configuration
   command: /opt/matrix/synapse/bin/python -m synapse.app.homeserver --server-name matrix.{{ liquid_domain }} --config-path homeserver.yaml --generate-config --report-stats=no
-  chdir: opt/matrix/synapse
+  args:
+    chdir: opt/matrix/synapse
+    creates: /opt/matrix/synapse/homeserver.yaml
 
 - name: Overwrite the configuration file
   template:
