@@ -37,7 +37,11 @@
     virtualenv: /opt/matrix/synapse
     virtualenv_python: python2.7
 
-- name: Set up the configuration file
+- name: Run the default configuration
+  command: /opt/matrix/synapse/bin/python -m synapse.app.homeserver --server-name matrix.{{ liquid_domain }} --config-path homeserver.yaml --generate-config --report-stats=no
+  chdir: opt/matrix/synapse
+
+- name: Overwrite the configuration file
   template:
     src: homeserver.yaml
     dest: /opt/matrix/synapse/homeserver.yaml
