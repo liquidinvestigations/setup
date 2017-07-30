@@ -1,4 +1,4 @@
-SECRET_KEY = '-- secret key --'
+SECRET_KEY = '{{ liquid_core_secret_key }}'
 DEBUG = True
 ALLOWED_HOSTS = ['{{ liquid_domain }}']
 AUTH_PASSWORD_VALIDATORS = []
