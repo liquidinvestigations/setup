@@ -48,6 +48,9 @@
     src: homeserver.yaml
     dest: /opt/matrix/synapse/homeserver.yaml
 
+- name: Reset permissions on the synapse server
+  command: chmod -R liquid:liquid /opt/matrix/synapse
+
 - name: Create the initialization script
   copy:
     src: initialize.d/matrix

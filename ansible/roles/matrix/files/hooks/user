@@ -4,7 +4,7 @@ import json
 import os
 import sys
 password = json.loads(os.environ['LIQUID_HOOK_DATA'])['password']
-[username] = sys.args[1:]
+[username] = sys.argv[1:]
 
 cmd = [
     "/opt/matrix/synapse/bin/python",
