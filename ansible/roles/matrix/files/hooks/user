@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+
+import json
+import os
+import sys
+password = json.loads(os.environ['LIQUID_HOOK_DATA'])['password']
+[username] = sys.args[1:]
+
+cmd = [
+    "/opt/matrix/synapse/bin/python",
+    "/opt/matrix/synapse/scripts/register_new_matrix_user",
+    "--config", "/opt/matrix/synapse/homeserver.yaml",
+    "--username", username,
+    "--password", password,
+    "--admin",  # required because of https://github.com/matrix-org/synapse/issues/2310
+    "http://localhost:55156",
+]
+os.execv(cmd[0], cmd)
+
