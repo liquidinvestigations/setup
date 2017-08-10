@@ -87,7 +87,7 @@ class BaseBuilder:
     def build(self):
         self.install_host_dependencies()
         image, offset = self.get_base_image()
-        self.resize_partition(image, '4G')
+        self.resize_partition(image, '8G')
 
         with self.open_target(image, offset) as target:
             run(['resize2fs', target.device])
