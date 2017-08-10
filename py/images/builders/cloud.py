@@ -41,7 +41,7 @@ class Builder_cloud(BaseBuilder):
         ]
         for rel_path in grub_files:
             path = target.mount_point / rel_path
-            run(['sed', 'i', 's/ *console=ttyS0//g', str(path)])
+            run(['sed', '-i', 's/ *console=ttyS0//g', str(path)])
 
     def install(self, target):
         super().install(target)
