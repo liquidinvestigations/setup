@@ -47,14 +47,12 @@ class BaseBuilder:
 
     @contextmanager
     def patch_resolv_conf(self, target):
-        system_resolv_conf = Path('/etc/resolv.conf')
         resolv_conf = target.mount_point / 'etc' / 'resolv.conf'
         resolv_conf_orig = resolv_conf.with_name(resolv_conf.name + '.orig')
 
         resolv_conf.rename(resolv_conf_orig)
         with resolv_conf.open('wb') as dst:
-            with system_resolv_conf.open('rb') as src:
-                dst.write(src.read())
+            dst.write(b"nameserver 8.8.8.8\n")
 
         try:
             yield
