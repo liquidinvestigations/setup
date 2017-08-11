@@ -72,7 +72,7 @@ ssh-keygen -f $TARGET/etc/ssh/ssh_host_rsa_key -N '' -t rsa
 ssh-keygen -f $TARGET/etc/ssh/ssh_host_dsa_key -N '' -t dsa
 
 # Fix DNS to use google (resolves problems accessing archive.debian.com &c.)
-chroot $TARGET echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 8.8.8.8" > $TARGET/etc/resolv.conf
 
 # Create vagrant user for ssh
 chroot $TARGET adduser vagrant --gecos "Vagrant User,,," --disabled-password
