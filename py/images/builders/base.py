@@ -31,7 +31,7 @@ class BaseBuilder:
         sfdisk_new = []
         for line in sfdisk_orig:
             if 'type=83' in line:
-                line = re.sub(r'size=[^,]\+,', line, '')
+                line = re.sub(r'size=[^,]+,', '', line)
             sfdisk_new.append(line)
 
         run(['sfdisk', str(image)], input=''.join(sfdisk_new).encode('latin1'))
