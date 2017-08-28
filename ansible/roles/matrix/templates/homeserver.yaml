@@ -59,7 +59,7 @@ web_client: True
 # web_client_location: "/path/to/web/root"
 
 # The public-facing base URL for the client API (not including _matrix/...)
-public_baseurl: "https://matrix.{{ liquid_domain }}"
+public_baseurl: "{% if use_https %}https{% else %}http{% endif %}://matrix.{{ liquid_domain }}"
 
 # Set the soft limit on the number of file descriptors synapse can use
 # Zero is used to indicate synapse should set the soft limit to the
