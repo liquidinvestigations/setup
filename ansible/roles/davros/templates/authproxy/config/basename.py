@@ -1,1 +1,1 @@
-LIQUID_URL = 'http://{{ liquid_domain }}'
+LIQUID_URL = 'https://{{ liquid_domain }}'

@@ -1,0 +1,3 @@
+pip
+setuptools
+https://github.com/matrix-org/synapse/tarball/master
