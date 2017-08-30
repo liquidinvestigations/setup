@@ -4,6 +4,9 @@
   copy:
     src: authproxy/
     dest: /opt/davros/authproxy/
+    owner: liquid
+    group: liquid
+    recurse: yes
 
 - name: Install authproxy requirements
   pip:
@@ -20,3 +23,10 @@
   template:
     src: authproxy/config/secret.py
     dest: /opt/davros/authproxy/config/secret.py
+
+- name: Create authproxy oauth keys config
+  file:
+    dest: /opt/davros/authproxy/config/oauth.py
+    state: touch
+    owner: liquid
+    group: liquid
