@@ -4,13 +4,13 @@
 # autogenerates on launch with your own SSL certificate + key pair
 # if you like.  Any required intermediary certificates can be
 # appended after the primary certificate in hierarchical order.
-#tls_certificate_path: "/opt/ops/https/certs/matrix.{{ liquid_domain }}.tls.crt"
+#tls_certificate_path: "/var/lib/liquid/https/certs/matrix.{{ liquid_domain }}.tls.crt"
 
 # PEM encoded private key for TLS
-#tls_private_key_path: "/opt/ops/https/certs/matrix.{{ liquid_domain }}.tls.key"
+#tls_private_key_path: "/var/lib/liquid/https/certs/matrix.{{ liquid_domain }}.tls.key"
 
 # PEM dh parameters for ephemeral keys
-#tls_dh_params_path: "/opt/ops/https/certs/matrix.{{ liquid_domain }}.tls.dh"
+#tls_dh_params_path: "/var/lib/liquid/https/certs/matrix.{{ liquid_domain }}.tls.dh"
 
 # Don't bind to the https port
 no_tls: False
