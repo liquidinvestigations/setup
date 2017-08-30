@@ -88,9 +88,9 @@ The services can be managed via `supervisorctl`.
 
 The `devel` role sets up the following:
 
-- user: `liquid`, password: `liquid`
-- sudo access
+- system user: `liquid`, password: `liquid`, sudo enabled
 - sshd on port 22 that accepts password authentication
+- liquid-core: user `liquid`, password: `liquid`
 
 The `devel` role can be enabled by putting `devel: true` into `vars/config.yml`.
 
