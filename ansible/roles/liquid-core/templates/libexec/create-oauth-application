@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -ne 2 ]; then
+    echo "Usage: create-oauth-application APP_NAME REDIRECT_URI"
+    echo "The script will fill out keys under /var/lib/liquid/oauth_keys/\$APP_NAME."
+    exit 1
+fi
+
+APP_NAME=$1
+REDIRECT_URI=$2
+
+/opt/liquid-core/venv/bin/python /opt/liquid-core/liquid-core/manage.py shell <<EOF
+import oauth2_provider
+app, _ = oauth2_provider.models.Application.objects.get_or_create(name='$APP_NAME')
+app.redirect_uris = '$REDIRECT_URI'
+
+app.client_type = 'confidential'
+app.authorization_grant_type = 'authorization-code'
+app.skip_authorization = True
+app.user_id = None
+app.save()
+
+with open('/var/lib/liquid/oauth_keys/$APP_NAME', 'w') as f:
+    f.write("export CLIENT_ID={}\\n".format(app.client_id))
+    f.write("export CLIENT_SECRET={}\\n".format(app.client_secret))
+EOF
