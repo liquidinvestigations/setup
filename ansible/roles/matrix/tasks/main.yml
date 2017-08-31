@@ -54,7 +54,7 @@
 - name: Create the initialization script
   copy:
     src: initialize.d/matrix
-    dest: /opt/common/initialize.d/matrix
+    dest: /opt/common/initialize.d/24-matrix.sh
     mode: 0755
 
 - name: Create supervisor config
