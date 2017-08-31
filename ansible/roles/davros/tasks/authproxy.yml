@@ -4,9 +4,14 @@
   copy:
     src: authproxy/
     dest: /opt/davros/authproxy/
+
+- name: Set up file permissions on authproxy folder
+  file:
+    path: /opt/davros/authproxy
+    state: directory
     owner: liquid
     group: liquid
-    recurse: yes
+    recurse: true
 
 - name: Install authproxy requirements
   pip:
