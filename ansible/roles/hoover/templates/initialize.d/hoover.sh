@@ -4,6 +4,17 @@ set -x
 
 cd /opt/hoover
 
+(
+    # create secret keys without echoing
+    set +x
+    echo "SECRET_KEY = '`openssl rand -base64 48`'" > /opt/hoover/search/hoover/site/settings/secret_key.py
+    echo "SECRET_KEY = '`openssl rand -base64 48`'" > /opt/hoover/snoop/snoop/site/settings/secret_key.py
+    source /var/lib/liquid/oauth_keys/hoover
+    echo "CLIENT_ID = '$CLIENT_ID'" > /opt/hoover/search/hoover/site/settings/oauth.py
+    echo "CLIENT_SECRET = '$CLIENT_SECRET'" >> /opt/hoover/search/hoover/site/settings/oauth.py
+)
+
+
 function wait_url {
     X=0
     until $(curl --output /dev/null --silent --head --fail $1); do

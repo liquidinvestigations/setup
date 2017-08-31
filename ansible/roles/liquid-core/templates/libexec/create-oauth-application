@@ -23,7 +23,7 @@ app.user_id = None
 app.save()
 
 f = open('/var/lib/liquid/oauth_keys/$APP_NAME', 'w')
-f.write("export CLIENT_ID={}\\n".format(app.client_id))
-f.write("export CLIENT_SECRET={}\\n".format(app.client_secret))
+f.write("export CLIENT_ID='{}'\\n".format(app.client_id))
+f.write("export CLIENT_SECRET='{}'\\n".format(app.client_secret))
 f.close()
 EOF
