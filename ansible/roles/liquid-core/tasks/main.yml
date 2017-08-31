@@ -70,5 +70,11 @@
 
 - name: Create the initialization script
   template: src=initialize.d/liquid-core.sh
-            dest=/opt/common/initialize.d/0-liquid-core.sh
+            dest=/opt/common/initialize.d/00-liquid-core.sh
             mode=755
+
+- name: Create the devel initialization script
+  template: src=initialize.d/liquid-core-devel.sh
+            dest=/opt/common/initialize.d/80-liquid-core-initial-user.sh
+            mode=755
+  when: devel

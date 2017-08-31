@@ -106,7 +106,7 @@
 
 - name: Create the initialization script
   template: src=initialize.d/hoover.sh
-            dest=/opt/common/initialize.d/hoover.sh
+            dest=/opt/common/initialize.d/22-hoover.sh
             mode=755
 
 - name: Create the tika run script

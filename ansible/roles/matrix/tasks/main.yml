@@ -21,7 +21,7 @@
 - name: Subscribe to hooks
   copy:
     src: hooks/user
-    dest: /opt/common/hooks/{{ item }}.d/matrix
+    dest: /opt/common/hooks/{{ item }}.d/24-matrix.sh
     mode: 0755
   with_items:
     - user-created

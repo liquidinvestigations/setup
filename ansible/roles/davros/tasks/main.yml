@@ -15,5 +15,5 @@
 
 - name: Copy the initialization script
   copy: src=initialize.d/davros.sh
-        dest=/opt/common/initialize.d/davros.sh
+        dest=/opt/common/initialize.d/20-davros.sh
         mode=755
