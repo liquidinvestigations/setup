@@ -83,7 +83,7 @@
 
 - name: Create the initialization script
   template: src=initialize.d/hypothesis.sh
-            dest=/opt/common/initialize.d/hypothesis.sh
+            dest=/opt/common/initialize.d/23-hypothesis.sh
             mode=755
 
 - name: Create the libexec folder

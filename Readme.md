@@ -88,9 +88,9 @@ The services can be managed via `supervisorctl`.
 
 The `devel` role sets up the following:
 
-- user: `liquid`, password: `liquid`
-- sudo access
+- system user: `liquid`, password: `liquid`, sudo enabled
 - sshd on port 22 that accepts password authentication
+- liquid-core: user `liquid`, password: `liquid`
 
 The `devel` role can be enabled by putting `devel: true` into `vars/config.yml`.
 
@@ -115,3 +115,12 @@ normally. But for the "Build an OS image" scenaro, Docker can't run in a
 chroot, so we pull the app images on the host system (by running the
 [`image_host_docker.yml`](ansible/image_host_docker.yml) playbook), and copy
 them over to the target chroot volume.
+
+### HTTPS
+To use HTTPS, create certificates using your preferred method (letsencrypt,
+self-signed).
+
+To enable HTTPS functionality in nginx, set `use_https: true` in
+`vars/config.yml` and re-run `ansible-playbook`.  Then, supply all the
+certificate files under `/var/lib/liquid/https/certs/` and restart nginx.  To
+find what certificates are needed, run `grep -r /https/certs ./ansible/roles`.

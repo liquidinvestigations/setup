@@ -1,5 +1,61 @@
 ---
-- include: tasks/docker.yml
+- name: Install required packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - build-essential
+    - python2.7-dev
+    - libffi-dev 
+    - python-pip
+    - python-setuptools
+    - sqlite3 
+    - libssl-dev
+    - libjpeg-dev
+    - libxslt1-dev
+
+- name: Create the matrix folder
+  file:
+    path: /opt/matrix
+    state: directory
+    mode: 0755
+
+- name: Subscribe to hooks
+  copy:
+    src: hooks/user
+    dest: /opt/common/hooks/{{ item }}.d/24-matrix.sh
+    mode: 0755
+  with_items:
+    - user-created
+
+- name: Copy the requirements file
+  copy:
+    src: requirements.txt
+    dest: /opt/matrix/requirements.txt
+
+- name: Install synapse homeserver
+  pip:
+    requirements: /opt/matrix/requirements.txt
+    virtualenv: /opt/matrix/synapse
+    virtualenv_python: python2.7
+
+- name: Run the default configuration
+  command: /opt/matrix/synapse/bin/python -m synapse.app.homeserver --server-name matrix.{{ liquid_domain }} --config-path homeserver.yaml --generate-config --report-stats=no
+  args:
+    chdir: /opt/matrix/synapse
+    creates: /opt/matrix/synapse/homeserver.yaml
+
+- name: Overwrite the configuration file
+  template:
+    src: homeserver.yaml
+    dest: /opt/matrix/synapse/homeserver.yaml
+
+- name: Reset permissions on the synapse server
+  command: chown -R liquid:liquid /opt/matrix/synapse
+
+- name: Create the initialization script
+  copy:
+    src: initialize.d/matrix
+    dest: /opt/common/initialize.d/24-matrix.sh
+    mode: 0755
 
 - name: Create supervisor config
   copy:
@@ -11,19 +67,3 @@
     src: nginx/matrix.conf
     dest: /etc/nginx/sites-enabled/matrix.conf
 
-- name: Create the libexec folder
-  file:
-    path: /opt/matrix/libexec
-    state: directory
-    mode: 0755
-
-- name: Create shell configuration file
-  template:
-    src: libexec/setenv.sh
-    dest: /opt/matrix/libexec/setenv.sh
-
-- name: Create the initialization script
-  copy:
-    src: initialize.d/matrix
-    dest: /opt/common/initialize.d/matrix
-    mode: 0755

@@ -47,6 +47,11 @@
             dest=/opt/liquid-core/libexec/runserver
             mode=755
 
+- name: Create the create-oauth-application script
+  template: src=libexec/create-oauth-application
+            dest=/opt/liquid-core/libexec/create-oauth-application
+            mode=755
+
 - name: Create the supervisor configuration file
   template: src=supervisor/liquid-core.conf
             dest=/etc/supervisor/conf.d/liquid-core.conf
@@ -54,3 +59,22 @@
 - name: Create the nginx configuration file
   template: src=nginx/liquid-core.conf
             dest=/etc/nginx/sites-enabled/liquid-core.conf
+
+- name: Create the /var/lib/liquid/oauth_keys directory
+  file:
+    path: /var/lib/liquid/oauth_keys
+    state: directory
+    owner: liquid
+    group: liquid
+    mode: "700"
+
+- name: Create the initialization script
+  template: src=initialize.d/liquid-core.sh
+            dest=/opt/common/initialize.d/00-liquid-core.sh
+            mode=755
+
+- name: Create the devel initialization script
+  when: devel
+  template: src=initialize.d/liquid-core-devel.sh
+            dest=/opt/common/initialize.d/80-liquid-core-initial-user.sh
+            mode=755

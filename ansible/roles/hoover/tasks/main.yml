@@ -106,7 +106,7 @@
 
 - name: Create the initialization script
   template: src=initialize.d/hoover.sh
-            dest=/opt/common/initialize.d/hoover.sh
+            dest=/opt/common/initialize.d/22-hoover.sh
             mode=755
 
 - name: Create the tika run script
@@ -120,5 +120,26 @@
     dest: /opt/hoover/testdata
 
 - name: Create the testing_local.py config for snoop
-  template: src=hoover-snoop-config/testing_local.py
-            dest=/opt/hoover/snoop/snoop/site/settings/testing_local.py
+  copy: src=snoop-testing-local.py
+        dest=/opt/hoover/snoop/snoop/site/settings/testing_local.py
+
+- name: Create the local.py config for snoop
+  copy: src=snoop-local.py
+        dest=/opt/hoover/snoop/snoop/site/settings/local.py
+
+- name: Touch the secret_key.py config for snoop
+  file: dest=/opt/hoover/snoop/snoop/site/settings/secret_key.py
+        owner=liquid group=liquid state=touch
+
+- name: Create the local.py config for search
+  template: src=search-local.py
+            dest=/opt/hoover/search/hoover/site/settings/local.py
+            owner=liquid group=liquid
+
+- name: Touch the secret_key.py config for search
+  file: dest=/opt/hoover/search/hoover/site/settings/secret_key.py
+        owner=liquid group=liquid state=touch
+
+- name: Touch the oauth.py config for search
+  file: dest=/opt/hoover/search/hoover/site/settings/oauth.py
+        owner=liquid group=liquid state=touch

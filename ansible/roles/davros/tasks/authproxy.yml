@@ -15,3 +15,13 @@
   template:
     src: authproxy/config/basename.py
     dest: /opt/davros/authproxy/config/basename.py
+
+- name: Create authproxy secret key config
+  template:
+    src: authproxy/config/secret.py
+    dest: /opt/davros/authproxy/config/secret.py
+
+- name: Create authproxy oauth keys config
+  file:
+    dest: /opt/davros/authproxy/config/oauth.py
+    state: touch
