@@ -222,7 +222,7 @@ room_invite_state_types:
 app_service_config_files: []
 
 
-macaroon_secret_key: "I*ch;sUv&olK-M9JALmPOZ7-&s6=^xa=6a:DA0ip3I#tQVIqMj"
+macaroon_secret_key: "-- secret key goes here --"
 
 # Used to enable access token expiration.
 expire_access_token: False
