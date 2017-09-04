@@ -74,7 +74,7 @@
             mode=755
 
 - name: Create the devel initialization script
-  when: devel == true
+  when: devel
   template: src=initialize.d/liquid-core-devel.sh
             dest=/opt/common/initialize.d/80-liquid-core-initial-user.sh
             mode=755
