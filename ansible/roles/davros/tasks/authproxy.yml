@@ -5,14 +5,6 @@
     src: authproxy/
     dest: /opt/davros/authproxy/
 
-- name: Set up file permissions on authproxy folder
-  file:
-    path: /opt/davros/authproxy
-    state: directory
-    owner: liquid
-    group: liquid
-    recurse: true
-
 - name: Install authproxy requirements
   pip:
     requirements: /opt/davros/authproxy/requirements.txt
@@ -33,5 +25,3 @@
   file:
     dest: /opt/davros/authproxy/config/oauth.py
     state: touch
-    owner: liquid
-    group: liquid
