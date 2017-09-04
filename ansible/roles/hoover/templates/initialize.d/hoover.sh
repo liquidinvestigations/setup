@@ -4,6 +4,7 @@ set -x
 
 cd /opt/hoover
 
+if [ ! -s /opt/hoover/search/hoover/site/settings/secret_key.py ]; then
 (
     # create secret keys without echoing
     set +x
@@ -13,6 +14,7 @@ cd /opt/hoover
     echo "CLIENT_ID = '$CLIENT_ID'" > /opt/hoover/search/hoover/site/settings/oauth.py
     echo "CLIENT_SECRET = '$CLIENT_SECRET'" >> /opt/hoover/search/hoover/site/settings/oauth.py
 )
+fi
 
 
 function wait_url {
