@@ -67,7 +67,6 @@ def callback():
             'code': flask.request.args['code'],
         },
         auth=(config['LIQUID_CLIENT_ID'], config['LIQUID_CLIENT_SECRET']),
-        allow_redirects=False,
     )
     if token_resp.status_code != 200:
         raise RuntimeError("Could not get token: {!r}".format(token_resp))
