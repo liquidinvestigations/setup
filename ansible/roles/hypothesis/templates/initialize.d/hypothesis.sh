@@ -19,7 +19,7 @@ function wait_url {
 if [ ! -e libexec/secrets.sh ]; then
   set +x
   echo "Creating secret keys..."
-  echo "export SECRET_KEY='$(openssl rand -base64 32 | tr -d '\n')'" >> libexec/secrets.sh
+  echo "export SECRET_KEY='$(openssl rand -base64 32 | tr -d '\n')'" > libexec/secrets.sh
   echo "export CLIENT_ID='$(openssl rand -base64 32 | tr -d '\n')'" >> libexec/secrets.sh
   echo "export CLIENT_SECRET='$(openssl rand -base64 32 | tr -d '\n')'" >> libexec/secrets.sh
   set -x
