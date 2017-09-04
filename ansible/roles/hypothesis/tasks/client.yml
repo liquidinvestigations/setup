@@ -5,8 +5,8 @@
 
 - name: Bake the boot script
   environment:
-    ASSET_ROOT: "{% if use_https %}https{% else %}http{% endif %}://client.hypothesis.{{ liquid_domain }}/"
-    SIDEBAR_APP_URL: "{% if use_https %}https{% else %}http{% endif %}://hypothesis.{{ liquid_domain }}/app.html"
+    ASSET_ROOT: "{{ http_scheme }}://client.hypothesis.{{ liquid_domain }}/"
+    SIDEBAR_APP_URL: "{{ http_scheme }}://hypothesis.{{ liquid_domain }}/app.html"
   command: ./bake.py
   args:
     chdir: /opt/hypothesis/h-client-build

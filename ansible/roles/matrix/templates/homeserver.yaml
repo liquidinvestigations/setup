@@ -15,7 +15,7 @@ pid_file: /opt/matrix/synapse/homeserver.pid
 web_client: True
 
 # The public-facing base URL for the client API (not including _matrix/...)
-public_baseurl: "{% if use_https %}https{% else %}http{% endif %}://matrix.{{ liquid_domain }}"
+public_baseurl: "{{ http_scheme }}://matrix.{{ liquid_domain }}"
 
 # Set the soft limit on the number of file descriptors synapse can use
 # Zero is used to indicate synapse should set the soft limit to the
