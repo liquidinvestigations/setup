@@ -51,6 +51,7 @@
 - name: Create liquid system user
   user:
     name: liquid
+    shell: /bin/bash
 
 - name: Create the supervisor global config
   template: src=supervisor/supervisor.conf
