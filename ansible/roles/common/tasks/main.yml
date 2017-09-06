@@ -116,3 +116,15 @@
     state: directory
 
 - include: tasks/hooks.yml
+
+- name: Create the firewall script
+  copy:
+    src: libexec/firewall
+    dest: /opt/common/libexec/firewall
+    mode: 0755
+
+- name: Run the firewall script at boot
+  lineinfile:
+    dest: /etc/rc.local
+    insertbefore: "exit 0"
+    line: "/opt/common/libexec/firewall >> /var/log/rc.local.log 2>&1"
