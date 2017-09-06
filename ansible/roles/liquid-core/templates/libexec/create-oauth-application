@@ -1,29 +1,48 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-set -e
+import json
+from pathlib import Path
+import subprocess
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: create-oauth-application APP_NAME REDIRECT_URI"
-    echo "The script will fill out keys under /var/lib/liquid/oauth_keys/\$APP_NAME."
-    exit 1
-fi
+KEYS_FILE = """\
+export CLIENT_ID='{client_id}'
+export CLIENT_SECRET='{client_secret}'
+"""
 
-APP_NAME=$1
-REDIRECT_URI=$2
 
-/opt/liquid-core/venv/bin/python /opt/liquid-core/liquid-core/manage.py shell <<EOF
-import oauth2_provider
-app, _ = oauth2_provider.models.Application.objects.get_or_create(name='$APP_NAME')
-app.redirect_uris = '$REDIRECT_URI'
+def create_oauth2_app(app_name, redirect_uri):
+    stdout = subprocess.check_output([
+        '/opt/liquid-core/venv/bin/python',
+        '/opt/liquid-core/liquid-core/manage.py',
+        'createoauth2app',
+        app_name,
+        redirect_uri,
+    ])
+    return json.loads(stdout.decode('utf8'))
 
-app.client_type = 'confidential'
-app.authorization_grant_type = 'authorization-code'
-app.skip_authorization = True
-app.user_id = None
-app.save()
 
-f = open('/var/lib/liquid/oauth_keys/$APP_NAME', 'w')
-f.write("export CLIENT_ID='{}'\\n".format(app.client_id))
-f.write("export CLIENT_SECRET='{}'\\n".format(app.client_secret))
-f.close()
-EOF
+def write_oauth_keys(app_name, keys):
+    keys_path = Path('/var/lib/liquid/oauth_keys') / app_name
+    with keys_path.open('w', encoding='utf8') as keys_file:
+        keys_file.write(KEYS_FILE.format(**keys))
+
+
+def main():
+    import sys
+    args = sys.argv[1:]
+    if len(args) != 2:
+        print("Usage: create-oauth-application APP_NAME REDIRECT_URI")
+        print(
+            "The script will fill out keys under "
+            "/var/lib/liquid/oauth_keys/$APP_NAME."
+        )
+        sys.exit(1)
+
+    [app_name, redirect_uri] = args
+
+    keys = create_oauth2_app(app_name, redirect_uri)
+    write_oauth_keys(app_name, keys)
+
+
+if __name__ == '__main__':
+    main()
