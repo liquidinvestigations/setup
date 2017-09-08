@@ -4,6 +4,8 @@ from .base import BaseBuilder, SHARED
 
 class Builder_cloud(BaseBuilder):
 
+    OFFSET = 1048576
+
     def get_base_image(self):
         base_image_url = (
             'https://liquidinvestigations.org/images/base_images/'
@@ -21,7 +23,7 @@ class Builder_cloud(BaseBuilder):
             str(image),
         ])
 
-        return (image, 1048576)
+        return (image, self.OFFSET)
 
     def _patch_serial_console(self, target):
         """
