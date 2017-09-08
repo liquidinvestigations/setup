@@ -62,6 +62,16 @@ class DemoBuilder(Builder_cloud):
         with ens3_cfg.open('w', encoding='utf8') as f:
             f.write('auto ens3\niface ens3 inet dhcp\n')
 
+    def setup_console(self, target):
+        grub_files = [
+            'boot/grub/grub.cfg',
+            'etc/default/grub',
+            'etc/default/grub.d/50-cloudimg-settings.cfg',
+        ]
+        for rel_path in grub_files:
+            path = target.mount_point / rel_path
+            run(['sed', '-i ', 's/console=tty1/console=ttyS0/g', str(path)])
+
     def setup_demo(self):
         image = Path('/mnt/shared/demo.img')
         with self.open_target(image, self.OFFSET) as target:
@@ -71,6 +81,7 @@ class DemoBuilder(Builder_cloud):
                 self.setup_sshd(target)
                 self.setup_liquid_sudo(target)
                 self.setup_network(target)
+                self.setup_console(target)
 
 def install():
     builder = DemoBuilder()
