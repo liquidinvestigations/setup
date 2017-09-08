@@ -3,6 +3,9 @@ from pathlib import Path
 from .builders.cloud import Builder_cloud
 from .tools import run
 
+SETUP_GIT = 'https://github.com/liquidinvestigations/setup'
+LIQUID_DOMAIN = 'liquiddemo.org'
+
 class DemoBuilder(Builder_cloud):
 
     def create_swapfile(self, target):
@@ -72,6 +75,25 @@ class DemoBuilder(Builder_cloud):
             path = target.mount_point / rel_path
             run(['sed', '-i ', 's/console=tty1/console=ttyS0/g', str(path)])
 
+    def setup_ansible(self, target):
+        if not Path('/usr/bin/ansible-playbook').is_file():
+            self.install_host_dependencies()
+
+        setup_path = target.mount_point / 'opt/setup'
+
+        if not setup_path.exists():
+            run(['git', 'clone', SETUP_GIT, str(setup_path)])
+
+        config_yml = setup_path / 'ansible/vars/config.yml'
+        with config_yml.open('w', encoding='utf8') as f:
+            f.write('liquid_domain: {}\n'.format(LIQUID_DOMAIN))
+            f.write('devel: true\n')
+
+        run([
+            'ansible-playbook',
+            'image_chroot.yml',
+        ], cwd=str(setup_path / 'ansible'))
+
     def setup_demo(self):
         image = Path('/mnt/shared/demo.img')
         with self.open_target(image, self.OFFSET) as target:
@@ -82,6 +104,7 @@ class DemoBuilder(Builder_cloud):
                 self.setup_liquid_sudo(target)
                 self.setup_network(target)
                 self.setup_console(target)
+                self.setup_ansible(target)
 
 def install():
     builder = DemoBuilder()
