@@ -57,6 +57,11 @@ class DemoBuilder(Builder_cloud):
         with sudoers_liquid_demo.open('w', encoding='utf8') as f:
             f.write('liquid ALL=(ALL:ALL) NOPASSWD: ALL\n')
 
+    def setup_network(self, target):
+        ens3_cfg = target.mount_point / 'etc/network/interfaces.d/ens3.cfg'
+        with ens3_cfg.open('w', encoding='utf8') as f:
+            f.write('auto ens3\niface ens3 inet dhcp\n')
+
     def setup_demo(self):
         image = Path('/mnt/shared/demo.img')
         with self.open_target(image, self.OFFSET) as target:
@@ -65,6 +70,7 @@ class DemoBuilder(Builder_cloud):
                 self.create_swapfile(target)
                 self.setup_sshd(target)
                 self.setup_liquid_sudo(target)
+                self.setup_network(target)
 
 def install():
     builder = DemoBuilder()
