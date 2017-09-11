@@ -4,7 +4,6 @@ from .builders.cloud import Builder_cloud
 from .tools import run
 
 SETUP_GIT = 'https://github.com/liquidinvestigations/setup'
-LIQUID_DOMAIN = 'liquiddemo.org'
 
 class DemoBuilder(Builder_cloud):
 
@@ -75,7 +74,7 @@ class DemoBuilder(Builder_cloud):
             path = target.mount_point / rel_path
             run(['sed', '-i ', 's/console=tty1/console=ttyS0/g', str(path)])
 
-    def setup_ansible(self, target):
+    def setup_ansible(self, target, domain):
         if not Path('/usr/bin/ansible-playbook').is_file():
             self.install_host_dependencies()
 
@@ -86,7 +85,7 @@ class DemoBuilder(Builder_cloud):
 
         config_yml = setup_path / 'ansible/vars/config.yml'
         with config_yml.open('w', encoding='utf8') as f:
-            f.write('liquid_domain: {}\n'.format(LIQUID_DOMAIN))
+            f.write('liquid_domain: {}\n'.format(domain))
             f.write('devel: true\n')
 
         run([
@@ -94,7 +93,7 @@ class DemoBuilder(Builder_cloud):
             'image_chroot.yml',
         ], cwd=str(setup_path / 'ansible'))
 
-    def setup_demo(self):
+    def setup_demo(self, domain):
         image = Path('/mnt/shared/demo.img')
         with self.open_target(image, self.OFFSET) as target:
             with self.patch_resolv_conf(target):
@@ -104,8 +103,14 @@ class DemoBuilder(Builder_cloud):
                 self.setup_liquid_sudo(target)
                 self.setup_network(target)
                 self.setup_console(target)
-                self.setup_ansible(target)
+                self.setup_ansible(target, domain)
 
 def install():
+    from argparse import ArgumentParser
+    parser = ArgumentParser(description="Provision a nightly image as demo server")
+    parser.add_argument('image', help="Path to the image")
+    parser.add_argument('domain', help="Domain name for demo server")
+    options = parser.parse_args()
+
     builder = DemoBuilder()
-    builder.setup_demo()
+    builder.setup_demo(options.domain)
