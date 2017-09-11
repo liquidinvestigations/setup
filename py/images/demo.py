@@ -93,8 +93,7 @@ class DemoBuilder(Builder_cloud):
             'image_chroot.yml',
         ], cwd=str(setup_path / 'ansible'))
 
-    def setup_demo(self, domain):
-        image = Path('/mnt/shared/demo.img')
+    def setup_demo(self, image, domain):
         with self.open_target(image, self.OFFSET) as target:
             with self.patch_resolv_conf(target):
                 #run(['bash'], cwd=str(target.mount_point)); return
@@ -113,4 +112,4 @@ def install():
     options = parser.parse_args()
 
     builder = DemoBuilder()
-    builder.setup_demo(options.domain)
+    builder.setup_demo(Path(options.image).resolve(), options.domain)
