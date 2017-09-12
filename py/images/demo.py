@@ -106,13 +106,21 @@ class DemoBuilder(Builder_cloud):
                 'image_chroot.yml',
             ], cwd=str(setup_path / 'ansible'))
 
+    def kill_testdata(self, target):
+        import_testdata = (
+            target.mount_point /
+            'opt/hoover/libexec/import_testdata'
+        )
+        with import_testdata.open('w') as f:
+            f.write('#!/bin/bash\necho "no testdata"\n')
+
     def copy_users(self, target, users_json):
         target_users_json = target.mount_point / 'opt/liquid-core/users.json'
         with users_json.open('rb') as f:
             with target_users_json.open('wb') as g:
                 g.write(f.read())
 
-    def setup_demo(self, image, domain, users_json, shell):
+    def setup_demo(self, image, domain, users_json, shell, no_testdata):
         with self.open_target(image, self.OFFSET) as target:
             with self.patch_resolv_conf(target):
                 if shell:
@@ -125,6 +133,8 @@ class DemoBuilder(Builder_cloud):
                 self.setup_console(target)
                 self.setup_ansible(target, domain)
                 self.copy_users(target, users_json)
+                if no_testdata:
+                    self.kill_testdata(target)
 
 def install():
     from argparse import ArgumentParser
@@ -133,6 +143,7 @@ def install():
     parser.add_argument('domain', help="Domain name for demo server")
     parser.add_argument('users_json', help="Path to JSON file with initial users")
     parser.add_argument('--shell', action='store_true', help="Open shell in chroot")
+    parser.add_argument('--no-testdata', action='store_true', help="Skip testdata")
     options = parser.parse_args()
 
     builder = DemoBuilder()
@@ -141,4 +152,5 @@ def install():
         options.domain,
         Path(options.users_json),
         options.shell,
+        options.no_testdata,
     )
