@@ -93,7 +93,13 @@ class DemoBuilder(Builder_cloud):
             'image_chroot.yml',
         ], cwd=str(setup_path / 'ansible'))
 
-    def setup_demo(self, image, domain, shell):
+    def copy_users(self, target, users_json):
+        target_users_json = target.mount_point / 'opt/liquid-core/users.json'
+        with users_json.open('rb') as f:
+            with target_users_json.open('wb') as g:
+                g.write(f.read())
+
+    def setup_demo(self, image, domain, users_json, shell):
         with self.open_target(image, self.OFFSET) as target:
             with self.patch_resolv_conf(target):
                 if shell:
@@ -105,12 +111,14 @@ class DemoBuilder(Builder_cloud):
                 self.setup_network(target)
                 self.setup_console(target)
                 self.setup_ansible(target, domain)
+                self.copy_users(target, users_json)
 
 def install():
     from argparse import ArgumentParser
     parser = ArgumentParser(description="Provision a nightly image as demo server")
     parser.add_argument('image', help="Path to the image")
     parser.add_argument('domain', help="Domain name for demo server")
+    parser.add_argument('users_json', help="Path to JSON file with initial users")
     parser.add_argument('--shell', action='store_true', help="Open shell in chroot")
     options = parser.parse_args()
 
@@ -118,5 +126,6 @@ def install():
     builder.setup_demo(
         Path(options.image).resolve(),
         options.domain,
+        Path(options.users_json),
         options.shell,
     )
