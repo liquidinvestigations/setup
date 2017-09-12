@@ -121,6 +121,12 @@
     dest: /opt/hoover/libexec/runserver-snoop
     mode: 0755
 
+- name: Create the import_testdata script
+  copy:
+    src: libexec/import_testdata
+    dest: /opt/hoover/libexec/import_testdata
+    mode: 0755
+
 - name: Create the initialization script
   template:
     src: initialize.d/hoover.sh
