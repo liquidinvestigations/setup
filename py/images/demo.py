@@ -93,10 +93,12 @@ class DemoBuilder(Builder_cloud):
             'image_chroot.yml',
         ], cwd=str(setup_path / 'ansible'))
 
-    def setup_demo(self, image, domain):
+    def setup_demo(self, image, domain, shell):
         with self.open_target(image, self.OFFSET) as target:
             with self.patch_resolv_conf(target):
-                #run(['bash'], cwd=str(target.mount_point)); return
+                if shell:
+                    run(['bash'], cwd=str(target.mount_point))
+                    return
                 self.create_swapfile(target)
                 self.setup_sshd(target)
                 self.setup_liquid_sudo(target)
@@ -109,7 +111,12 @@ def install():
     parser = ArgumentParser(description="Provision a nightly image as demo server")
     parser.add_argument('image', help="Path to the image")
     parser.add_argument('domain', help="Domain name for demo server")
+    parser.add_argument('--shell', action='store_true', help="Open shell in chroot")
     options = parser.parse_args()
 
     builder = DemoBuilder()
-    builder.setup_demo(Path(options.image).resolve(), options.domain)
+    builder.setup_demo(
+        Path(options.image).resolve(),
+        options.domain,
+        options.shell,
+    )
