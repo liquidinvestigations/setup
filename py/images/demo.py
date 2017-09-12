@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from contextlib import contextmanager
 from .builders.cloud import Builder_cloud
 from .tools import run
 
@@ -74,24 +75,36 @@ class DemoBuilder(Builder_cloud):
             path = target.mount_point / rel_path
             run(['sed', '-i ', 's/console=tty1/console=ttyS0/g', str(path)])
 
+    @contextmanager
+    def ansible_bind_mount(self, target):
+        local_setup_path = Path(__file__).resolve().parent.parent.parent
+        setup_path = target.mount_point / 'opt/setup'
+
+        assert not setup_path.exists()
+        setup_path.mkdir()
+        run(['mount', '--bind', str(local_setup_path), str(setup_path)])
+
+        try:
+            yield setup_path
+
+        finally:
+            run(['umount', str(setup_path)])
+            setup_path.rmdir()
+
     def setup_ansible(self, target, domain):
         if not Path('/usr/bin/ansible-playbook').is_file():
             self.install_host_dependencies()
 
-        setup_path = target.mount_point / 'opt/setup'
+        with self.ansible_bind_mount(target) as setup_path:
+            config_yml = setup_path / 'ansible/vars/config.yml'
+            with config_yml.open('w', encoding='utf8') as f:
+                f.write('liquid_domain: {}\n'.format(domain))
+                f.write('devel: true\n')
 
-        if not setup_path.exists():
-            run(['git', 'clone', SETUP_GIT, str(setup_path)])
-
-        config_yml = setup_path / 'ansible/vars/config.yml'
-        with config_yml.open('w', encoding='utf8') as f:
-            f.write('liquid_domain: {}\n'.format(domain))
-            f.write('devel: true\n')
-
-        run([
-            'ansible-playbook',
-            'image_chroot.yml',
-        ], cwd=str(setup_path / 'ansible'))
+            run([
+                'ansible-playbook',
+                'image_chroot.yml',
+            ], cwd=str(setup_path / 'ansible'))
 
     def copy_users(self, target, users_json):
         target_users_json = target.mount_point / 'opt/liquid-core/users.json'
