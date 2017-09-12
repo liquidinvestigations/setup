@@ -93,3 +93,9 @@
     src: initialize.d/liquid-core-devel.sh
     dest: /opt/common/initialize.d/80-liquid-core-initial-user.sh
     mode: 0755
+
+- name: Create the devel users file
+  when: devel
+  copy:
+    src: users.json
+    dest: /opt/liquid-core/users.json
