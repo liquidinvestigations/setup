@@ -1,0 +1,4 @@
+#!/bin/bash
+set -ex
+
+dpkg-reconfigure openssh-server

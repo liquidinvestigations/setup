@@ -41,6 +41,7 @@
     - postgresql-contrib
     - postgresql-server-dev-all
     - python-psycopg2 # so that ansible can manage postgres users and dbs
+    - openssh-server
 
 - name: apt-get clean
   command: apt-get -y clean
@@ -86,6 +87,12 @@
   file:
     path: /opt/common/initialize.d
     state: directory
+    mode: 0755
+
+- name: Create the common initialization script
+  copy:
+    src: initialize.d/common
+    dest: /opt/common/initialize.d/00-common
     mode: 0755
 
 - name: Create the boot script
