@@ -63,15 +63,15 @@ class DemoBuilder(Builder_cloud):
             run(['umount', str(setup_path)])
             setup_path.rmdir()
 
-    def setup_ansible(self, target, domain):
+    def setup_ansible(self, target, config_yml):
         if not Path('/usr/bin/ansible-playbook').is_file():
             self.install_host_dependencies()
 
         with self.ansible_bind_mount(target) as setup_path:
-            config_yml = setup_path / 'ansible/vars/config.yml'
-            with config_yml.open('w', encoding='utf8') as f:
-                f.write('liquid_domain: {}\n'.format(domain))
-                f.write('devel: true\n')
+            target_config_yml = setup_path / 'ansible/vars/config.yml'
+            with config_yml.open(encoding='utf8') as f:
+                with target_config_yml.open('w', encoding='utf8') as g:
+                    g.write(f.read())
 
             run([
                 'ansible-playbook',
@@ -104,7 +104,7 @@ class DemoBuilder(Builder_cloud):
             with target_users_json.open('wb') as g:
                 g.write(f.read())
 
-    def setup_demo(self, image, domain, users_json, shell, no_testdata, serial):
+    def setup_demo(self, image, config_yml, users_json, shell, no_testdata, serial):
         with self.open_target(image, self.OFFSET) as target:
             with self.patch_resolv_conf(target):
                 if shell:
@@ -114,7 +114,7 @@ class DemoBuilder(Builder_cloud):
                 self.setup_network(target)
                 if serial:
                     self.setup_console(target)
-                self.setup_ansible(target, domain)
+                self.setup_ansible(target, config_yml)
                 self.copy_users(target, users_json)
                 if no_testdata:
                     self.kill_testdata(target)
@@ -124,7 +124,7 @@ def install():
     from argparse import ArgumentParser
     parser = ArgumentParser(description="Provision a nightly image as demo server")
     parser.add_argument('image', help="Path to the image")
-    parser.add_argument('domain', help="Domain name for demo server")
+    parser.add_argument('config_yml', help="Path to ansible configuration file")
     parser.add_argument('users_json', help="Path to JSON file with initial users")
     parser.add_argument('--shell', action='store_true', help="Open shell in chroot")
     parser.add_argument('--no-testdata', action='store_true', help="Skip testdata")
@@ -135,7 +135,7 @@ def install():
     builder = DemoBuilder()
     builder.setup_demo(
         Path(options.image).resolve(),
-        options.domain,
+        Path(options.config_yml),
         Path(options.users_json),
         options.shell,
         options.no_testdata,
