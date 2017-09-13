@@ -27,3 +27,8 @@
         path: /etc/ssh/sshd_config
         regexp: "^[#]?PasswordAuthentication "
         line: "PasswordAuthentication yes"
+
+    - name: Configure passwordless sudo for liquid
+      copy:
+        content: "liquid ALL=(ALL:ALL) NOPASSWD: ALL\n"
+        dest: /etc/sudoers.d/liquid-devel
