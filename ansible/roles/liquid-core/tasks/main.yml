@@ -32,12 +32,6 @@
   file:
     path: /opt/liquid-core/var
     state: directory
-
-- name: Change ownership of var folder
-  file:
-    path: /opt/liquid-core/var
-    state: directory
-    recurse: yes
     owner: liquid
 
 - name: Collect django static files

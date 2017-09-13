@@ -13,3 +13,4 @@ fi
 
 cd /opt/liquid-core/liquid-core
 ../venv/bin/python ./manage.py migrate
+chown liquid: var/db.sqlite3
