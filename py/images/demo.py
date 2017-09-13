@@ -132,7 +132,7 @@ class DemoBuilder(Builder_cloud):
             with target_users_json.open('wb') as g:
                 g.write(f.read())
 
-    def setup_demo(self, image, domain, users_json, shell, no_testdata):
+    def setup_demo(self, image, domain, users_json, shell, no_testdata, serial):
         with self.open_target(image, self.OFFSET) as target:
             with self.patch_resolv_conf(target):
                 if shell:
@@ -142,7 +142,8 @@ class DemoBuilder(Builder_cloud):
                 self.setup_sshd(target)
                 self.setup_liquid_sudo(target)
                 self.setup_network(target)
-                self.setup_console(target)
+                if serial:
+                    self.setup_console(target)
                 self.setup_ansible(target, domain)
                 self.copy_users(target, users_json)
                 if no_testdata:
@@ -157,6 +158,8 @@ def install():
     parser.add_argument('users_json', help="Path to JSON file with initial users")
     parser.add_argument('--shell', action='store_true', help="Open shell in chroot")
     parser.add_argument('--no-testdata', action='store_true', help="Skip testdata")
+    parser.add_argument('--serial', action='store_true',
+                        help="Use ttys0 as serial console")
     options = parser.parse_args()
 
     builder = DemoBuilder()
@@ -166,4 +169,5 @@ def install():
         Path(options.users_json),
         options.shell,
         options.no_testdata,
+        options.serial,
     )
