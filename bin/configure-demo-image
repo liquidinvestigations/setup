@@ -7,5 +7,5 @@ if __name__ == '__main__':
     repo = Path(__file__).resolve().parent.parent
     sys.path.append(str(repo / 'py'))
 
-    from images import cmd
-    cmd.build_image()
+    from images import demo
+    demo.install()

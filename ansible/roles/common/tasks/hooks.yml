@@ -12,5 +12,5 @@
 
 - name: Configure sudo rights for liquid
   copy:
-    src: sudoers.d/liquid
-    dest: /etc/sudoers.d/liquid
+    src: sudoers.d/liquid-hooks
+    dest: /etc/sudoers.d/liquid-hooks

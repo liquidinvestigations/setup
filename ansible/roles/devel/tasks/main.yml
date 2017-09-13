@@ -25,5 +25,10 @@
     - name: Permit password sshd auth
       lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: "PasswordAuthentication"
+        regexp: "^[#]?PasswordAuthentication "
         line: "PasswordAuthentication yes"
+
+    - name: Configure passwordless sudo for liquid
+      copy:
+        content: "liquid ALL=(ALL:ALL) NOPASSWD: ALL\n"
+        dest: /etc/sudoers.d/liquid-devel

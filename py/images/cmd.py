@@ -10,7 +10,7 @@ FLAVOURS = {
 }
 
 
-def main():
+def build_image():
     parser = ArgumentParser()
     parser.add_argument('flavor', choices=FLAVOURS.keys())
     parser.add_argument('-d', '--debug', action='store_true')
