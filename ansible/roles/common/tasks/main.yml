@@ -148,9 +148,3 @@
     dest: /etc/rc.local
     insertbefore: "exit 0"
     line: "/opt/common/libexec/firewall >> /var/log/rc.local.log 2>&1"
-
-- name: Enable directive to include sudoers.d
-  lineinfile:
-    path: /etc/sudoers
-    regexp: "^#includedir /etc/sudoers.d"
-    line: "includedir /etc/sudoers.d"
