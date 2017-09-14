@@ -86,18 +86,6 @@ class DemoBuilder(Builder_cloud):
         with import_testdata.open('w') as f:
             f.write('#!/bin/bash\necho "no testdata"\n')
 
-    def fix_hoover_ui(self, target):
-        fixui = target.mount_point / 'tmp/fixui'
-        with fixui.open('w') as f:
-            f.write(
-                'cd /opt/hoover/ui\n'
-                'git pull\n'
-                'npm install\n'
-                './run build\n'
-            )
-        target.chroot_run(['bash', '/tmp/fixui'])
-        fixui.unlink()
-
     def copy_users(self, target, users_json):
         target_users_json = target.mount_point / 'opt/liquid-core/users.json'
         with users_json.open('rb') as f:
@@ -118,7 +106,6 @@ class DemoBuilder(Builder_cloud):
                 self.copy_users(target, users_json)
                 if no_testdata:
                     self.kill_testdata(target)
-                self.fix_hoover_ui(target)
 
 def install():
     from argparse import ArgumentParser
