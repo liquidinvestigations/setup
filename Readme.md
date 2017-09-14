@@ -140,6 +140,5 @@ Requirements:
 Invoke the script like this:
 
 ```shell
-cd /mnt/shared
-sudo ./setup/bin/configure-demo-image demo.img config.yml users.json
+./buildbot run shared/setup/bin/configure-demo-image /mnt/shared/demo.img /mnt/shared/config.yml /mnt/shared/users.json
 ```
