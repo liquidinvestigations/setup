@@ -124,3 +124,21 @@ To enable HTTPS functionality in nginx, set `use_https: true` in
 `vars/config.yml` and re-run `ansible-playbook`.  Then, supply all the
 certificate files under `/var/lib/liquid/https/certs/` and restart nginx.  To
 find what certificates are needed, run `grep -r /https/certs ./ansible/roles`.
+
+### Demo server
+The `bin/configure-demo-image` script takes a nightly cloud image and
+provisions it to act as demo server. It should be run from a buildbot VM.
+
+Requirements:
+* The setup repo in `/mnt/shared/setup`.
+* An uncompressed raw nightly image, e.g. in `/mnt/shared/demo.img`.
+* A list of user accounts, e.g. `/mnt/shared/users.json`, in
+  [this](https://github.com/liquidinvestigations/setup/blob/e9cdcbfcbd2af8627d9c6e048ce01b892ac49da7/ansible/roles/liquid-core/files/users.json)
+  format.
+* An ansible configuration file, e.g. `/mnt/shared/config.yml`. Interesting variables include `liquid_domain`, `use_https` and `devel`.
+
+Invoke the script like this:
+
+```shell
+./buildbot run shared/setup/bin/configure-demo-image /mnt/shared/demo.img /mnt/shared/config.yml /mnt/shared/users.json
+```
