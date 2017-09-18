@@ -3,6 +3,7 @@
   git:
     repo: https://github.com/liquidinvestigations/h-client-build.git
     dest: /opt/hypothesis/h-client-build
+    version: "{{ git_repo_versions.hypothesis.h_client_build }}"
 
 - name: Bake the boot script
   environment:

@@ -38,6 +38,7 @@
   - name: Run hoover initial setup
     shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/master/install.py)"
     environment:
+      HOOVER_SETUP_BRANCH: "{{ git_repo_versions.hoover.setup }}"
       HOOVER_HOME: "/opt/hoover"
       HOOVER_BOOTSTRAP_NO_DB: "True"
       HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
@@ -143,6 +144,7 @@
   git:
     repo: https://github.com/hoover/testdata.git
     dest: /opt/hoover/testdata
+    version: "{{ git_repo_versions.hoover.testdata }}"
 
 - name: Create the testing_local.py config for snoop
   copy:

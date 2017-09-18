@@ -35,6 +35,7 @@
   git:
     repo: https://github.com/liquidinvestigations/discover.git
     dest: /opt/discover/discover
+    version: "{{ git_repo_versions.discover }}"
 
 - name: Touch the secret_key.py config for discover
   file:

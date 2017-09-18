@@ -18,7 +18,7 @@
   git:
     repo: https://github.com/hypothesis/h.git
     dest: /opt/hypothesis/h
-    version: 53046f652c801b85e792c0020fa71f7493b249da
+    version: "{{ git_repo_versions.hypothesis.h }}"
 
 - name: Change ownership of h folder
   file:
