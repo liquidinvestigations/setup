@@ -20,6 +20,4 @@ do
   "$file"
 done
 
-service postgresql stop
-
 date
