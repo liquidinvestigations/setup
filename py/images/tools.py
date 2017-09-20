@@ -42,7 +42,7 @@ def run(args, **kwargs):
 def download(url, path):
     if path.is_file():
         return
-    return run(['curl', url, '-o', str(path)])
+    return run(['curl', '-sS', url, '-o', str(path)])
 
 
 def xzcat(xz_path, content_path):
