@@ -48,11 +48,11 @@ Vagrant.configure(2) do |config|
 
     # install dependencies
     ( which ansible && which git ) || ( \
-        sudo apt-get update; \
-        sudo apt-get install -y software-properties-common python-software-properties; \
+        sudo apt-get -qq update; \
+        ( sudo apt-get -qq install -y software-properties-common python-software-properties > /dev/null ); \
         sudo apt-add-repository ppa:ansible/ansible; \
-        sudo apt-get update; \
-        sudo apt-get install -y ansible git \
+        sudo apt-get -qq update; \
+        ( sudo apt-get -qq install -y ansible git > /dev/null ) \
     )
 
     sudo supervisorctl update

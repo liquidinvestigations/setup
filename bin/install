@@ -10,9 +10,10 @@ def which_ansible_playbook():
 ansible_playbook = which_ansible_playbook()
 if not ansible_playbook:
     print("ansible not found; installing...")
-    run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
-    run(['apt-get', 'update'])
-    run(['apt-get', 'install', '-y', 'ansible', 'git', 'qemu-utils'])
+    run(['apt-add-repository', '-y', 'ppa:ansible/ansible'], check=True)
+    run(['apt-get', '-qq', 'update'], check=True)
+    run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git', 'qemu-utils'],
+        stdout=subprocess.DEVNULL, check=True)
     ansible_playbook = which_ansible_playbook()
 
 assert ansible_playbook
