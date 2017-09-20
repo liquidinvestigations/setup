@@ -13,8 +13,8 @@ class BaseBuilder:
 
     def install_host_dependencies(self):
         run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
-        run(['apt-get', 'update'])
-        run(['apt-get', 'install', '-y', 'ansible', 'git', 'qemu-utils'])
+        run(['apt-get', '-qq', 'update'])
+        run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git', 'qemu-utils'])
 
     def get_base_image(self):
         raise NotImplementedError
@@ -61,9 +61,9 @@ class BaseBuilder:
             resolv_conf_orig.rename(resolv_conf)
 
     def prepare_chroot(self, target):
-        target.chroot_run(['apt-get', 'update'])
-        target.chroot_run(['apt-get', 'install', '-y', 'python'])
-        target.chroot_run(['apt-get', 'clean'])
+        target.chroot_run(['apt-get', '-qq', 'update'])
+        target.chroot_run(['apt-get', '-qq', 'install', '-y', 'python'])
+        target.chroot_run(['apt-get', '-qq', 'clean'])
 
     def _ansible_playbook(self, playbook):
         run(['ansible-playbook', '-i', 'hosts', playbook],
