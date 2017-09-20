@@ -67,8 +67,8 @@ class Target:
         self.device = device
         self.mount_point = mount_point
 
-    def chroot_run(self, args):
-        return run(['chroot', str(self.mount_point)] + args)
+    def chroot_run(self, args, **kwargs):
+        return run(['chroot', str(self.mount_point)] + args, **kwargs)
 
 
 @contextmanager
