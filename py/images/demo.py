@@ -75,6 +75,7 @@ class DemoBuilder(Builder_cloud):
 
             run([
                 'ansible-playbook',
+                '-i', 'hosts',
                 'image_chroot.yml',
             ], cwd=str(setup_path / 'ansible'))
 

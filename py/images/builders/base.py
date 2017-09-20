@@ -66,7 +66,8 @@ class BaseBuilder:
         target.chroot_run(['apt-get', 'clean'])
 
     def _ansible_playbook(self, playbook):
-        run(['ansible-playbook', playbook], cwd=str(self.setup / 'ansible'))
+        run(['ansible-playbook', '-i', 'hosts', playbook],
+            cwd=str(self.setup / 'ansible'))
 
     def prepare_docker_images(self):
         self._ansible_playbook('image_host_docker.yml')

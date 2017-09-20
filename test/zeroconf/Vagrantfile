@@ -62,7 +62,7 @@ Vagrant.configure(2) do |config|
     cd $HOME/setup/ansible
     echo "liquid_domain: '#{hostname}'" > vars/config.yml
     echo "devel: true" >> vars/config.yml
-    sudo ansible-playbook server.yml
+    sudo ansible-playbook -i hosts server.yml
 
     # pull the liquid-core version that runs zeroconf
     sudo sed -i 's/DNSMASQ_INTERFACE = None/DNSMASQ_INTERFACE = "enp0s8"/' /opt/discover/discover/settings/local.py
