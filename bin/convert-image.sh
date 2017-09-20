@@ -49,8 +49,8 @@ set -x
 
 # Install tools needed for image conversion
 if [ -n "$HOSTINST" ]; then
-    apt-get update
-    apt-get install -y --no-install-recommends $HOSTINST
+    apt-get -qq update
+    apt-get -qq install -y --no-install-recommends $HOSTINST > /dev/null
 fi
 
 # Create copy of image so source image is not altered
@@ -97,9 +97,9 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" > $TARGET/etc/sudoers.d/vagrant
 # Set up things inside image for specific virtualization program
 
 if [ "$FORMAT" = virtualbox ]; then
-    chroot $TARGET apt-get update
+    chroot $TARGET apt-get -qq update
     # Recommended packages would install VirtualBox X11 stuff we don't need
-    chroot $TARGET apt-get install -y --no-install-recommends virtualbox-guest-dkms
+    chroot $TARGET apt-get install -y --no-install-recommends virtualbox-guest-dkms > /dev/null
 
     # Networking must work for Vagrant ssh port forwarding
     echo -e "auto enp0s3\nallow-hotplug enp0s3\niface enp0s3 inet dhcp" > $TARGET/etc/network/interfaces.d/enp0s3.cfg
@@ -109,7 +109,7 @@ fi
 mv $TARGET/etc/resolv.conf.orig $TARGET/etc/resolv.conf
 
 # Unmount image before conversion
-chroot $TARGET apt-get clean
+chroot $TARGET apt-get -qq clean
 umount $TARGET/proc
 umount $TARGET/dev
 umount $TARGET
