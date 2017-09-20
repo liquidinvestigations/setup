@@ -61,7 +61,7 @@
 
 # Same as above, but for all the unused security certificates.
 - name: Move away generated tls certificates
-  shell: for ext in tls.crt tls.key tls.dh signing.key; do (ls /opt/matrix/synapse/unused-certificate.$ext || mv /opt/matrix/synapse/matrix.{{ liquid_domain }}.$ext /opt/matrix/synapse/unused-certificate.$ext0); done
+  shell: for ext in tls.crt tls.key tls.dh signing.key; do (ls /opt/matrix/synapse/unused-certificate.$ext || mv /opt/matrix/synapse/matrix.{{ liquid_domain }}.$ext /opt/matrix/synapse/unused-certificate.$ext); done
 
 - name: Overwrite the configuration file
   template:
