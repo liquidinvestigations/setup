@@ -135,7 +135,7 @@
     path: /opt/common/libexec
     state: directory
 
-- include: tasks/hooks.yml
+- import_tasks: tasks/hooks.yml
 
 - name: Create the firewall script
   copy:
