@@ -57,7 +57,7 @@
     chdir: /opt/hypothesis/h
     creates: build
 
-- include: tasks/client.yml
+- import_tasks: tasks/client.yml
 
 - name: Download elasticsearch v1
   unarchive:

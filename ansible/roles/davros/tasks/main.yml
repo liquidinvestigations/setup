@@ -1,7 +1,7 @@
 ---
-- include: tasks/docker.yml
+- import_tasks: tasks/docker.yml
 
-- include: tasks/authproxy.yml
+- import_tasks: tasks/authproxy.yml
 
 - name: Create supervisor config
   copy:
