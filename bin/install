@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import os
-from subprocess import run, PIPE
+from subprocess import run, PIPE, DEVNULL
 
 def which_ansible_playbook():
     return run(['which', 'ansible-playbook'], stdout=PIPE).stdout.strip()
@@ -13,7 +13,7 @@ if not ansible_playbook:
     run(['apt-add-repository', '-y', 'ppa:ansible/ansible'], check=True)
     run(['apt-get', '-qq', 'update'], check=True)
     run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git', 'qemu-utils'],
-        stdout=subprocess.DEVNULL, check=True)
+        stdout=DEVNULL, check=True)
     ansible_playbook = which_ansible_playbook()
 
 assert ansible_playbook
