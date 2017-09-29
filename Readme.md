@@ -9,22 +9,20 @@ image for a cloud server or ARM64 microboard.
 
 ### Build an OS image
 You can build a full system image, based on Ubuntu 16.04 LTS, that includes the
-liquid software bundle. This is done using [buildbot][].
+liquid software bundle. This is done using [Factory][].
 
-[buildbot]: https://github.com/liquidinvestigations/buildbot
+[Factory]: https://github.com/liquidinvestigations/factory
 
-First, set up buildbot and make sure you can log into an instance. It should be
+First, set up factory and make sure you can log into an instance. It should be
 an arm64 instance running on arm64 hardware if you want to target a microboard,
 or an x86_64 image running on x86_64 hardware if you want a server/cloud image.
 
-Next, clone this repository inside the `shared` folder, and run the build
-script in a buildbot instance (use `build-odroid_c2-image.sh for an odroid
-arm64 image instead of an x86_64 image):
+Next, run the build script in a factory instance:
 
 ```shell
-$ git clone https://github.com/liquidinvestigations/setup ./shared/setup
-$ echo 'liquid_domain: liquid.example.com' > ./shared/setup/ansible/vars/config.yml
-$ ./buildbot run shared/setup/bin/build_image cloud
+$ git clone https://github.com/liquidinvestigations/setup
+$ echo 'liquid_domain: liquid.example.com' > setup/ansible/vars/config.yml
+$ factory run --share setup:/mnt/setup /mnt/setup/bin/build_image cloud
 ```
 
 If all goes well, the image should be saved in the `shared/output` folder. You
@@ -128,7 +126,7 @@ restart nginx.  To find what certificates are needed, run `grep -r /https/certs
 
 ### Demo server
 The `bin/configure-demo-image` script takes a nightly cloud image and
-provisions it to act as demo server. It should be run from a buildbot VM.
+provisions it to act as demo server. It should be run from a Factory VM.
 
 Requirements:
 * The setup repo in `/mnt/shared/setup`.
@@ -141,5 +139,5 @@ Requirements:
 Invoke the script like this:
 
 ```shell
-./buildbot run shared/setup/bin/configure-demo-image /mnt/shared/demo.img /mnt/shared/config.yml /mnt/shared/users.json
+./factory run shared/setup/bin/configure-demo-image /mnt/shared/demo.img /mnt/shared/config.yml /mnt/shared/users.json
 ```
