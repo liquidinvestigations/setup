@@ -11,8 +11,7 @@ parallel(
                 sh 'factory/factory prepare-cloud-image'
             }
             stage('CLOUD: Write setup configuration file') {
-                sh 'echo "domain: liquid_jenkins_build.example.org" > ansible/vars/config.yml'
-                sh 'echo "devel: true" > ansible/vars/config.yml'
+                sh 'cp jenkins-config.yml ansible/vars/config.yml'
             }
             stage('CLOUD: Build Image') {
                 sh 'mkdir images'
@@ -47,8 +46,7 @@ parallel(
                 sh 'factory/factory prepare-cloud-image'
             }
             stage('ODROID C2: Write setup configuration file') {
-                sh 'echo "domain: liquid_jenkins_build.example.org" > ansible/vars/config.yml'
-                sh 'echo "devel: true" > ansible/vars/config.yml'
+                sh 'cp jenkins-config.yml ansible/vars/config.yml'
             }
             stage('ODROID C2: Build Image') {
                 sh 'factory/factory run --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/build_image odroid_c2'
