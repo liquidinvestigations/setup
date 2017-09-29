@@ -6,12 +6,12 @@
 
 set -e
 
-SETUPDIR=/mnt/shared/setup
+SETUPDIR=/mnt/setup
 TARGET=/mnt/target
 TEMPDIR=/tmp
-OUTPUT=/mnt/shared/output
-IMAGE=/mnt/shared/ubuntu-x86_64-raw.img
-TEMPIMG=/mnt/shared/temp-image.img
+OUTPUT=/mnt/images/output
+IMAGE=/mnt/images/ubuntu-x86_64-raw.img
+TEMPIMG=/mnt/images/temp-image.img
 
 # TODO: Remove defaulting to virtualbox when buildbot supports arguments
 if [ -n "$1" ]; then
@@ -120,10 +120,10 @@ losetup -d /dev/loop0
 
 mkdir -p $OUTPUT
 if [ "$FORMAT" = virtualbox ]; then
-    basefolder=/mnt/shared/output
+    basefolder=/mnt/images/output
 
     vbimage="$basefolder/$VMNAME/$VMNAME.vbi"
-    vboxmanage createvm --basefolder /mnt/shared/output --name "$VMNAME" --ostype Ubuntu_64 --register
+    vboxmanage createvm --basefolder /mnt/images/output --name "$VMNAME" --ostype Ubuntu_64 --register
     vboxmanage modifyvm "$VMNAME" --memory 2048
     vboxmanage modifyvm "$VMNAME" --audio none
     vboxmanage modifyvm "$VMNAME" --nic1 NAT

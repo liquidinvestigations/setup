@@ -4,12 +4,12 @@ from contextlib import contextmanager
 import subprocess
 from ..tools import run, losetup, mount_target
 
-SHARED = Path('/mnt/shared')
+IMAGES = Path('/mnt/images')
 
 
 class BaseBuilder:
 
-    setup = SHARED / 'setup'
+    setup = Path(__file__).resolve().parent.parent.parent.parent
 
     def install_host_dependencies(self):
         run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
