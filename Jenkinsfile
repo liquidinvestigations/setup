@@ -18,7 +18,7 @@ parallel(
                 sh 'factory/factory run --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/build_image cloud'
             }
             stage("CLOUD: Run first boot") {
-                sh 'cp images/ubuntu-x86_64-raw.img images/liquid-cloud-x86_64/disk.img'
+                sh 'cp images/ubuntu-x86_64-raw.img factory/images/liquid-cloud-x86_64/disk.img'
                 sh 'factory/factory --platform liquid-cloud-x86_64 run --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/wait_first_boot.py'
             }
             stage('CLOUD: Archive Raw Image') {
