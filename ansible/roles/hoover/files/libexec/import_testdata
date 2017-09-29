@@ -44,6 +44,7 @@ set -x
 EOF
 
 supervisorctl stop hoover-tika
+supervisorctl start hoover-elasticsearch
 
 # wait after hoover's elasticsearch
 es_url="http://localhost:14352"
