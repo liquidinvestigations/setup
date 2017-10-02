@@ -51,6 +51,7 @@ parallel(
                 sh 'cp jenkins-config.yml ansible/vars/config.yml'
             }
             stage('ODROID C2: Build Image') {
+                sh 'mkdir images'
                 sh 'factory/factory run --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/build_image odroid_c2'
             }
             stage('ODROID C2: Archive Raw Image') {
