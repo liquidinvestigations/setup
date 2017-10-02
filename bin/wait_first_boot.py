@@ -11,6 +11,7 @@
 from os.path import exists
 from time import sleep
 from sys import exit
+import subprocess
 
 FILE_FAIL = '/opt/common/first_boot_failed'
 FILE_DONE = '/opt/common/first_boot_done'
@@ -55,5 +56,10 @@ def cat_logs_and_exit():
 
 
 if __name__ == '__main__':
-    wait_for_first_boot()
-    cat_logs_and_exit()
+    try:
+        wait_for_first_boot()
+        cat_logs_and_exit()
+    finally:
+        print("Stopping all apps")
+        # otherwise, shutdown takes a long time, and kitchen times out
+        subprocess.run(['supervisorctl', 'stop', 'all'])
