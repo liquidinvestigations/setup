@@ -1,0 +1,14 @@
+domain: "liquid_jenkins_build.example.org"
+devel: true
+
+# override repo branch names for CI build
+git_repo_versions:
+  hoover:
+    setup: master
+    testdata: master
+  hypothesis:
+    h: 53046f652c801b85e792c0020fa71f7493b249da
+    h_client_build: master
+  discover: master
+  liquid_core: master
+  setup: master

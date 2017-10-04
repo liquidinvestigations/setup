@@ -1,5 +1,5 @@
 from ..tools import download, run
-from .base import BaseBuilder, SHARED
+from .base import BaseBuilder, IMAGES
 
 
 class Builder_cloud(BaseBuilder):
@@ -11,10 +11,10 @@ class Builder_cloud(BaseBuilder):
             'https://liquidinvestigations.org/images/base_images/'
             'ubuntu-16.04-server-cloudimg-amd64-disk1.img'
         )
-        base_image = SHARED / 'ubuntu-x86_64-cow2.img'
+        base_image = IMAGES / 'ubuntu-x86_64-cow2.img'
         download(base_image_url, base_image)
 
-        image = SHARED / 'ubuntu-x86_64-raw.img'
+        image = IMAGES / 'ubuntu-x86_64-raw.img'
         run([
             'qemu-img', 'convert',
             '-f', 'qcow2',
