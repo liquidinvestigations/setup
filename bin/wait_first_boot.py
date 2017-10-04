@@ -63,3 +63,6 @@ if __name__ == '__main__':
         print("Stopping all apps")
         # otherwise, shutdown takes a long time, and kitchen times out
         subprocess.run(['supervisorctl', 'stop', 'all'])
+        subprocess.run(['service', 'docker', 'stop'])
+        subprocess.run(['service', 'postgresql', 'stop'])
+        subprocess.run(['sync'])
