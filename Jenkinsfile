@@ -15,7 +15,7 @@ parallel(
             }
             stage('CLOUD: Build Image') {
                 sh 'mkdir images'
-                sh 'factory/factory run --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/build_image cloud'
+                sh 'factory/factory run --share .:/mnt/setup --share images:/mnt/images ANSIBLE_NOCOLOR=true time /mnt/setup/bin/build_image cloud'
             }
             stage("CLOUD: Run first boot") {
                 sh 'mkdir factory/images/liquid-cloud-x86_64'
@@ -52,7 +52,7 @@ parallel(
             }
             stage('ODROID C2: Build Image') {
                 sh 'mkdir images'
-                sh 'factory/factory run --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/build_image odroid_c2'
+                sh 'factory/factory run --share .:/mnt/setup --share images:/mnt/images ANSIBLE_NOCOLOR=true time /mnt/setup/bin/build_image odroid_c2'
             }
             stage('ODROID C2: Archive Raw Image') {
                 sh 'xz -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-raw.img.xz'
