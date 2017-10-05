@@ -1,0 +1,17 @@
+#!/bin/bash
+set -x
+
+export ANSIBLE_NOCOLOR=true
+
+time "$@"
+RETURN_CODE=$?
+
+if [ $RETURN_CODE ]; then
+    ps faux
+    free -h
+    df -h
+    w
+    mesg
+
+    exit $RETURN_CODE
+fi

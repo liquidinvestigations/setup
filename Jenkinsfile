@@ -15,7 +15,7 @@ parallel(
             }
             stage('CLOUD: Build Image') {
                 sh 'mkdir images'
-                sh 'factory/factory run --smp 2 --memory 4096 --share .:/mnt/setup --share images:/mnt/images ANSIBLE_NOCOLOR=true time /mnt/setup/bin/build_image cloud'
+                sh 'factory/factory run --smp 2 --memory 4096 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud'
             }
             stage("CLOUD: Run first boot") {
                 sh 'mkdir factory/images/liquid-cloud-x86_64'
