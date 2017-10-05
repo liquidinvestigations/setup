@@ -61,7 +61,7 @@ parallel(
             stage('ODROID C2: Build Image') {
                 sh 'cp jenkins-config.yml ansible/vars/config.yml'
                 sh 'mkdir images'
-                sh 'factory/factory run  --smp 2 --memory 1024 --share .:/mnt/setup --share images:/mnt/images ANSIBLE_NOCOLOR=true time /mnt/setup/bin/build_image odroid_c2'
+                sh 'factory/factory run  --smp 2 --memory 1024 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2'
             }
             stage('ODROID C2: Archive Raw Image') {
                 sh 'xz -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-raw.img.xz'
