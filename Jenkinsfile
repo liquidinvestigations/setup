@@ -5,10 +5,7 @@ parallel(
             deleteDir()
             checkout scm
             stage('CLOUD: Host Debug Information') {
-                sh 'hostname'
-                sh 'uname'
-                sh 'free -h'
-                sh 'df -h'
+                sh 'set -x && hostname && uname -a && free -h && df -h'
             }
             stage('CLOUD: Build a Factory & Prepare Cloud Image') {
                 sh 'git clone https://github.com/liquidinvestigations/factory'
@@ -49,10 +46,7 @@ parallel(
             deleteDir()
             checkout scm
             stage('ODROID C2: Host Debug Information') {
-                sh 'hostname'
-                sh 'uname'
-                sh 'free -h'
-                sh 'df -h'
+                sh 'set -x && hostname && uname -a && free -h && df -h'
             }
             stage('ODROID C2: Build a Factory & Prepare Cloud Image') {
                 sh 'git clone https://github.com/liquidinvestigations/factory'
