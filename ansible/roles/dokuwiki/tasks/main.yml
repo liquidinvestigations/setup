@@ -1,28 +1,31 @@
 ---
-- import_tasks: tasks/docker.yml
+- when: ansible_architecture == 'x86_64'
+  block:
 
-- name: Create supervisor config
-  copy:
-    src: supervisor/dokuwiki.conf
-    dest: /etc/supervisor/conf.d/dokuwiki.conf
+  - import_tasks: tasks/docker.yml
 
-- name: Create nginx config
-  template:
-    src: nginx/dokuwiki.conf
-    dest: /etc/nginx/sites-enabled/dokuwiki.conf
+  - name: Create supervisor config
+    copy:
+      src: supervisor/dokuwiki.conf
+      dest: /etc/supervisor/conf.d/dokuwiki.conf
 
-- name: Create the initialization script
-  copy:
-    src: initialize.d/dokuwiki
-    dest: /opt/common/initialize.d/21-dokuwiki.sh
-    mode: 0755
+  - name: Create nginx config
+    template:
+      src: nginx/dokuwiki.conf
+      dest: /etc/nginx/sites-enabled/dokuwiki.conf
 
-- name: Subscribe to hooks
-  copy:
-    src: hooks/user
-    dest: /opt/common/hooks/{{ item }}.d/dokuwiki
-    mode: 0755
-  with_items:
-    - user-created
-    - user-passwd
-    - user-deleted
+  - name: Create the initialization script
+    copy:
+      src: initialize.d/dokuwiki
+      dest: /opt/common/initialize.d/21-dokuwiki.sh
+      mode: 0755
+
+  - name: Subscribe to hooks
+    copy:
+      src: hooks/user
+      dest: /opt/common/hooks/{{ item }}.d/dokuwiki
+      mode: 0755
+    with_items:
+      - user-created
+      - user-passwd
+      - user-deleted
