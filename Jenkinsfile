@@ -9,7 +9,7 @@ parallel(
             }
             stage('CLOUD: Build a Factory & Prepare Cloud Image') {
                 sh 'git clone https://github.com/liquidinvestigations/factory'
-                sh 'factory/factory prepare-cloud-image'
+                sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
             }
             stage('CLOUD: Build Image') {
                 sh 'cp jenkins-config.yml ansible/vars/config.yml'
@@ -50,7 +50,7 @@ parallel(
             }
             stage('ODROID C2: Build a Factory & Prepare Cloud Image') {
                 sh 'git clone https://github.com/liquidinvestigations/factory'
-                sh 'factory/factory prepare-cloud-image'
+                sh 'cd factory/images; mkdir cloud-arm64; cd cloud-arm64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-arm64-image.tar.xz | xzcat | tar x'
             }
             stage('ODROID C2: Build Image') {
                 sh 'cp jenkins-config.yml ansible/vars/config.yml'
