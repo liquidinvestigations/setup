@@ -9,7 +9,7 @@ FLAVOURS = {
 }
 
 
-def build(flavor, tags, image_path):
+def build(flavor, tags, image_path, docker):
     builder_cls = FLAVOURS[flavor]
     builder = builder_cls()
     builder.install_ansible()
@@ -21,7 +21,7 @@ def build(flavor, tags, image_path):
         builder.install_qemu_utils()
         image = builder.prepare_image()
 
-    builder.build(image, tags)
+    builder.build(image, tags, docker)
 
 
 def install(tags):

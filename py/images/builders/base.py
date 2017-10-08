@@ -105,7 +105,8 @@ class BaseBuilder:
 
         return image
 
-    def build(self, image, tags):
+    def build(self, image, tags, docker=True):
         with self.open_target(image) as target:
-            self.install_docker_images(target)
+            if docker:
+                self.install_docker_images(target)
             self.run_ansible('image_chroot.yml', tags)
