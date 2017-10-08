@@ -1,3 +1,4 @@
+from pathlib import Path
 from .builders.cloud import Builder_cloud
 from .builders.odroid import Builder_odroid_c2, Builder_odroid_xu4
 
@@ -8,9 +9,19 @@ FLAVOURS = {
 }
 
 
-def build(flavor, tags):
+def build(flavor, tags, image_path):
     builder_cls = FLAVOURS[flavor]
-    builder_cls().build(tags)
+    builder = builder_cls()
+    builder.install_ansible()
+
+    if image_path:
+        image = Path(image_path).resolve()
+
+    else:
+        builder.install_qemu_utils()
+        image = builder.prepare_image()
+
+    builder.build(image, tags)
 
 
 def install(tags):

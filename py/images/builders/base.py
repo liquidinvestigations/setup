@@ -101,14 +101,11 @@ class BaseBuilder:
 
         with self.open_target(image) as target:
             run(['resize2fs', target.device])
+            self.prepare_chroot(target)
 
         return image
 
-    def build(self, tags):
-        self.install_ansible()
-        self.install_qemu_utils()
-        image = self.prepare_image()
+    def build(self, image, tags):
         with self.open_target(image) as target:
-            self.prepare_chroot(target)
             self.install_docker_images(target)
             self.run_ansible('image_chroot.yml', tags)
