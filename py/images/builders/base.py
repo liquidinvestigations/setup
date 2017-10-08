@@ -35,7 +35,8 @@ class BaseBuilder:
 
     def install_ansible(self):
         have_ansible = (
-            run(['which', 'ansible-playbook'], stdout=subprocess.PIPE)
+            run(['which', 'ansible-playbook'],
+                stdout=subprocess.PIPE, check=False)
             .stdout.strip()
         )
         if not have_ansible:
