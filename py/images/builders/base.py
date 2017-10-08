@@ -63,7 +63,8 @@ class BaseBuilder:
 
         with losetup(image, self.platform.offset) as device:
             with mount_target(device, mount_point, ['proc', 'dev']) as target:
-                yield target
+                with patch_resolv_conf(target):
+                    yield target
 
     def prepare_chroot(self, target):
         target.chroot_run(['apt-get', '-qq', 'update'])
@@ -94,8 +95,6 @@ class BaseBuilder:
 
         with self.open_target(image) as target:
             run(['resize2fs', target.device])
-
-            with patch_resolv_conf(target):
-                self.prepare_chroot(target)
-                self.install_docker_images(target)
-                self.install(target)
+            self.prepare_chroot(target)
+            self.install_docker_images(target)
+            self.install(target)

@@ -3,7 +3,6 @@ from pathlib import Path
 from contextlib import contextmanager
 from .builders.cloud import Builder_cloud
 from .tools import run
-from .base import patch_resolv_conf
 
 SETUP_GIT = 'https://github.com/liquidinvestigations/setup'
 
@@ -96,18 +95,17 @@ class DemoBuilder(Builder_cloud):
 
     def setup_demo(self, image, config_yml, users_json, shell, no_testdata, serial):
         with self.open_target(image) as target:
-            with patch_resolv_conf(target):
-                if shell:
-                    run(['bash'], cwd=str(target.mount_point))
-                    return
-                self.create_swapfile(target)
-                self.setup_network(target)
-                if serial:
-                    self.setup_console(target)
-                self.setup_ansible(target, config_yml)
-                self.copy_users(target, users_json)
-                if no_testdata:
-                    self.kill_testdata(target)
+            if shell:
+                run(['bash'], cwd=str(target.mount_point))
+                return
+            self.create_swapfile(target)
+            self.setup_network(target)
+            if serial:
+                self.setup_console(target)
+            self.setup_ansible(target, config_yml)
+            self.copy_users(target, users_json)
+            if no_testdata:
+                self.kill_testdata(target)
 
 def install():
     from argparse import ArgumentParser
