@@ -71,10 +71,8 @@ class BaseBuilder:
         run(['ansible-playbook', '-i', 'hosts', playbook],
             cwd=str(self.setup / 'ansible'))
 
-    def prepare_docker_images(self):
+    def install_docker_images(self, target):
         self._ansible_playbook('image_host_docker.yml')
-
-    def copy_docker_images(self, target):
         run(['service', 'docker', 'stop'])
         run([
             'cp', '-a',
@@ -95,6 +93,5 @@ class BaseBuilder:
 
             with self.patch_resolv_conf(target):
                 self.prepare_chroot(target)
-                self.prepare_docker_images()
-                self.copy_docker_images(target)
+                self.install_docker_images(target)
                 self.install(target)
