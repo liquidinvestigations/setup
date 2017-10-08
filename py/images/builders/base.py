@@ -7,6 +7,12 @@ from ..tools import run, losetup, mount_target
 IMAGES = Path('/mnt/images')
 
 
+class Platform:
+
+    def get_base_image(self):
+        raise NotImplementedError
+
+
 class BaseBuilder:
 
     setup = Path(__file__).resolve().parent.parent.parent.parent
@@ -16,9 +22,6 @@ class BaseBuilder:
         run(['apt-get', '-qq', 'update'])
         run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git', 'qemu-utils'],
             stdout=subprocess.DEVNULL)
-
-    def get_base_image(self):
-        raise NotImplementedError
 
     def resize_partition(self, image, new_size):
         run(['truncate', '-s', new_size, str(image)])
@@ -85,7 +88,7 @@ class BaseBuilder:
 
     def build(self):
         self.install_host_dependencies()
-        image, offset = self.get_base_image()
+        image, offset = self.platform.get_base_image()
         self.resize_partition(image, '8G')
 
         with self.open_target(image, offset) as target:

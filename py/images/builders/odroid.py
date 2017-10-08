@@ -1,8 +1,10 @@
 from ..tools import download, xzcat, run
-from .base import BaseBuilder, IMAGES
+from .base import BaseBuilder, Platform, IMAGES
 
 
-class Builder_odroid_c2(BaseBuilder):
+class Platform_odroid_c2(Platform):
+
+    OFFSET = 135266304
 
     def get_base_image(self):
         base_image_url = (
@@ -15,10 +17,17 @@ class Builder_odroid_c2(BaseBuilder):
         image = IMAGES / 'ubuntu-odroid_c2-raw.img'
         xzcat(base_image, image)
 
-        return (image, 135266304)
+        return (image, self.OFFSET)
 
 
-class Builder_odroid_xu4(BaseBuilder):
+class Builder_odroid_c2(BaseBuilder):
+
+    platform = Platform_odroid_c2()
+
+
+class Platform_odroid_xu4:
+
+    OFFSET = 135266304
 
     def get_base_image(self):
         base_image_url = (
@@ -31,7 +40,12 @@ class Builder_odroid_xu4(BaseBuilder):
         image = IMAGES / 'ubuntu-odroid_xu4-raw.img'
         xzcat(base_image, image)
 
-        return (image, 135266304)
+        return (image, self.OFFSET)
+
+
+class Builder_odroid_xu4(BaseBuilder):
+
+    platform = Platform_odroid_xu4()
 
     def _fix_network(self, target):
         run(['apt-get', '-qq', 'purge', '--auto-remove', 'network-manager'])
