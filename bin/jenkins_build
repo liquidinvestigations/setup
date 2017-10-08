@@ -6,10 +6,4 @@ export ANSIBLE_NOCOLOR=true
 time "$@"
 RETURN_CODE=$?
 
-w
-free -h
-df -h
-ps faux
-dmesg
-
 exit $RETURN_CODE
