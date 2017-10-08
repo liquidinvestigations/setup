@@ -88,13 +88,19 @@ class BaseBuilder:
     def install(self, target):
         self._ansible_playbook('image_chroot.yml')
 
-    def build(self):
-        self.install_host_dependencies()
+    def prepare_image(self):
         image = self.platform.get_base_image()
         self.resize_partition(image, '8G')
 
         with self.open_target(image) as target:
             run(['resize2fs', target.device])
+
+        return image
+
+    def build(self):
+        self.install_host_dependencies()
+        image = self.prepare_image()
+        with self.open_target(image) as target:
             self.prepare_chroot(target)
             self.install_docker_images(target)
             self.install(target)
