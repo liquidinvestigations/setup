@@ -4,7 +4,7 @@ from .base import BaseBuilder, Platform, IMAGES
 
 class Platform_cloud:
 
-    OFFSET = 1048576
+    offset = 1048576
 
     def get_base_image(self):
         base_image_url = (
@@ -23,7 +23,7 @@ class Platform_cloud:
             str(image),
         ])
 
-        return (image, self.OFFSET)
+        return image
 
 
 class Builder_cloud(BaseBuilder):

@@ -94,7 +94,7 @@ class DemoBuilder(Builder_cloud):
                 g.write(f.read())
 
     def setup_demo(self, image, config_yml, users_json, shell, no_testdata, serial):
-        with self.open_target(image, self.OFFSET) as target:
+        with self.open_target(image) as target:
             with self.patch_resolv_conf(target):
                 if shell:
                     run(['bash'], cwd=str(target.mount_point))

@@ -41,11 +41,11 @@ class BaseBuilder:
         run(['sfdisk', str(image)], input=''.join(sfdisk_new).encode('latin1'))
 
     @contextmanager
-    def open_target(self, image, offset):
+    def open_target(self, image):
         mount_point = Path('/mnt/target')
         mount_point.mkdir(parents=True, exist_ok=True)
 
-        with losetup(image, offset) as device:
+        with losetup(image, self.platform.offset) as device:
             with mount_target(device, mount_point, ['proc', 'dev']) as target:
                 yield target
 
@@ -88,10 +88,10 @@ class BaseBuilder:
 
     def build(self):
         self.install_host_dependencies()
-        image, offset = self.platform.get_base_image()
+        image = self.platform.get_base_image()
         self.resize_partition(image, '8G')
 
-        with self.open_target(image, offset) as target:
+        with self.open_target(image) as target:
             run(['resize2fs', target.device])
 
             with self.patch_resolv_conf(target):

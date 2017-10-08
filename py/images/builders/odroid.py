@@ -4,7 +4,7 @@ from .base import BaseBuilder, Platform, IMAGES
 
 class Platform_odroid_c2(Platform):
 
-    OFFSET = 135266304
+    offset = 135266304
 
     def get_base_image(self):
         base_image_url = (
@@ -17,7 +17,7 @@ class Platform_odroid_c2(Platform):
         image = IMAGES / 'ubuntu-odroid_c2-raw.img'
         xzcat(base_image, image)
 
-        return (image, self.OFFSET)
+        return image
 
 
 class Builder_odroid_c2(BaseBuilder):
@@ -27,7 +27,7 @@ class Builder_odroid_c2(BaseBuilder):
 
 class Platform_odroid_xu4:
 
-    OFFSET = 135266304
+    offset = 135266304
 
     def get_base_image(self):
         base_image_url = (
@@ -40,7 +40,7 @@ class Platform_odroid_xu4:
         image = IMAGES / 'ubuntu-odroid_xu4-raw.img'
         xzcat(base_image, image)
 
-        return (image, self.OFFSET)
+        return image
 
 
 class Builder_odroid_xu4(BaseBuilder):
