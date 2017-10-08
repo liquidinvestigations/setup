@@ -79,9 +79,11 @@ class BaseBuilder:
                           stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
-    def run_ansible(self, playbook):
-        run(['ansible-playbook', '-i', 'hosts', playbook],
-            cwd=str(self.setup / 'ansible'))
+    def run_ansible(self, playbook, tags=None):
+        cmd = ['ansible-playbook', '-i', 'hosts', playbook]
+        if tags:
+            cmd += ['--tags', tags]
+        run(cmd, cwd=str(self.setup / 'ansible'))
 
     def install_docker_images(self, target):
         self.run_ansible('image_host_docker.yml')
@@ -101,11 +103,11 @@ class BaseBuilder:
 
         return image
 
-    def build(self):
+    def build(self, tags):
         self.install_ansible()
         self.install_qemu_utils()
         image = self.prepare_image()
         with self.open_target(image) as target:
             self.prepare_chroot(target)
             self.install_docker_images(target)
-            self.run_ansible('image_chroot.yml')
+            self.run_ansible('image_chroot.yml', tags)

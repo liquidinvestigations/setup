@@ -8,13 +8,13 @@ FLAVOURS = {
 }
 
 
-def build(flavor):
+def build(flavor, tags):
     builder_cls = FLAVOURS[flavor]
-    builder_cls().build()
+    builder_cls().build(tags)
 
 
-def install():
+def install(tags):
     builder = Builder_cloud()
     builder.install_ansible()
     (builder.setup / 'ansible' / 'vars' / 'config.yml').touch()
-    builder.run_ansible('server.yml')
+    builder.run_ansible('server.yml', tags)

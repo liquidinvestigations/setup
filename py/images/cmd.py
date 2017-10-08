@@ -6,11 +6,15 @@ from . import tools
 def build_image():
     parser = ArgumentParser()
     parser.add_argument('flavor', choices=setup.FLAVOURS.keys())
+    parser.add_argument('--tags', default=None)
     parser.add_argument('-d', '--debug', action='store_true')
     options = parser.parse_args()
     tools.DEBUG = options.debug
-    setup.build(options.flavor)
+    setup.build(options.flavor, options.tags)
 
 
 def install():
-    setup.install()
+    parser = ArgumentParser()
+    parser.add_argument('--tags', default=None)
+    options = parser.parse_args()
+    setup.install(options.tags)
