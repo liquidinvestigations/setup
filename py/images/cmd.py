@@ -10,3 +10,7 @@ def build_image():
     options = parser.parse_args()
     tools.DEBUG = options.debug
     setup.build(options.flavor)
+
+
+def install():
+    setup.install()

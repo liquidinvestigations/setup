@@ -11,3 +11,10 @@ FLAVOURS = {
 def build(flavor):
     builder_cls = FLAVOURS[flavor]
     builder_cls().build()
+
+
+def install():
+    builder = Builder_cloud()
+    builder.install_ansible()
+    (builder.setup / 'ansible' / 'vars' / 'config.yml').touch()
+    builder.run_ansible('server.yml')
