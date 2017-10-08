@@ -33,11 +33,18 @@ class BaseBuilder:
 
     setup = Path(__file__).resolve().parent.parent.parent.parent
 
-    def install_host_dependencies(self):
-        run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
-        run(['apt-get', '-qq', 'update'])
-        run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git', 'qemu-utils'],
-            stdout=subprocess.DEVNULL)
+    def install_ansible(self):
+        have_ansible = (
+            run(['which', 'ansible-playbook'], stdout=PIPE)
+            .stdout.strip()
+        )
+        if not have_ansible:
+            run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
+            run(['apt-get', '-qq', 'update'])
+            run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git'])
+
+    def install_qemu_utils(self):
+        run(['apt-get', '-qq', 'install', '-y', 'qemu-utils'])
 
     def resize_partition(self, image, new_size):
         run(['truncate', '-s', new_size, str(image)])
@@ -98,7 +105,8 @@ class BaseBuilder:
         return image
 
     def build(self):
-        self.install_host_dependencies()
+        self.install_ansible()
+        self.install_qemu_utils()
         image = self.prepare_image()
         with self.open_target(image) as target:
             self.prepare_chroot(target)
