@@ -79,21 +79,18 @@ class BaseBuilder:
                           stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
-    def _ansible_playbook(self, playbook):
+    def run_ansible(self, playbook):
         run(['ansible-playbook', '-i', 'hosts', playbook],
             cwd=str(self.setup / 'ansible'))
 
     def install_docker_images(self, target):
-        self._ansible_playbook('image_host_docker.yml')
+        self.run_ansible('image_host_docker.yml')
         run(['service', 'docker', 'stop'])
         run([
             'cp', '-a',
             '/var/lib/docker',
             str(target.mount_point / 'var/lib/docker'),
         ])
-
-    def install(self, target):
-        self._ansible_playbook('image_chroot.yml')
 
     def prepare_image(self):
         image = self.platform.get_base_image()
@@ -111,4 +108,4 @@ class BaseBuilder:
         with self.open_target(image) as target:
             self.prepare_chroot(target)
             self.install_docker_images(target)
-            self.install(target)
+            self.run_ansible('image_chroot.yml')
