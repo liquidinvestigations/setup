@@ -13,6 +13,8 @@
     - libssl-dev
     - libjpeg-dev
     - libxslt1-dev
+  tags:
+    - prerequisites
 
 - name: Create the matrix folder
   file:

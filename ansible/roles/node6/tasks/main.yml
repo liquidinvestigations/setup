@@ -17,6 +17,8 @@
       pkg:
         - nodejs=6.*
       state: installed
+  tags:
+    - prerequisites
 
 - when: ansible_architecture == 'aarch64'
   block:

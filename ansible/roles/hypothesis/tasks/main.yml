@@ -7,6 +7,8 @@
     - python2.7-dev
     - rabbitmq-server
     - libffi-dev
+  tags:
+    - prerequisites
 
 - name: Create the top folder
   file:
