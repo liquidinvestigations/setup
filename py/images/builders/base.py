@@ -13,6 +13,22 @@ class Platform:
         raise NotImplementedError
 
 
+@contextmanager
+def patch_resolv_conf(target):
+    resolv_conf = target.mount_point / 'etc' / 'resolv.conf'
+    resolv_conf_orig = resolv_conf.with_name(resolv_conf.name + '.orig')
+
+    resolv_conf.rename(resolv_conf_orig)
+    with resolv_conf.open('wb') as dst:
+        dst.write(b"nameserver 8.8.8.8\n")
+
+    try:
+        yield
+
+    finally:
+        resolv_conf_orig.rename(resolv_conf)
+
+
 class BaseBuilder:
 
     setup = Path(__file__).resolve().parent.parent.parent.parent
@@ -49,21 +65,6 @@ class BaseBuilder:
             with mount_target(device, mount_point, ['proc', 'dev']) as target:
                 yield target
 
-    @contextmanager
-    def patch_resolv_conf(self, target):
-        resolv_conf = target.mount_point / 'etc' / 'resolv.conf'
-        resolv_conf_orig = resolv_conf.with_name(resolv_conf.name + '.orig')
-
-        resolv_conf.rename(resolv_conf_orig)
-        with resolv_conf.open('wb') as dst:
-            dst.write(b"nameserver 8.8.8.8\n")
-
-        try:
-            yield
-
-        finally:
-            resolv_conf_orig.rename(resolv_conf)
-
     def prepare_chroot(self, target):
         target.chroot_run(['apt-get', '-qq', 'update'])
         target.chroot_run(['apt-get', '-qq', 'install', '-y', 'python'],
@@ -94,7 +95,7 @@ class BaseBuilder:
         with self.open_target(image) as target:
             run(['resize2fs', target.device])
 
-            with self.patch_resolv_conf(target):
+            with patch_resolv_conf(target):
                 self.prepare_chroot(target)
                 self.install_docker_images(target)
                 self.install(target)

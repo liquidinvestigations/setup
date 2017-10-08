@@ -3,6 +3,7 @@ from pathlib import Path
 from contextlib import contextmanager
 from .builders.cloud import Builder_cloud
 from .tools import run
+from .base import patch_resolv_conf
 
 SETUP_GIT = 'https://github.com/liquidinvestigations/setup'
 
@@ -95,7 +96,7 @@ class DemoBuilder(Builder_cloud):
 
     def setup_demo(self, image, config_yml, users_json, shell, no_testdata, serial):
         with self.open_target(image) as target:
-            with self.patch_resolv_conf(target):
+            with patch_resolv_conf(target):
                 if shell:
                     run(['bash'], cwd=str(target.mount_point))
                     return
