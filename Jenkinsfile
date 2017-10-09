@@ -14,10 +14,13 @@ node('cloud') {
         sh 'git clone https://github.com/liquidinvestigations/factory'
         sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
     }
-    stage('CLOUD: Build Image') {
+    stage('CLOUD: Prepare the build') {
         sh 'cp jenkins-config.yml ansible/vars/config.yml'
         sh 'mkdir images'
-        sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud'
+        sh 'curl -L https://jenkins.liquiddemo.org/__images__/setup-prerequisites/liquid-cloud-x86_64-prerequisites.img.xz | xzcat > images/ubuntu-x86_64-raw.img'
+    }
+    stage('CLOUD: Build Image') {
+        sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --image /mnt/images/ubuntu-x86_64-raw.img'
     }
     stage('CLOUD: Test and Archive') {
         parallel(
