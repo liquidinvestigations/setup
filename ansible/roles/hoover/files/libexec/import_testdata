@@ -65,6 +65,13 @@ set -x
 /opt/hoover/bin/hoover search update testdata
 EOF
 
+sudo -u liquid /opt/hoover/bin/hoover search shell <<EOF
+from hoover.search.models import Collection
+c = Collection.objects.get(name='testdata')
+c.public = True
+c.save()
+EOF
+
 supervisorctl stop hoover-snoop
 supervisorctl stop hoover-elasticsearch
 
