@@ -6,7 +6,7 @@ class Builder_odroid_c2(BaseBuilder):
 
     def get_base_image(self):
         base_image_url = (
-            'https://liquidinvestigations.org/images/base_images/'
+            'https://jenkins.liquiddemo.org/__images__/base/'
             'ubuntu64-16.04-minimal-odroid-c2-20160815.img.xz'
         )
         base_image = IMAGES / 'xenial-odroid_c2-minimal.img.xz'
@@ -22,7 +22,7 @@ class Builder_odroid_xu4(BaseBuilder):
 
     def get_base_image(self):
         base_image_url = (
-            'https://liquidinvestigations.org/images/base_images/'
+            'https://jenkins.liquiddemo.org/__images__/base/'
             'ubuntu-16.04.2-minimal-odroid-xu4-20170516.img.xz'
         )
         base_image = IMAGES / 'xenial-odroid_xu4-minimal.img.xz'

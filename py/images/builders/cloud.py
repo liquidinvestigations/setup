@@ -8,7 +8,7 @@ class Builder_cloud(BaseBuilder):
 
     def get_base_image(self):
         base_image_url = (
-            'https://liquidinvestigations.org/images/base_images/'
+            'https://jenkins.liquiddemo.org/__images__/base/'
             'ubuntu-16.04-server-cloudimg-amd64-disk1.img'
         )
         base_image = IMAGES / 'ubuntu-x86_64-cow2.img'
