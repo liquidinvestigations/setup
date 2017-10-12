@@ -39,6 +39,8 @@
 - name: Install msgconvert from CPAN
   cpanm:
       name: Email::Outlook::Message
+  tags:
+    - prerequisites
 
 - block:
   - name: Run hoover initial setup

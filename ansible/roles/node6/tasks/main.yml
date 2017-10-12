@@ -43,6 +43,8 @@
     with_items:
       - node
       - npm
+  tags:
+    - prerequisites
 
 - when: ansible_architecture == 'armv7l'
   block:
@@ -67,3 +69,5 @@
     with_items:
       - node
       - npm
+  tags:
+    - prerequisites

@@ -9,6 +9,8 @@
     - libnss-mdns
     - dnsmasq
     - python3-dev
+  tags:
+    - prerequisites
 
 - name: Configure avahi-daemon
   template:
