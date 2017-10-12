@@ -1,9 +1,19 @@
 #!/bin/bash
 set -x
 
+hostname
+uname -a
+free -h
+df -h
+
 export ANSIBLE_NOCOLOR=true
 
 time "$@"
 RETURN_CODE=$?
+
+hostname
+uname -a
+free -h
+df -h
 
 exit $RETURN_CODE
