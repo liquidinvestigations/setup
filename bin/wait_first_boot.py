@@ -19,13 +19,17 @@ FILE_LOG = '/var/log/rc.local.log'
 
 SLEEP_SECS = 3
 
+def cat(filename):
+    with open(filename, 'r') as f:
+        shutil.copyfileobj(f, sys.stdout)
+
+
 def cat_log(message, log_filename=FILE_LOG):
     import shutil
     import sys
     print(message)
     print("See the log below.\n")
-    with open(log_filename, 'r') as f:
-        shutil.copyfileobj(f, sys.stdout)
+    cat(log_filename)
     print("\n" + message)
     print("See the log above.\n")
 
@@ -45,6 +49,7 @@ def wait_for_first_boot(wait_mins=30):
 def cat_logs_and_exit():
     if exists(FILE_FAIL):
         cat_log("First boot failed!")
+        cat('/opt/common/first_boot_status')
         exit(1)
 
     elif exists(FILE_DONE):

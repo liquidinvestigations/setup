@@ -15,9 +15,22 @@ service postgresql start
 
 sudo -u postgres psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='liquid'" | grep -q 1 || sudo -u postgres createuser --superuser liquid
 
+INITIALIZE_RESULT=0
+
+set +e
 for file in /opt/common/initialize.d/*
 do
   "$file"
+  RESULT=$?
+  if [ $RESULT ]; then
+      INITIALIZE_RESULT=$RESULT
+  fi
+  echo "$file $RESULT" >> /opt/common/first_boot_status
 done
+set -e
+
+echo "$0 $INITIALIZE_RESULT" >> /opt/common/first_boot_status
 
 date
+
+exit $INITIALIZE_RESULT
