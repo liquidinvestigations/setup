@@ -1,0 +1,21 @@
+// vim: ft=groovy
+node('arm64') {
+    deleteDir()
+    checkout scm
+    stage('ODROID C2: Host Debug Information') {
+        sh 'set -x && hostname && uname -a && free -h && df -h'
+    }
+    stage('ODROID C2: Build a Factory & Prepare Cloud Image') {
+        sh 'git clone https://github.com/liquidinvestigations/factory'
+        sh 'cd factory/images; mkdir cloud-arm64; cd cloud-arm64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-arm64-image.tar.xz | xzcat | tar x'
+    }
+    stage('ODROID C2: Build Image') {
+        sh 'cp jenkins-config.yml ansible/vars/config.yml'
+        sh 'mkdir images'
+        sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2'
+    }
+    stage('ODROID C2: Archive Raw Image') {
+        sh 'xz -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-raw.img.xz'
+        archiveArtifacts 'liquid-odroid_c2-arm64-raw.img.xz'
+    }
+}
