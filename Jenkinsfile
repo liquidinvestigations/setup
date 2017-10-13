@@ -5,11 +5,11 @@ properties([
 ])
 
 node('cloud') {
-    deleteDir()
-    checkout scm
     stage('CLOUD: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
+    deleteDir()
+    checkout scm
     stage('CLOUD: Build a Factory & Prepare Cloud Image') {
         sh 'git clone https://github.com/liquidinvestigations/factory'
         sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
