@@ -8,6 +8,8 @@
 
 # Returns 0 if first boot done and 1 if first boot failed
 
+import shutil
+import sys
 from os.path import exists
 from time import sleep
 from sys import exit
@@ -25,8 +27,6 @@ def cat(filename):
 
 
 def cat_log(message, log_filename=FILE_LOG):
-    import shutil
-    import sys
     print(message)
     print("See the log below.\n")
     cat(log_filename)
