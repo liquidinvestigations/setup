@@ -14,26 +14,29 @@ node('cloud') {
         sh 'mkdir images'
         sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud'
     }
-    parallel(
-        first_boot: {
-            stage("CLOUD: Run first boot") {
-                sh 'mkdir factory/images/liquid-cloud-x86_64'
-                sh 'cp images/ubuntu-x86_64-raw.img factory/images/liquid-cloud-x86_64/disk.img'
-                sh 'echo \'{"login": {"username": "liquid", "password": "liquid"}}\' > factory/images/liquid-cloud-x86_64/config.json'
-                sh 'factory/factory --platform liquid-cloud-x86_64 run --smp 2 --memory 2048  --share .:/mnt/setup /mnt/setup/bin/wait_first_boot.py'
+    stage('CLOUD: Test and Archive') {
+        parallel(
+            first_boot: {
+                stage("CLOUD: Run first boot") {
+                    sh 'mkdir factory/images/liquid-cloud-x86_64'
+                    sh 'cp images/ubuntu-x86_64-raw.img factory/images/liquid-cloud-x86_64/disk.img'
+                    sh 'echo \'{"login": {"username": "liquid", "password": "liquid"}}\' > factory/images/liquid-cloud-x86_64/config.json'
+                    sh 'factory/factory --platform liquid-cloud-x86_64 run --smp 2 --memory 2048  --share .:/mnt/setup /mnt/setup/bin/wait_first_boot.py'
+                }
+            },
+            archive_raw_image: {
+                stage('CLOUD: Archive Raw Image') {
+                    sh 'xz -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-raw.img.xz'
+                    archiveArtifacts 'liquid-cloud-x86_64-raw.img.xz'
+                }
+            },
+            create_vagrant_box: {
+                stage('CLOUD: Create Vagrant box for VirtualBox provider') {
+                    sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/convert-image.sh'
+                    sh 'mv images/output/ubuntu-x86_64-vbox.box liquid-cloud-x86_64-vbox.box'
+                    archiveArtifacts 'liquid-cloud-x86_64-vbox.box'
+                }
             }
-        },
-        archive_raw_image: {
-            stage('CLOUD: Archive Raw Image') {
-                sh 'xz -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-raw.img.xz'
-                archiveArtifacts 'liquid-cloud-x86_64-raw.img.xz'
-            }
-        },
-        create_vagrant_box: {
-            stage('CLOUD: Create Vagrant box for VirtualBox provider') {
-                sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/convert-image.sh'
-                sh 'mv images/output/ubuntu-x86_64-vbox.box liquid-cloud-x86_64-vbox.box'
-                archiveArtifacts 'liquid-cloud-x86_64-vbox.box'
-            }
-        }
+        )
+    }
 }
