@@ -15,5 +15,6 @@ hostname
 uname -a
 free -h
 df -h
+dmesg | tail -n 30
 
 exit $RETURN_CODE
