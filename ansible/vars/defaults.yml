@@ -13,3 +13,8 @@ git_repo_versions:
   discover: master
   liquid_core: master
   setup: master
+  web_ui: master
+
+web_ui_override: false
+web_ui_override_root: "/home/liquid/web-ui"
+web_ui_override_port: 4200
