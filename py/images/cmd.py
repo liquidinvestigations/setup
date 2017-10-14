@@ -1,20 +1,22 @@
 from argparse import ArgumentParser
-from .builders.cloud import Builder_cloud
-from .builders.odroid import Builder_odroid_c2, Builder_odroid_xu4
+from . import setup
 from . import tools
-
-FLAVOURS = {
-    'cloud': Builder_cloud,
-    'odroid_c2': Builder_odroid_c2,
-    'odroid_xu4': Builder_odroid_xu4,
-}
 
 
 def build_image():
     parser = ArgumentParser()
-    parser.add_argument('flavor', choices=FLAVOURS.keys())
+    parser.add_argument('flavor', choices=setup.FLAVOURS.keys())
+    parser.add_argument('--tags', default=None)
     parser.add_argument('-d', '--debug', action='store_true')
+    parser.add_argument('--image', default=None)
+    parser.add_argument('--no-docker', dest='docker', action='store_false')
     options = parser.parse_args()
-    builder_cls = FLAVOURS[options.flavor]
     tools.DEBUG = options.debug
-    builder_cls().build()
+    setup.build(options.flavor, options.tags, options.image, options.docker)
+
+
+def install():
+    parser = ArgumentParser()
+    parser.add_argument('--tags', default=None)
+    options = parser.parse_args()
+    setup.install(options.tags)

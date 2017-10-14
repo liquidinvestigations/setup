@@ -7,18 +7,45 @@ from ..tools import run, losetup, mount_target
 IMAGES = Path('/mnt/images')
 
 
+class Platform:
+
+    def get_base_image(self):
+        raise NotImplementedError
+
+
+@contextmanager
+def patch_resolv_conf(target):
+    resolv_conf = target.mount_point / 'etc' / 'resolv.conf'
+    resolv_conf_orig = resolv_conf.with_name(resolv_conf.name + '.orig')
+
+    resolv_conf.rename(resolv_conf_orig)
+    with resolv_conf.open('wb') as dst:
+        dst.write(b"nameserver 8.8.8.8\n")
+
+    try:
+        yield
+
+    finally:
+        resolv_conf_orig.rename(resolv_conf)
+
+
 class BaseBuilder:
 
     setup = Path(__file__).resolve().parent.parent.parent.parent
 
-    def install_host_dependencies(self):
-        run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
-        run(['apt-get', '-qq', 'update'])
-        run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git', 'qemu-utils'],
-            stdout=subprocess.DEVNULL)
+    def install_ansible(self):
+        have_ansible = (
+            run(['which', 'ansible-playbook'],
+                stdout=subprocess.PIPE, check=False)
+            .stdout.strip()
+        )
+        if not have_ansible:
+            run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
+            run(['apt-get', '-qq', 'update'])
+            run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git'])
 
-    def get_base_image(self):
-        raise NotImplementedError
+    def install_qemu_utils(self):
+        run(['apt-get', '-qq', 'install', '-y', 'qemu-utils'])
 
     def resize_partition(self, image, new_size):
         run(['truncate', '-s', new_size, str(image)])
@@ -38,28 +65,14 @@ class BaseBuilder:
         run(['sfdisk', str(image)], input=''.join(sfdisk_new).encode('latin1'))
 
     @contextmanager
-    def open_target(self, image, offset):
+    def open_target(self, image):
         mount_point = Path('/mnt/target')
         mount_point.mkdir(parents=True, exist_ok=True)
 
-        with losetup(image, offset) as device:
+        with losetup(image, self.platform.offset) as device:
             with mount_target(device, mount_point, ['proc', 'dev']) as target:
-                yield target
-
-    @contextmanager
-    def patch_resolv_conf(self, target):
-        resolv_conf = target.mount_point / 'etc' / 'resolv.conf'
-        resolv_conf_orig = resolv_conf.with_name(resolv_conf.name + '.orig')
-
-        resolv_conf.rename(resolv_conf_orig)
-        with resolv_conf.open('wb') as dst:
-            dst.write(b"nameserver 8.8.8.8\n")
-
-        try:
-            yield
-
-        finally:
-            resolv_conf_orig.rename(resolv_conf)
+                with patch_resolv_conf(target):
+                    yield target
 
     def prepare_chroot(self, target):
         target.chroot_run(['apt-get', '-qq', 'update'])
@@ -67,12 +80,14 @@ class BaseBuilder:
                           stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
-    def _ansible_playbook(self, playbook):
-        run(['ansible-playbook', '-i', 'hosts', playbook],
-            cwd=str(self.setup / 'ansible'))
+    def run_ansible(self, playbook, tags=None):
+        cmd = ['ansible-playbook', '-i', 'hosts', playbook]
+        if tags:
+            cmd += ['--tags', tags]
+        run(cmd, cwd=str(self.setup / 'ansible'))
 
     def install_docker_images(self, target):
-        self._ansible_playbook('image_host_docker.yml')
+        self.run_ansible('image_host_docker.yml')
         run(['service', 'docker', 'stop'])
         run([
             'cp', '-a',
@@ -80,18 +95,18 @@ class BaseBuilder:
             str(target.mount_point / 'var/lib/docker'),
         ])
 
-    def install(self, target):
-        self._ansible_playbook('image_chroot.yml')
-
-    def build(self):
-        self.install_host_dependencies()
-        image, offset = self.get_base_image()
+    def prepare_image(self):
+        image = self.platform.get_base_image()
         self.resize_partition(image, '8G')
 
-        with self.open_target(image, offset) as target:
+        with self.open_target(image) as target:
             run(['resize2fs', target.device])
+            self.prepare_chroot(target)
 
-            with self.patch_resolv_conf(target):
-                self.prepare_chroot(target)
+        return image
+
+    def build(self, image, tags, docker=True):
+        with self.open_target(image) as target:
+            if docker:
                 self.install_docker_images(target)
-                self.install(target)
+            self.run_ansible('image_chroot.yml', tags)

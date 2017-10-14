@@ -5,6 +5,8 @@
     cache_valid_time: 14400
     # TODO create a flag for apt-get upgrade
     #upgrade: dist
+  tags:
+    - prerequisites
 
 - name: Set up machine hostname
   hostname:
@@ -42,6 +44,8 @@
     - postgresql-server-dev-all
     - python-psycopg2 # so that ansible can manage postgres users and dbs
     - openssh-server
+  tags:
+    - prerequisites
 
 - name: apt-get clean
   command: apt-get -y clean

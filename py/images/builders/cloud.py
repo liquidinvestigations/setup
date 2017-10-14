@@ -1,10 +1,10 @@
 from ..tools import download, run
-from .base import BaseBuilder, IMAGES
+from .base import BaseBuilder, Platform, IMAGES
 
 
-class Builder_cloud(BaseBuilder):
+class Platform_cloud:
 
-    OFFSET = 1048576
+    offset = 1048576
 
     def get_base_image(self):
         base_image_url = (
@@ -23,7 +23,12 @@ class Builder_cloud(BaseBuilder):
             str(image),
         ])
 
-        return (image, self.OFFSET)
+        return image
+
+
+class Builder_cloud(BaseBuilder):
+
+    platform = Platform_cloud()
 
     def _patch_serial_console(self, target):
         """

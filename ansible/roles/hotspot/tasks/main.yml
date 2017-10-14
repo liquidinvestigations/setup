@@ -8,6 +8,8 @@
     - bridge-utils
     - hostapd
     - dnsmasq
+  tags:
+    - prerequisites
 
 - name: Don't run hostapd as system service
   service:

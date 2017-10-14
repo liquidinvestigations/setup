@@ -4,6 +4,8 @@
   with_items:
     - docker.io
     - docker-compose
+  tags:
+    - prerequisites
 
 - name: Make sure dockerd is running
   when: build_docker_images

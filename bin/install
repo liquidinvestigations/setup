@@ -1,25 +1,11 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-import os
-from subprocess import run, PIPE, DEVNULL
+if __name__ == '__main__':
+    from pathlib import Path
+    import sys
 
-def which_ansible_playbook():
-    return run(['which', 'ansible-playbook'], stdout=PIPE).stdout.strip()
+    repo = Path(__file__).resolve().parent.parent
+    sys.path.append(str(repo / 'py'))
 
-ansible_playbook = which_ansible_playbook()
-if not ansible_playbook:
-    print("ansible not found; installing...")
-    run(['apt-add-repository', '-y', 'ppa:ansible/ansible'], check=True)
-    run(['apt-get', '-qq', 'update'], check=True)
-    run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git', 'qemu-utils'],
-        stdout=DEVNULL, check=True)
-    ansible_playbook = which_ansible_playbook()
-
-assert ansible_playbook
-
-setup = Path(__file__).resolve().parent.parent
-(setup / 'ansible' / 'vars' / 'config.yml').touch()
-
-os.chdir(str(setup / 'ansible'))
-os.execv(ansible_playbook, [ansible_playbook, 'server.yml'])
+    from images import cmd
+    cmd.install()

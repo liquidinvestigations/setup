@@ -1,0 +1,22 @@
+// vim: ft=groovy
+node('cloud') {
+    deleteDir()
+    checkout scm
+    stage('CLOUD: Host Debug Information') {
+        sh 'set -x && hostname && uname -a && free -h && df -h'
+    }
+    stage('CLOUD: Build a Factory & Prepare Cloud Image') {
+        sh 'git clone https://github.com/liquidinvestigations/factory'
+        sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
+    }
+    stage('CLOUD: Build prerequisites image') {
+        sh 'cp jenkins-config.yml ansible/vars/config.yml'
+        sh 'mkdir images'
+        sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --tags prerequisites --no-docker'
+    }
+    stage('CLOUD: Archive prerequisites image') {
+        sh 'xz -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-prerequisites.img.xz'
+        archiveArtifacts 'liquid-cloud-x86_64-prerequisites.img.xz'
+    }
+}
+

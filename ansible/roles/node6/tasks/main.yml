@@ -17,6 +17,8 @@
       pkg:
         - nodejs=6.*
       state: installed
+  tags:
+    - prerequisites
 
 - when: ansible_architecture == 'aarch64'
   block:
@@ -41,6 +43,8 @@
     with_items:
       - node
       - npm
+  tags:
+    - prerequisites
 
 - when: ansible_architecture == 'armv7l'
   block:
@@ -65,3 +69,5 @@
     with_items:
       - node
       - npm
+  tags:
+    - prerequisites

@@ -6,6 +6,8 @@
     - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
     - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
   when: ansible_distribution == 'Ubuntu' and ansible_architecture == 'x86_64'
+  tags:
+    - prerequisites
 
 - apt_repository:
     repo: "{{item}}"
@@ -14,6 +16,8 @@
     - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}} multiverse'
     - 'deb http://ports.ubuntu.com/ubuntu-ports {{ansible_distribution_release}}-updates multiverse'
   when: ansible_distribution == 'Ubuntu' and ansible_architecture in ['armv7l', 'aarch64']
+  tags:
+    - prerequisites
 
 - name: Install required system packages
   apt:
@@ -29,10 +33,14 @@
     - p7zip-rar
     - pst-utils
     - cpanminus # for cpanm ansible module
+  tags:
+    - prerequisites
 
 - name: Install msgconvert from CPAN
   cpanm:
       name: Email::Outlook::Message
+  tags:
+    - prerequisites
 
 - block:
   - name: Run hoover initial setup
