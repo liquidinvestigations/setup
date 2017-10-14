@@ -16,7 +16,7 @@ node('cloud') {
         sh 'git clone https://github.com/liquidinvestigations/factory'
         sh 'mkdir -pv factory/images/cloud-x86_64/'
         dir('factory/images/cloud-x86_64') {
-            sh "wget -q {$cloud_image} -O tmp.tar.xz;"
+            sh "wget -q $cloud_image -O tmp.tar.xz;"
             sh 'xzcat tmp.tar.xz | tar x'
             sh 'rm tmp.tar.xz'
         }
@@ -24,7 +24,7 @@ node('cloud') {
     stage('CLOUD: Prepare the build') {
         sh 'cp jenkins-config.yml ansible/vars/config.yml'
         sh 'mkdir images'
-        sh "curl -L {$liquid_prerequisites_cloud_image};"
+        sh "wget -q $liquid_prerequisites_cloud_image;"
         sh 'xzcat liquid-cloud-x86_64-prerequisites.img.xz > images/ubuntu-x86_64-raw.img'
         sh 'rm liquid-cloud-x86_64-prerequisites.img.xz'
     }
