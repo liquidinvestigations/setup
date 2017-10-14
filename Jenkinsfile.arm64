@@ -37,8 +37,6 @@ node('arm64') {
             archiveArtifacts 'liquid-odroid_c2-arm64-raw.img.xz'
         }
     } finally {
-        sh 'find . -type f -name "*.img.xz" -delete'
-        deleteDir('images')
-        deleteDir('factory/images')
+        deleteDir()
     }
 }

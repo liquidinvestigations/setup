@@ -58,9 +58,6 @@ node('cloud') {
             )
         }
     } finally {
-        sh 'find . -type f -name "*.img.xz" -delete'
-        sh 'find . -type f -name "*.box" -delete'
-        deleteDir('images')
-        deleteDir('factory/images')
+        deleteDir()
     }
 }
