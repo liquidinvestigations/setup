@@ -12,6 +12,7 @@ node('arm64') {
     }
     deleteDir()
     checkout scm
+    try {
     stage('ODROID C2: Build a Factory & Prepare Cloud Image') {
         sh 'git clone https://github.com/liquidinvestigations/factory'
         sh 'mkdir -pv factory/images/cloud-arm64/'
@@ -34,5 +35,9 @@ node('arm64') {
     stage('ODROID C2: Archive Raw Image') {
         sh 'xz -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-raw.img.xz'
         archiveArtifacts 'liquid-odroid_c2-arm64-raw.img.xz'
+    }
+    } finally {
+        deleteDir('images')
+        deleteDir('factory/images')
     }
 }
