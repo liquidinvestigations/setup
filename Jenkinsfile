@@ -14,12 +14,19 @@ node('cloud') {
     checkout scm
     stage('CLOUD: Build a Factory & Prepare Cloud Image') {
         sh 'git clone https://github.com/liquidinvestigations/factory'
-        sh "cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L {$cloud_image} | xzcat | tar x"
+        sh 'mkdir -pv factory/images/cloud-x86_64/'
+        dir('factory/images/cloud-x86_64') {
+            sh "wget -q {$cloud_image} -O tmp.tar.xz;"
+            sh 'xzcat tmp.tar.xz | tar x'
+            sh 'rm tmp.tar.xz'
+        }
     }
     stage('CLOUD: Prepare the build') {
         sh 'cp jenkins-config.yml ansible/vars/config.yml'
         sh 'mkdir images'
-        sh "curl -L {$liquid_prerequisites_cloud_image} | xzcat > images/ubuntu-x86_64-raw.img"
+        sh "curl -L {$liquid_prerequisites_cloud_image};"
+        sh 'xzcat liquid-cloud-x86_64-prerequisites.img.xz > images/ubuntu-x86_64-raw.img'
+        sh 'rm liquid-cloud-x86_64-prerequisites.img.xz'
     }
     stage('CLOUD: Build Image') {
         sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --image /mnt/images/ubuntu-x86_64-raw.img'
