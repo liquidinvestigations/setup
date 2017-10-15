@@ -47,13 +47,6 @@ node('cloud') {
                         sh 'xz -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-raw.img.xz'
                         archiveArtifacts 'liquid-cloud-x86_64-raw.img.xz'
                     }
-                },
-                create_vagrant_box: {
-                    stage('CLOUD: Create Vagrant box for VirtualBox provider') {
-                        sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/convert-image.sh'
-                        sh 'mv images/output/ubuntu-x86_64-vbox.box liquid-cloud-x86_64-vbox.box'
-                        archiveArtifacts 'liquid-cloud-x86_64-vbox.box'
-                    }
                 }
             )
         }
