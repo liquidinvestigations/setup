@@ -47,6 +47,12 @@
   tags:
     - prerequisites
 
+- name: Remove cloud-init if it's installed
+  apt:
+    name: cloud-init
+    state: absent
+    purge: yes
+
 - name: apt-get clean
   command: apt-get -y clean
 
