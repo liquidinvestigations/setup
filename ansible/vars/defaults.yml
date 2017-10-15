@@ -16,5 +16,5 @@ git_repo_versions:
   web_ui: master
 
 web_ui_override: false
-web_ui_override_root: "/home/liquid/web-ui"
+web_ui_override_path: "/home/liquid/web-ui"
 web_ui_override_port: 4200
