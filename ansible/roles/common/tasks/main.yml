@@ -52,6 +52,8 @@
     name: cloud-init
     state: absent
     purge: yes
+  tags:
+    - prerequisites
 
 - name: apt-get clean
   command: apt-get -y clean
