@@ -180,3 +180,4 @@
     repo: https://github.com/liquidinvestigations/setup.git
     dest: /opt/setup
     version: "{{ git_repo_versions.setup }}"
+    update: false
