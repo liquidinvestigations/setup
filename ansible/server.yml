@@ -13,6 +13,7 @@
     - docker
     - node6
     - liquid-core
+    - web-ui
     - hoover
     - discover
     - hypothesis

@@ -12,3 +12,4 @@ git_repo_versions:
   discover: master
   liquid_core: master
   setup: master
+  web_ui: master
