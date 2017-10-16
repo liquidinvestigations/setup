@@ -5,6 +5,14 @@ set -x
 echo "Starting firewall"
 /opt/common/libexec/firewall
 
+supervisor_up() {
+  ! supervisorctl status | grep -q 'supervisor\.sock no such file'
+}
+until supervisor_up; do echo 'waiting for supervisor ...'; sleep 1; done
+echo 'supervisor up'
+supervisorctl update
+service postgresql start
+
 # Errors on, try to start first boot.
 set -e
 cd /opt/common
@@ -26,6 +34,8 @@ set +e
 echo "Starting all services."
 # TODO: only start enabled services
 supervisorctl start all
+
+supervisorctl restart dnsmasq-dns
 
 echo "Running on-boot hook."
 for file in /opt/common/hooks/on-boot.d/*
