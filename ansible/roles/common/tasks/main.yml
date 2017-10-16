@@ -22,14 +22,6 @@
   tags:
     - configure
 
-- name: Put FQDN in /etc/hosts
-  lineinfile:
-    path: /etc/hosts
-    line: '127.0.0.1 {{ liquid_domain }}'
-    state: present
-  tags:
-    - configure
-
 - name: Install base packages
   apt:
     name: "{{ item }}"
