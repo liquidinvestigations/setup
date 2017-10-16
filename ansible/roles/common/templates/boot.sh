@@ -13,6 +13,8 @@ echo 'supervisor up'
 supervisorctl update
 service postgresql start
 
+FIRST_BOOT=NOT_STARTED
+
 # Errors on, try to start first boot.
 set -e
 cd /opt/common
@@ -20,12 +22,15 @@ if [ ! -f first_boot_done ] && [ ! -f first_boot_failed ]; then
   echo "Starting first boot."
   if ./initialize.sh ; then
     echo "First boot done."
-    touch first_boot_done
+    #touch first_boot_done
+    FIRST_BOOT=DONE
   else
     echo "First boot failed."
-    touch first_boot_failed
+    #touch first_boot_failed
+    FIRST_BOOT=FAILED
   fi
 else
+  FIRST_BOOT=ALREADY_DONE
   echo "Not starting first boot, already done."
 fi
 
@@ -42,5 +47,28 @@ for file in /opt/common/hooks/on-boot.d/*
 do
   "$file"
 done
+
+# Mark first_boot_done and first_boot_failed only after the
+# services have been started and hooks have been ran.
+# This is important for the first boot tests, that wait
+# for either first_boot_done or first_boot_failed to exist before
+# starting The suite.
+case "$FIRST_BOOT" in
+  ALREADY_DONE)
+    echo "First boot already done, not marking"
+    ;;
+  DONE)
+    echo "Marking first_boot_done"
+    touch first_boot_done
+    ;;
+  FAILED)
+    echo "Marking first_boot_failed"
+    touch first_boot_failed
+    ;;
+  *)
+    echo "Unknown FIRST_BOOT flag, marking first_boot_failed"
+    touch first_boot_failed
+    ;;
+esac
 
 echo "Boot scripts done."
