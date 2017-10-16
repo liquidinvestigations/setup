@@ -4,26 +4,6 @@
     name: "{{ item }}"
     state: latest
   with_items:
-    - wireless-tools
-    - bridge-utils
-    - hostapd
-    - dnsmasq
+    - network-manager
   tags:
     - prerequisites
-
-- name: Don't run hostapd as system service
-  service:
-    name: hostapd
-    enabled: no
-
-- name: Create the hotspot folder
-  file:
-    path: /opt/hotspot
-    state: directory
-    mode: 0755
-
-- name: Create the boot script
-  template:
-    src: boot.py
-    dest: /opt/common/hooks/on-boot.d/hotspot.py
-    mode: 0755
