@@ -25,9 +25,9 @@ node('cloud') {
         stage('CLOUD: Prepare the build') {
             sh 'cp jenkins-config.yml ansible/vars/config.yml'
             sh 'mkdir images'
-            sh "wget -q $liquid_prerequisites_cloud_image -O images/pre.xz.img"
-            sh 'xzcat images/pre.xz.img > images/ubuntu-x86_64-raw.img'
-            sh 'rm images/pre.xz.img'
+            sh "wget -q $liquid_prerequisites_cloud_image -O images/pre.img.xz"
+            sh 'xzcat images/pre.img.xz > images/ubuntu-x86_64-raw.img'
+            sh 'rm images/pre.img.xz'
         }
         stage('CLOUD: Build Image') {
             sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --image /mnt/images/ubuntu-x86_64-raw.img'

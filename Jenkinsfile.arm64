@@ -17,7 +17,7 @@ node('arm64') {
             sh 'git clone https://github.com/liquidinvestigations/factory'
             sh 'mkdir -pv factory/images/cloud-arm64/'
             dir('factory/images/cloud-arm64') {
-                sh "wget -q $cloud_image -O tmp.tar.xz;"
+                sh "wget -q $cloud_image -O tmp.tar.xz"
                 sh 'xzcat tmp.tar.xz | tar x'
                 sh 'rm tmp.tar.xz'
             }
@@ -25,7 +25,7 @@ node('arm64') {
         stage('ODROID C2: Prepare the build') {
             sh 'cp jenkins-config.yml ansible/vars/config.yml'
             sh 'mkdir images'
-            sh "wget -q $liquid_prerequisites_odroid_c2_image -O images/pre.xz.img"
+            sh "wget -q $liquid_prerequisites_odroid_c2_image -O images/pre.img.xz"
             sh 'xzcat images/pre.img.xz > images/ubuntu-odroid_c2-raw.img'
             sh 'rm images/pre.img.xz'
         }
