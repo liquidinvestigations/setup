@@ -40,6 +40,7 @@ node('cloud') {
                         sh 'cp images/ubuntu-x86_64-raw.img factory/images/liquid-cloud-x86_64/disk.img'
                         sh 'echo \'{"login": {"username": "liquid", "password": "liquid"}}\' > factory/images/liquid-cloud-x86_64/config.json'
                         sh 'factory/factory --platform liquid-cloud-x86_64 run --smp 2 --memory 2048  --share .:/mnt/setup /mnt/setup/bin/wait_first_boot.py'
+                        junit 'test/results/*.xml'
                     }
                 },
                 archive_raw_image: {
