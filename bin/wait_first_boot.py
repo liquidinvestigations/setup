@@ -68,6 +68,7 @@ class CoreTest(PyTestWrapper):
 
 class SetupTest(PyTestWrapper):
     pre_commands = [
+        "supervisorctl restart dnsmasq-dns",
         "virtualenv -p python3 /tmp/liquid-setup-test",
         "/tmp/liquid-setup-test/bin/pip install -r /mnt/setup/test/requirements.txt",
     ]
