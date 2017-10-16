@@ -82,6 +82,7 @@
   with_items:
     - /var/lib/liquid/oauth_keys
     - /var/lib/liquid/core
+    - /var/lib/liquid/core/logs
 
 - name: Create the initialization script
   template:
