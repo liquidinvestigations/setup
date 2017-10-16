@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 
-# waits for the initial boot process to finish, which
+# Waits for the initial boot process to finish, which
 # consists of the /opt/common/boot.sh calling initialize.sh.
 
-# waits for either first_boot_done OR first_boot_failed to exist in
+# Waits for either first_boot_done OR first_boot_failed to exist in
 # /opt/common.
 
-# Returns 0 if first boot done and 1 if first boot failed
+# Runs all tests and saves them under setup/test/results as
+# junit xml files.
 
 import shutil
 import sys
 from os.path import exists
+import os
 from time import sleep
 from sys import exit
 import subprocess
@@ -34,6 +36,54 @@ def cat_log(message, log_filename=FILE_LOG):
     print("See the log above.\n")
 
 
+class PyTestWrapper:
+    pre_commands = []
+    pytest = 'py.test'
+    chdir = None
+    xml_file = None
+    env = None
+
+    def run(self):
+        if self.env:
+            env = os.environ.copy()
+            env.update(self.env)
+        else:
+            env = None
+        for command in self.pre_commands:
+            print("+", command)
+            subprocess.run([command], shell=True, check=True, env=env)
+        pytest_cmd = [self.pytest, '--junit-xml', self.xml_file]
+        print("+", " ".join(pytest_cmd))
+        subprocess.run(pytest_cmd, cwd=self.chdir, env=env)
+
+
+class CoreTest(PyTestWrapper):
+    pytest = "/opt/liquid-core/venv/bin/py.test"
+    chdir = "/opt/liquid-core/liquid-core/testsuite"
+    xml_file = "/mnt/setup/test/results/liquid-core.xml"
+    env = {
+        "PYTHONPATH": "/opt/liquid-core/liquid-core:"+os.environ.get("PYTHONPATH",'')
+    }
+
+
+class SetupTest(PyTestWrapper):
+    pre_commands = [
+        "virtualenv -p python3 /tmp/liquid-setup-test",
+        "/tmp/liquid-setup-test/bin/pip install -r /mnt/setup/test/requirements.txt",
+    ]
+    pytest = "/tmp/liquid-setup-test/bin/py.test"
+    chdir = "/mnt/setup/test"
+    xml_file = "/mnt/setup/test/results/liquid-setup.xml"
+
+
+def run_tests():
+    for test_cls in [CoreTest, SetupTest]:
+        try:
+            test_cls().run()
+        except subprocess.CalledProcessError:
+            print("Failed to run", test_cls.__name__)
+
+
 def wait_for_first_boot(wait_mins=30):
     print("Waiting for first boot to happen for {} mins.".format(wait_mins))
     seconds = 0
@@ -46,20 +96,18 @@ def wait_for_first_boot(wait_mins=30):
             exit(1)
 
 
-def cat_logs_and_exit():
+def cat_first_boot_logs():
     if exists(FILE_FAIL):
         cat_log("First boot failed!")
         cat('/opt/common/first_boot_status')
-        exit(1)
-
     elif exists(FILE_DONE):
         cat_log("First boot done.")
-        exit(0)
-
-    print("This should never happen")
-    exit(1)
+    else:
+        print("This should never happen")
+        exit(1)
 
 
 if __name__ == '__main__':
     wait_for_first_boot()
     cat_logs_and_exit()
+    run_tests()
