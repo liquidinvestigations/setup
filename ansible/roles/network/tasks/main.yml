@@ -7,3 +7,8 @@
     - network-manager
   tags:
     - prerequisites
+
+- name: Allow hotplug eth0 # so the system boots without an ethernet cable
+  copy:
+    src: network-interfaces/eth0
+    dest: /etc/network/interfaces.d/eth0
