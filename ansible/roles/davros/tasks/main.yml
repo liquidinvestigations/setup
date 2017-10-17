@@ -22,3 +22,13 @@
     mode: 0755
   tags:
     - configure
+
+- name: Create empty data dir for davros-sync
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: liquid
+    group: liquid
+  with_items:
+    - "/var/lib/liquid/data"
+    - "/var/lib/liquid/data/davros-sync"
