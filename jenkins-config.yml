@@ -7,13 +7,13 @@ git_repo_versions:
   hoover:
     setup: master
     testdata: master
-    snoop: "hoover+davros=<3"
-    search: "hoover+davros=<3"
+    snoop: master
+    search: master
     ui: master
   hypothesis:
     h: 53046f652c801b85e792c0020fa71f7493b249da
     h_client_build: master
   discover: master
   liquid_core: master
-  setup: "hoover+davros=<3"
+  setup: "hoover-davros-love"
   web_ui: master
