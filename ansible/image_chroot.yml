@@ -10,13 +10,13 @@
   roles:
     - common
     - devel
-    - docker
-    - node6
-    - liquid-core
-    - web-ui
-    - hotspot
-    - hoover
+    - network
     - discover
+    - liquid-core
+    - node6
+    - web-ui
+    - docker
+    - hoover
     - hypothesis
     - dokuwiki
     - matrix

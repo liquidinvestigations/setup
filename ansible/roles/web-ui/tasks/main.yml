@@ -13,16 +13,9 @@
     group: liquid
     recurse: true
 
-- name: Install node dependencies
-  shell: npm install
-  args:
-    chdir: /opt/web-ui
-  become: true
-  become_user: liquid
-
-- name: Build the UI
-  command: npm run build-prod
-  args:
-    chdir: /opt/web-ui
-  become: true
-  become_user: liquid
+- name: Web UI dist artifacts
+  unarchive:
+    src: https://jenkins.liquiddemo.org/_mgax/web-ui-dist-20171017.tgz
+    dest: /opt/web-ui
+    remote_src: yes
+    creates: /opt/web-ui/dist
