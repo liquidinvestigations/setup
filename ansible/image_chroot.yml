@@ -13,9 +13,9 @@
     - network
     - discover
     - liquid-core
+    - node6
     - web-ui
     - docker
-    - node6
     - hoover
     - hypothesis
     - dokuwiki
