@@ -1,4 +1,8 @@
 // vim: ft=groovy
+properties([
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '3')),
+    pipelineTriggers([[$class: 'PeriodicFolderTrigger', interval: '2d']])
+])
 node('cloud') {
     def cloud_image = 'https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz'
     stage('CLOUD: Host Debug Information') {
