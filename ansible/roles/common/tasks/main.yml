@@ -56,6 +56,24 @@
 - name: apt-get clean
   command: apt-get -y clean
 
+- name: Disable ubuntu apt auto-update services
+  service:
+    name: "{{ item }}"
+    enabled: no
+  with_items:
+    - apt-daily.service
+    - apt-daily.timer
+  tags:
+    - prerequisites
+
+- name: Uninstall the debian unattended-upgrades package
+  apt:
+    name: unattended-upgrades
+    state: absent
+    purge: yes
+  tags:
+    - prerequisites
+
 - name: Enable supervisor
   service:
     name: supervisor
