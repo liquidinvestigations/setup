@@ -18,7 +18,6 @@ fi
 set -x
 
 DAVROS_DATA_SYNC="/var/lib/liquid/data/davros-sync"
-IS_MOUNTED="$( mount | grep $DAVROS_DATA_SYNC )"
-if [ -z $IS_MOUNTED ]
+if ! $( mount | grep -q $DAVROS_DATA_SYNC ); then
     mount --bind /var/lib/docker/volumes/davros_content/_data $DAVROS_DATA_SYNC
 fi
