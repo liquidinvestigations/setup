@@ -1,10 +1,13 @@
 ---
+- name: Add the ansible ppa repository
+  command: apt-add-repository -y ppa:ansible/ansible
+  tags:
+    - prerequisites
+
 - name: Update all packages
   apt:
     update_cache: yes
     cache_valid_time: 14400
-    # TODO create a flag for apt-get upgrade
-    #upgrade: dist
   tags:
     - prerequisites
 
@@ -27,6 +30,7 @@
     name: "{{ item }}"
     state: latest
   with_items:
+    - ansible
     - curl
     - git
     - apt-transport-https
