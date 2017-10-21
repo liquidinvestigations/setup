@@ -15,10 +15,7 @@ def run(cmd):
 def on_reconfigure():
     print('on_reconfigure')
     options = json.load(sys.stdin)
-
-    vars = {
-        'liquidcore': options['vars'],
-    }
+    vars = {'liquid_{}'.format(k): v for k, v in options['vars'].items()}
 
     vars_path = ANSIBLE_VARS / 'liquidcore.yml'
     with vars_path.open('w', encoding='utf8') as f:
