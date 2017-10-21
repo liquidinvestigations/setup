@@ -17,21 +17,23 @@ function wait_url {
 }
 
 supervisorctl start hoover-elasticsearch
+supervisorctl start davros
 
-# if the testdata collection exists, exit
-have_testdata=$(sudo -u liquid /opt/hoover/bin/hoover snoop collection | grep testdata | wc -l)
-if [[ $have_testdata -ne 0 ]]; then exit 0; fi
+DAVROS_DATA_PATH=/var/lib/liquid/data/davros-sync
 
-# create the testdata collection
+# if the davros-sync collection exists, exit
+have_davros_sync=$(sudo -u liquid /opt/hoover/bin/hoover snoop collection | grep davros-sync | wc -l)
+if [[ $have_davros_sync -ne 0 ]]; then exit 0; fi
+
+# create the davros-sync collection
 supervisorctl start hoover-tika
 supervisorctl start hoover-snoop
 
-# create the testdata collection and walk / digest it
+# create the davros-sync collection and walk / digest it
 sudo -u liquid bash <<EOF
 set -x
-/opt/hoover/bin/hoover snoop createcollection /opt/hoover/testdata testdata testdata "Hoover Test Data", "Hoover Test Data"
-/opt/hoover/bin/hoover snoop walk testdata
-/opt/hoover/bin/hoover snoop digestqueue
+/opt/hoover/bin/hoover snoop createcollection '$DAVROS_DATA_PATH' davros-sync davros-sync "Davros Upload", "Davros Upload"
+/opt/hoover/bin/hoover snoop walk davros-sync
 EOF
 
 # wait after hoover's tika
@@ -52,25 +54,26 @@ wait_url $es_url
 
 sudo -u liquid bash <<EOF
 set -x
-/opt/hoover/bin/hoover snoop resetindex testdata
+/opt/hoover/bin/hoover snoop resetindex davros-sync
 EOF
 
 snoop_url="http://localhost:11941"
-wait_url $snoop_url/testdata/json
+wait_url $snoop_url/davros-sync/json
 
 
 sudo -u liquid bash <<EOF
 set -x
-/opt/hoover/bin/hoover search addcollection testdata "$snoop_url/testdata/json"
-/opt/hoover/bin/hoover search update testdata
+/opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/davros-sync/json"
+/opt/hoover/bin/hoover search update davros-sync
 EOF
 
-sudo -u liquid /opt/hoover/bin/hoover search shell <<EOF
-from hoover.search.models import Collection
-c = Collection.objects.get(name='testdata')
-c.public = True
-c.save()
-EOF
+# DON'T MAKE THIS COLLECTION PUBLIC
+#sudo -u liquid /opt/hoover/bin/hoover search shell <<EOF
+#from hoover.search.models import Collection
+#c = Collection.objects.get(name='davros-sync')
+#c.public = True
+#c.save()
+#EOF
 
 supervisorctl stop hoover-snoop
 supervisorctl stop hoover-elasticsearch
