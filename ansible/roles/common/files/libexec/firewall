@@ -3,6 +3,7 @@ set -e
 set -v
 
 iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
 iptables -F
 iptables -X KEEPSAFE || true
 iptables -N KEEPSAFE
@@ -20,4 +21,10 @@ iptables -A INPUT -p tcp --dport 22 -j ACCEPT # ssh
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT # http
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT # https
 iptables -A INPUT -p udp --dport 53 -j ACCEPT # dns
+iptables -A INPUT -p udp --dport 1194 -j ACCEPT # openvpn
 iptables -A INPUT -j KEEPSAFE
+
+iptables -t nat -F
+iptables -t nat -A POSTROUTING ! -d 10.8.0.0/8 -j MASQUERADE
+
+echo 1 > /proc/sys/net/ipv4/ip_forward

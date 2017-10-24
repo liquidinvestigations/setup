@@ -1,0 +1,33 @@
+---
+- name: Install OpenVPN
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - openvpn
+    - easy-rsa
+  tags:
+    - prerequisites
+
+- name: Don't start OpenVPN from systemd
+  service:
+    name: openvpn
+    enabled: no
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /var/lib/liquid/vpn
+
+- name: OpenVPN server configuration file
+  copy:
+    src: vpn/server.ovpn
+    dest: /var/lib/liquid/vpn/server.ovpn
+
+- name: Set up CA on first boot
+  copy:
+    src: vpn/initialize.d/vpn
+    dest: /opt/common/initialize.d/60-vpn
+    mode: 0755

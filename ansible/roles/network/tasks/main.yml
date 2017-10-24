@@ -1,4 +1,6 @@
 ---
+- import_tasks: tasks/vpn.yml
+
 - name: Install wireless packages
   apt:
     name: "{{ item }}"
