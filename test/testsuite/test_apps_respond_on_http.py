@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-DOMAIN = 'liquid.local'
+DOMAIN = 'liquid.example.org'
 SUBDOMAINS = [
     'hoover',
     'hypothesis',
