@@ -15,5 +15,5 @@ git_repo_versions:
     h_client_build: master
   discover: master
   liquid_core: master
-  setup: "hoover-davros-love"
+  setup: master
   web_ui: master
