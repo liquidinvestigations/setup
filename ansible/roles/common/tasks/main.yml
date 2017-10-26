@@ -1,4 +1,12 @@
 ---
+- name: Dump all vars
+  debug:
+    var: vars
+
+- name: Dump all environment vars
+  debug:
+    var: environment
+
 - name: Add the ansible ppa repository
   command: apt-add-repository -y ppa:ansible/ansible
   tags:
