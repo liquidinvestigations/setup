@@ -62,7 +62,9 @@ class CoreTest(PyTestWrapper):
     chdir = "/opt/liquid-core/liquid-core/testsuite"
     xml_file = "/mnt/setup/test/results/liquid-core.xml"
     env = {
-        "PYTHONPATH": "/opt/liquid-core/liquid-core:"+os.environ.get("PYTHONPATH",'')
+        "PYTHONPATH": "/opt/liquid-core/liquid-core:{}".format(
+            os.environ.get("PYTHONPATH",'')
+        ),
     }
 
 
@@ -70,7 +72,7 @@ class SetupTest(PyTestWrapper):
     pre_commands = [
         "supervisorctl restart dnsmasq-dns",
         "virtualenv -p python3 /tmp/liquid-setup-test",
-        "/tmp/liquid-setup-test/bin/pip install -r /mnt/setup/test/requirements.txt",
+        "/tmp/liquid-setup-test/bin/pip install -qqr /mnt/setup/test/requirements.txt",
     ]
     pytest = "/tmp/liquid-setup-test/bin/py.test"
     chdir = "/mnt/setup/test"
