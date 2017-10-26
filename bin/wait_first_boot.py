@@ -6,7 +6,7 @@
 # Waits for either first_boot_done OR first_boot_failed to exist in
 # /opt/common.
 
-# Runs all tests and saves them under setup/test/results as
+# Runs all tests and saves them under setup/testa/results as
 # junit xml files.
 
 import shutil
@@ -60,7 +60,7 @@ class PyTestWrapper:
 class CoreTest(PyTestWrapper):
     pytest = "/opt/liquid-core/venv/bin/py.test"
     chdir = "/opt/liquid-core/liquid-core"
-    xml_file = "/mnt/setup/test/results/liquid-core.xml"
+    xml_file = "/mnt/setup/tests/results/liquid-core.xml"
     env = {
         "PYTHONPATH": "/opt/liquid-core/liquid-core:{}".format(
             os.environ.get("PYTHONPATH",'')
@@ -72,11 +72,11 @@ class SetupTest(PyTestWrapper):
     pre_commands = [
         "supervisorctl restart dnsmasq-dns",
         "virtualenv -p python3 /tmp/liquid-setup-test",
-        "/tmp/liquid-setup-test/bin/pip install -qqr /mnt/setup/test/requirements.txt",
+        "/tmp/liquid-setup-tests/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
     ]
-    pytest = "/tmp/liquid-setup-test/bin/py.test"
+    pytest = "/tmp/liquid-setup-tests/bin/py.test"
     chdir = "/mnt/setup/test"
-    xml_file = "/mnt/setup/test/results/liquid-setup.xml"
+    xml_file = "/mnt/setup/tests/results/liquid-setup.xml"
 
 
 def run_tests():
