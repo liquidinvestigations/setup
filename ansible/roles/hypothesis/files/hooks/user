@@ -4,11 +4,9 @@ import sys
 import json
 import os
 
-LIQUID_DOMAIN = "{{ liquid_domain }}"
-
 hook = os.environ['HOOK']
 [username] = sys.argv[1:]
-email = '{}@{}'.format(username, LIQUID_DOMAIN)
+email = '{}@liquid.investigations.bogus.example.org'.format(username)
 
 env = dict(os.environ)
 env.pop('DJANGO_SETTINGS_MODULE', None)
@@ -34,7 +32,7 @@ def created():
     ])
 
 
-def password():
+def passwd():
     password = json.loads(env.pop('LIQUID_HOOK_DATA'))['password']
     h_user([
         'password',
@@ -52,7 +50,7 @@ def deleted():
 
 hook_map = {
     'user-{}'.format(fn.__name__): fn
-    for fn in [created, password, deleted]
+    for fn in [created, passwd, deleted]
 }
 
 hook_map[hook]()
