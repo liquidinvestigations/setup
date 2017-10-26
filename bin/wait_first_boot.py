@@ -110,5 +110,5 @@ def cat_first_boot_logs():
 
 if __name__ == '__main__':
     wait_for_first_boot()
-    cat_logs_and_exit()
+    cat_first_boot_logs()
     run_tests()
