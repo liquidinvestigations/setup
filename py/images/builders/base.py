@@ -41,11 +41,13 @@ class BaseBuilder:
         )
         if not have_ansible:
             run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
-            run(['apt-get', '-qq', 'update'])
-            run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git'])
+            run(['apt-get', '-qq', 'update'], stdout=subprocess.DEVNULL)
+            run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git'],
+                stdout=subprocess.DEVNULL)
 
     def install_qemu_utils(self):
-        run(['apt-get', '-qq', 'install', '-y', 'qemu-utils'])
+        run(['apt-get', '-qq', 'install', '-y', 'qemu-utils'],
+            stdout=subprocess.DEVNULL)
 
     def resize_partition(self, image, new_size):
         run(['truncate', '-s', new_size, str(image)])
