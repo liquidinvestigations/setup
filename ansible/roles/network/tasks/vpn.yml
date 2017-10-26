@@ -31,3 +31,8 @@
     src: vpn/initialize.d/vpn
     dest: /opt/common/initialize.d/60-vpn
     mode: 0755
+
+- name: Create the supervisor configuration file
+  template:
+    src: vpn/supervisor/vpn-server.conf
+    dest: /etc/supervisor/conf.d/vpn-server.conf
