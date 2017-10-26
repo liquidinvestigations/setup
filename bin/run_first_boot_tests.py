@@ -71,11 +71,11 @@ class CoreTest(PyTestWrapper):
 class SetupTest(PyTestWrapper):
     pre_commands = [
         "supervisorctl restart dnsmasq-dns",
-        "virtualenv -p python3 /tmp/liquid-setup-test",
-        "/tmp/liquid-setup-tests/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
+        "virtualenv -p python3 /mnt/setup/tests/venv",
+        "/mnt/setup/tests/venv/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
     ]
-    pytest = "/tmp/liquid-setup-tests/bin/py.test"
-    chdir = "/mnt/setup/test"
+    pytest = "/mnt/setup/tests/venv/bin/py.test"
+    chdir = "/mnt/setup/tests"
     xml_file = "/mnt/setup/tests/results/liquid-setup.xml"
 
 
