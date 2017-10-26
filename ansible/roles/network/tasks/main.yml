@@ -16,7 +16,7 @@
 - name: dnsmasq configuration for network-manager
   template:
     src: network-manager-dnsmasq.conf
-    dest: /etc/NetworkManager/dnsmasq-shared.d/liquid
+    dest: /etc/NetworkManager/dnsmasq-shared.d/liquid.conf
     mode: 0644
   tags:
     - configure
