@@ -22,11 +22,9 @@ if [ ! -f first_boot_done ] && [ ! -f first_boot_failed ]; then
   echo "Starting first boot."
   if ./initialize.sh ; then
     echo "First boot done."
-    #touch first_boot_done
     FIRST_BOOT=DONE
   else
     echo "First boot failed."
-    #touch first_boot_failed
     FIRST_BOOT=FAILED
   fi
 else
