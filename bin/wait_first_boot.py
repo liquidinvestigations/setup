@@ -59,7 +59,7 @@ class PyTestWrapper:
 
 class CoreTest(PyTestWrapper):
     pytest = "/opt/liquid-core/venv/bin/py.test"
-    chdir = "/opt/liquid-core/liquid-core/testsuite"
+    chdir = "/opt/liquid-core/liquid-core"
     xml_file = "/mnt/setup/test/results/liquid-core.xml"
     env = {
         "PYTHONPATH": "/opt/liquid-core/liquid-core:{}".format(
