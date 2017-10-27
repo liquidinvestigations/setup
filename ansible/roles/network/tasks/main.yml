@@ -24,6 +24,8 @@
 
 - import_tasks: tasks/vpn-server.yml
 
+- import_tasks: tasks/vpn-client.yml
+
 - name: Allow hotplug eth0 # so the system boots without an ethernet cable
   copy:
     src: network-interfaces/eth0
