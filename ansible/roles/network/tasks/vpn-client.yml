@@ -1,10 +1,10 @@
 ---
-- when: liquid_vpn.client
+- when: liquid_vpn.client.config
   block:
 
   - name: OpenVPN client configuration file
     copy:
-      content: "{{ liquid_vpn.client.config_file}}"
+      content: "{{ liquid_vpn.client.config }}"
       dest: /var/lib/liquid/vpn/client.ovpn
 
   - name: Create the supervisor configuration file
@@ -16,7 +16,7 @@
     - configure
 
 - name: Remove the client configuration files
-  when: not liquid_vpn.client
+  when: not liquid_vpn.client.config
   file:
     path: "{{ item }}"
     state: absent
