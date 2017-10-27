@@ -75,6 +75,8 @@ def set_up_easyrsa():
     hmac_file = str(CA_KEYS / 'ta.key')
     run_ca(['openvpn', '--genkey', '--secret', hmac_file])
 
+    (CA_KEYS / 'crl.pem').touch()
+
 
 def initialize():
     if not CA.exists():
