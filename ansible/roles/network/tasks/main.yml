@@ -1,14 +1,28 @@
 ---
-- import_tasks: tasks/vpn-server.yml
-
-- name: Install wireless packages
+- name: Install packages
   apt:
     name: "{{ item }}"
     state: latest
   with_items:
     - network-manager
+    - openvpn
+    - easy-rsa
   tags:
     - prerequisites
+
+- name: Don't start OpenVPN from systemd
+  service:
+    name: openvpn
+    enabled: no
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /var/lib/liquid/vpn
+
+- import_tasks: tasks/vpn-server.yml
 
 - name: Allow hotplug eth0 # so the system boots without an ethernet cable
   copy:
