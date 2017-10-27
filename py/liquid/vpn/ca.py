@@ -72,7 +72,7 @@ def set_up_easyrsa():
     ])
 
     hmac_file = str(CA_KEYS / 'ta.key')
-    subprocess.call(['openvpn', '--genkey', '--secret', hmac_file])
+    run_ca(['openvpn', '--genkey', '--secret', hmac_file])
 
 
 def initialize():
