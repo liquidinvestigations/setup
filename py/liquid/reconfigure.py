@@ -4,6 +4,7 @@ from pathlib import Path
 import subprocess
 from images.setup import install
 from .wifi import configure_wifi
+from .vpn import client
 
 ANSIBLE_VARS = Path(__file__).parent.parent.parent / 'ansible' / 'vars'
 
@@ -26,6 +27,9 @@ def on_reconfigure():
 
     print('configure_wifi')
     configure_wifi(vars)
+
+    print('syncing vpn client keys')
+    client.sync_keys(vars)
 
     run('service nginx reload')
     run('supervisorctl update')
