@@ -2,6 +2,7 @@ import os
 import json
 from pathlib import Path
 import subprocess
+import shutil
 
 VAR = Path('/var/lib/liquid/vpn')
 CA = VAR / 'ca'
@@ -77,4 +78,8 @@ def set_up_easyrsa():
 
 def initialize():
     if not CA.exists():
-        set_up_easyrsa()
+        try:
+            set_up_easyrsa()
+        except:
+            shutil.rmtree(str(CA))
+            raise
