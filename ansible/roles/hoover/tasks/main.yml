@@ -160,7 +160,7 @@
     dest: /opt/common/initialize.d/40-hoover-import-testdata.sh
     mode: 0755
 
-- name: Create the testdata import initialize script
+- name: Create the davros sync script
   template:
     src: initialize.d/import-davros-sync.sh
     dest: /opt/common/initialize.d/41-hoover-import-davros-sync.sh
