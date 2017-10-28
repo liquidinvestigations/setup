@@ -13,7 +13,7 @@ for file in /opt/common/initialize.d/*
 do
   "$file"
   RESULT=$?
-  if [ $RESULT ]; then
+  if [ 0 -ne $RESULT ]; then
       INITIALIZE_RESULT=$RESULT
   fi
   echo "$file $RESULT" >> /opt/common/first_boot_status
