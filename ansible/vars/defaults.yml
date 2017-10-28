@@ -1,4 +1,5 @@
 liquid_domain: liquid.local
+liquid_vpn: {server: {}, client: {config: null}}
 devel: false
 use_https: false
 

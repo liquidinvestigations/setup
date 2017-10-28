@@ -1,0 +1,16 @@
+---
+- name: OpenVPN server configuration file
+  copy:
+    src: vpn-server/server.ovpn
+    dest: /var/lib/liquid/vpn/server.ovpn
+
+- name: Set up CA on first boot
+  copy:
+    src: vpn-server/initialize.d/vpn
+    dest: /opt/common/initialize.d/60-vpn
+    mode: 0755
+
+- name: Create the supervisor configuration file
+  copy:
+    src: vpn-server/supervisor/vpn-server.conf
+    dest: /etc/supervisor/conf.d/vpn-server.conf

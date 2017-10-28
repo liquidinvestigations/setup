@@ -38,10 +38,16 @@ def delete_connection(uuid):
 
 
 def configure_wifi(vars):
+    def not_empty(wifi_config):
+        if wifi_config:
+            if wifi_config['ssid'] and wifi_config['password']:
+                return wifi_config
+        return None
+
     print('vars:', vars)
     target = {
-        'hotspot': vars.get('liquidcore', {}).get('lan', {}).get('hotspot'),
-        'client': vars.get('liquidcore', {}).get('wan', {}).get('wifi'),
+        'hotspot': not_empty(vars.get('liquidcore_lan', {}).get('hotspot')),
+        'client': not_empty(vars.get('liquidcore_wan', {}).get('wifi')),
     }
     print('target:', target)
 

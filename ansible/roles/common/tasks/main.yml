@@ -112,6 +112,11 @@
     - /var/lib/liquid/https/nginx
     - /var/lib/liquid/https/certs
 
+- name: Put configuration in /var/lib/liquid/conf/options.json
+  template:
+    src: options.json
+    dest: /var/lib/liquid/conf/options.json
+
 - name: Create common folder
   file:
     path: /opt/common
