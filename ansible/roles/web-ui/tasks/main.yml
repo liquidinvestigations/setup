@@ -15,7 +15,7 @@
 
 - name: Web UI dist artifacts
   unarchive:
-    src: https://jenkins.liquiddemo.org/__images__/web-ui/web-ui-dist-20171017.tgz
+    src: https://jenkins.liquiddemo.org/job/liquidinvestigations/job/web-ui/job/master/lastSuccessfulBuild/artifact/web-ui-dist.tar.gz
     dest: /opt/web-ui
     remote_src: yes
     creates: /opt/web-ui/dist
