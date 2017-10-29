@@ -21,6 +21,8 @@
     state: directory
   with_items:
     - /var/lib/liquid/vpn
+    - /var/lib/liquid/vpn/server
+    - /var/lib/liquid/vpn/server/keys
 
 - import_tasks: tasks/vpn-server.yml
 

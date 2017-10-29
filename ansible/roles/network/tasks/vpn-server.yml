@@ -2,7 +2,7 @@
 - name: OpenVPN server configuration file
   copy:
     src: vpn-server/server.ovpn
-    dest: /var/lib/liquid/vpn/server.ovpn
+    dest: /var/lib/liquid/vpn/server/server.ovpn
 
 - name: Set up CA on first boot
   copy:
