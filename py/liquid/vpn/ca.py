@@ -7,6 +7,8 @@ import shutil
 VAR = Path('/var/lib/liquid/vpn')
 CA = VAR / 'ca'
 CA_KEYS = CA / 'keys'
+SERVER = VAR / 'server'
+SERVER_KEYS = SERVER / 'keys'
 
 CA_VARS = {
     'KEY_SIZE': '2048',
@@ -50,6 +52,19 @@ def easyrsa_env():
     return env
 
 
+def copy_openvpn_keys():
+    """
+    OpenVPN runs as user `nobody`. Copy its certificates to a place where it
+    can read them.
+    """
+    keys = [
+        'ca.crt', 'server.crt', 'server.key',
+        'dh2048.pem', 'crl.pem', 'ta.key',
+    ]
+    for filename in keys:
+        shutil.copy(str(CA_KEYS / filename), str(SERVER_KEYS / filename))
+
+
 def set_up_easyrsa():
     run(['make-cadir', str(CA)])
 
@@ -83,6 +98,7 @@ def set_up_easyrsa():
         '-config', env['KEY_CONFIG'],
     ])
 
+    copy_openvpn_keys()
 
 
 def initialize():
