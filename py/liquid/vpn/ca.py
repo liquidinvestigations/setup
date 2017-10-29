@@ -75,7 +75,14 @@ def set_up_easyrsa():
     hmac_file = str(CA_KEYS / 'ta.key')
     run_ca(['openvpn', '--genkey', '--secret', hmac_file])
 
-    (CA_KEYS / 'crl.pem').touch()
+    env['KEY_CN'] = 'Liquid Investigations'
+    env['KEY_ALTNAMES'] = 'something'
+    run_ca([
+        'openssl', 'ca', '-gencrl',
+        '-out', str(CA_KEYS / 'crl.pem'),
+        '-config', env['KEY_CONFIG'],
+    ])
+
 
 
 def initialize():
