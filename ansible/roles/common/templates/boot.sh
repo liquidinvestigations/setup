@@ -32,19 +32,9 @@ else
   echo "Not starting first boot, already done."
 fi
 
-# Errors off, start services and run on-boot hooks.
-set +e
-echo "Starting all services."
+echo "Restarting all services."
 # TODO: only start enabled services
-supervisorctl start all
-
-supervisorctl restart dnsmasq-dns
-
-echo "Running on-boot hook."
-for file in /opt/common/hooks/on-boot.d/*
-do
-  "$file"
-done
+supervisorctl restart all
 
 # Mark first_boot_done and first_boot_failed only after the
 # services have been started and hooks have been ran.
