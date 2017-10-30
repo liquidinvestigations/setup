@@ -52,8 +52,6 @@ class DemoBuilder(Builder_cloud):
         local_setup_path = Path(__file__).resolve().parent.parent.parent
         setup_path = target.mount_point / 'opt/setup'
 
-        assert not setup_path.exists()
-        setup_path.mkdir()
         run(['mount', '--bind', str(local_setup_path), str(setup_path)])
 
         try:
@@ -61,11 +59,11 @@ class DemoBuilder(Builder_cloud):
 
         finally:
             run(['umount', str(setup_path)])
-            setup_path.rmdir()
 
     def setup_ansible(self, target, config_yml):
         if not Path('/usr/bin/ansible-playbook').is_file():
-            self.install_host_dependencies()
+            self.install_ansible()
+            self.install_qemu_utils()
 
         with self.ansible_bind_mount(target) as setup_path:
             target_config_yml = setup_path / 'ansible/vars/config.yml'
