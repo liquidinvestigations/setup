@@ -1,5 +1,5 @@
 liquid_domain: liquid.example.org
-liquid_vpn: {server: {}, client: {config: null}}
+liquid_vpn: {server: {"enabled": false}, client: {config: null, "enabled": false}}
 devel: false
 use_https: false
 
