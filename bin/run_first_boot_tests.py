@@ -87,7 +87,7 @@ def run_tests():
             print("Failed to run", test_cls.__name__)
 
 
-def wait_for_first_boot(wait_mins=30):
+def wait_for_first_boot(wait_mins=10):
     print("Waiting for first boot to happen for {} mins.".format(wait_mins))
     seconds = 0
     while not exists(FILE_FAIL) and not exists(FILE_DONE):
