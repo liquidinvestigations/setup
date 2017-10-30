@@ -5,7 +5,7 @@ properties([
 ])
 
 node('arm64') {
-    def cloud_image = 'https://jenkins.liquiddemo.org/__images__/factory/cloud-arm64-image.tar.xz'
+    def cloud_image = 'https://jenkins.liquiddemo.org/job/liquidinvestigations/job/factory/job/master/lastSuccessfulBuild/artifact/cloud-arm64-image.tar.xz'
     def liquid_prerequisites_odroid_c2_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites-arm64/job/master/lastSuccessfulBuild/artifact/liquid-odroid_c2-arm64-prerequisites.img.xz'
     stage('ODROID C2: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'

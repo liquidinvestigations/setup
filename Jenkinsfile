@@ -5,7 +5,7 @@ properties([
 ])
 
 node('cloud') {
-    def cloud_image = 'https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz'
+    def cloud_image = 'https://jenkins.liquiddemo.org/job/liquidinvestigations/job/factory/job/master/lastSuccessfulBuild/artifact/cloud-x86_64-image.tar.xz'
     def liquid_prerequisites_cloud_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites/job/master/lastSuccessfulBuild/artifact/liquid-cloud-x86_64-prerequisites.img.xz'
     stage('CLOUD: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
