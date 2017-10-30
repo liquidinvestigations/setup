@@ -5,6 +5,13 @@
     dest: /opt/web-ui
     version: "{{ git_repo_versions.web_ui }}"
 
+- name: Web UI dist artifacts
+  unarchive:
+    src: https://jenkins.liquiddemo.org/job/liquidinvestigations/job/web-ui/job/master/lastSuccessfulBuild/artifact/web-ui-dist.tar.gz
+    dest: /opt/web-ui
+    remote_src: yes
+    creates: /opt/web-ui/dist
+
 - name: Set up file permissions
   file:
     path: /opt/web-ui
@@ -12,10 +19,3 @@
     owner: liquid
     group: liquid
     recurse: true
-
-- name: Web UI dist artifacts
-  unarchive:
-    src: https://jenkins.liquiddemo.org/job/liquidinvestigations/job/web-ui/job/master/lastSuccessfulBuild/artifact/web-ui-dist.tar.gz
-    dest: /opt/web-ui
-    remote_src: yes
-    creates: /opt/web-ui/dist
