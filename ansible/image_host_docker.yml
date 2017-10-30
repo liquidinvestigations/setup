@@ -9,5 +9,4 @@
   roles:
     - docker
   tasks:
-    - import_tasks: roles/dokuwiki/tasks/docker.yml
     - import_tasks: roles/davros/tasks/docker.yml
