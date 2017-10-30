@@ -89,11 +89,6 @@
     path: /var/lib/liquid/conf/discover
     state: directory
 
-- name: Create /var/lib/liquid/conf/discover/dnsmasq.conf file
-  file:
-    path: /var/lib/liquid/conf/discover/dnsmasq.conf
-    state: touch
-
 - name: Don't enable avahi-daemon as a system service
   service:
     name: avahi-daemon
