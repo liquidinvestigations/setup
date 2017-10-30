@@ -6,22 +6,38 @@
   with_items:
     - php-fpm
     - php-xml
+  tags:
+    - prerequisites
 
 - name: Create /opt/dokuwiki directory
   file:
     path: /opt/dokuwiki
     state: directory
+  tags:
+    - prerequisites
+
+- name: Add user liquid to group www-data
+  user:
+    name: liquid
+    groups: www-data
+    append: yes
+  tags:
+    - prerequisites
 
 - name: Download DokuWiki stable source code
   shell: "wget https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz -O - | tar -xzvf - -C /opt/dokuwiki --strip 1"
+  tags:
+    - prerequisites
 
 - name: Set up file permissions
   file:
     path: /opt/dokuwiki
     state: directory
-    owner: liquid
-    group: liquid
+    owner: www-data
+    group: www-data
     recurse: true
+  tags:
+    - prerequisites
 
 - name: Create nginx config
   template:
