@@ -10,7 +10,7 @@ def get_interfaces():
         '/opt/discover/venv/bin/python', '-c',
         'import json, netifaces; print(json.dumps(netifaces.interfaces()))',
     ])
-    return json.loads(out)
+    return json.loads(out.decode('utf8'))
 
 
 def configure_avahi(vars):
