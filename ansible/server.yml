@@ -1,8 +1,6 @@
 ---
 - name: Install the server version of the Liquid Investigations toolkit
   hosts: local
-  vars:
-    build_docker_images: true
   vars_files:
     - vars/defaults.yml
     - vars/config.yml
@@ -16,7 +14,6 @@
     - liquid-core
     - node6
     - web-ui
-    - docker
     - hoover
     - hypothesis
     - dokuwiki
