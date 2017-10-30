@@ -47,35 +47,22 @@ class DemoBuilder(Builder_cloud):
             path = target.mount_point / rel_path
             run(['sed', '-i ', 's/console=tty1/console=ttyS0/g', str(path)])
 
-    @contextmanager
-    def ansible_bind_mount(self, target):
-        local_setup_path = Path(__file__).resolve().parent.parent.parent
-        setup_path = target.mount_point / 'opt/setup'
-
-        run(['mount', '--bind', str(local_setup_path), str(setup_path)])
-
-        try:
-            yield setup_path
-
-        finally:
-            run(['umount', str(setup_path)])
-
     def setup_ansible(self, target, config_yml):
         if not Path('/usr/bin/ansible-playbook').is_file():
             self.install_ansible()
             self.install_qemu_utils()
 
-        with self.ansible_bind_mount(target) as setup_path:
-            target_config_yml = setup_path / 'ansible/vars/config.yml'
-            with config_yml.open(encoding='utf8') as f:
-                with target_config_yml.open('w', encoding='utf8') as g:
-                    g.write(f.read())
+        setup_path = target.mount_point / 'opt' / 'setup'
+        target_config_yml = setup_path / 'ansible/vars/config.yml'
+        with config_yml.open(encoding='utf8') as f:
+            with target_config_yml.open('w', encoding='utf8') as g:
+                g.write(f.read())
 
-            run([
-                'ansible-playbook',
-                '-i', 'hosts',
-                'image_chroot.yml',
-            ], cwd=str(setup_path / 'ansible'))
+        run([
+            'ansible-playbook',
+            '-i', 'hosts',
+            'image_chroot.yml',
+        ], cwd=str(setup_path / 'ansible'))
 
     def kill_testdata(self, target):
         import_testdata = (
