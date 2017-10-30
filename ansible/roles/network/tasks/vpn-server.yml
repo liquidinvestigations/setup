@@ -1,16 +1,16 @@
 ---
+- name: Set up CA on first boot
+  copy:
+    src: vpn-server/initialize.d/vpn
+    dest: /opt/common/initialize.d/60-vpn.sh
+    mode: 0755
+
 - when: liquid_vpn.server.enabled
   block:
   - name: OpenVPN server configuration file
     copy:
       src: vpn-server/server.ovpn
       dest: /var/lib/liquid/vpn/server/server.ovpn
-  
-  - name: Set up CA on first boot
-    copy:
-      src: vpn-server/initialize.d/vpn
-      dest: /opt/common/initialize.d/60-vpn.sh
-      mode: 0755
   
   - name: Create the supervisor configuration file
     copy:
