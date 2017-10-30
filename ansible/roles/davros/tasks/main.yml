@@ -1,7 +1,19 @@
 ---
-- import_tasks: tasks/docker.yml
-
 - import_tasks: tasks/authproxy.yml
+
+- name: Download the source code
+  git:
+    repo: https://github.com/mnutt/davros.git
+    dest: /opt/davros/davros
+    version: master
+
+- name: Install dependencies and run build
+  shell: |
+    npm install
+    ./node_modules/bower/bin/bower install
+    ./node_modules/ember-cli/bin/ember build
+  args:
+    chdir: /opt/davros/davros
 
 - name: Create supervisor config
   copy:
