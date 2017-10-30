@@ -17,7 +17,7 @@ def configure_avahi(vars):
     with open(AVAHI_DAEMON_CONF_TMPL, encoding='utf8') as f:
         template = f.read()
 
-    interfaces = set(get_interfaces()) - set(['lo']) + set(['tun0', 'tun1'])
+    interfaces = set(get_interfaces()) | set(['tun0', 'tun1']) - set(['lo'])
     avahi_daemon_conf_txt = template.format(
         avahi_interfaces=','.join(interfaces),
     )
