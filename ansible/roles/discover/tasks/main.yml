@@ -13,9 +13,9 @@
     - prerequisites
 
 - name: Configure avahi-daemon
-  template:
-    src: avahi/avahi-daemon.conf
-    dest: /etc/avahi/avahi-daemon.conf
+  copy:
+    src: avahi/avahi-daemon.conf.tmpl
+    dest: /etc/avahi/avahi-daemon.conf.tmpl
 
 - name: Create avahi-daemon service
   template:

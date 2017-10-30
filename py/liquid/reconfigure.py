@@ -5,6 +5,7 @@ import subprocess
 from images.setup import install
 from .wifi import configure_wifi
 from .vpn import client
+from . import discover
 
 ANSIBLE_VARS = Path(__file__).parent.parent.parent / 'ansible' / 'vars'
 
@@ -30,6 +31,9 @@ def on_reconfigure():
 
     print('syncing vpn client keys')
     client.sync_keys(vars)
+
+    print('configuring avahi interfaces')
+    discover.configure_avahi(vars)
 
     run('service nginx reload')
     run('supervisorctl update')
