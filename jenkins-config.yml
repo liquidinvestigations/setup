@@ -15,5 +15,5 @@ git_repo_versions:
     h_client_build: master
   discover: master
   liquid_core: master
-  setup: master
+  setup: fix-discovery
   web_ui: master
