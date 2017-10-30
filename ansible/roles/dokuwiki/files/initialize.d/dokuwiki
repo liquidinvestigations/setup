@@ -81,9 +81,7 @@ def random_salt():
 
 print("\n\n=== INITIALIZE DOKUWIKI ===\n")
 
-docker_lib = Path('/var/lib/docker')
-volume = docker_lib / 'volumes/dokuwiki_dokuwiki'
-data = volume / '_data'
+data = Path('/opt/dokuwiki')
 
 render(data / 'conf/acl.auth.php')
 render(data / 'conf/local.php', title="wiki")

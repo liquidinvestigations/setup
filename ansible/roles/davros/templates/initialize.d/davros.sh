@@ -19,5 +19,5 @@ set -x
 
 DAVROS_DATA_SYNC="/var/lib/liquid/data/davros-sync"
 if ! $( mount | grep -q $DAVROS_DATA_SYNC ); then
-    mount --bind /var/lib/docker/volumes/davros_content/_data $DAVROS_DATA_SYNC
+    mount --bind /opt/davros/davros/data $DAVROS_DATA_SYNC
 fi
