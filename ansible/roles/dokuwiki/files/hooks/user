@@ -80,8 +80,8 @@ class UsersFile:
 
 
 def main():
-    volume = Path('/var/lib/docker/volumes/dokuwiki_dokuwiki')
-    users = UsersFile(volume / '_data/conf/users.auth.php')
+    volume = Path('/opt/dokuwiki')
+    users = UsersFile(volume / 'conf/users.auth.php')
 
     def created(options):
         pw = json.loads(os.environ['LIQUID_HOOK_DATA'])['password']
