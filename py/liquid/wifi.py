@@ -46,8 +46,8 @@ def configure_wifi(vars):
 
     print('vars:', vars)
     target = {
-        'hotspot': not_empty(vars.get('liquidcore_lan', {}).get('hotspot')),
-        'client': not_empty(vars.get('liquidcore_wan', {}).get('wifi')),
+        'hotspot': not_empty(vars.get('liquid_lan', {}).get('hotspot')),
+        'client': not_empty(vars.get('liquid_wan', {}).get('wifi')),
     }
     print('target:', target)
 
