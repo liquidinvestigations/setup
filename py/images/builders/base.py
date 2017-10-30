@@ -88,15 +88,6 @@ class BaseBuilder:
             cmd += ['--tags', tags]
         run(cmd, cwd=str(self.setup / 'ansible'))
 
-    def install_docker_images(self, target):
-        self.run_ansible('image_host_docker.yml')
-        run(['service', 'docker', 'stop'])
-        run([
-            'cp', '-a',
-            '/var/lib/docker',
-            str(target.mount_point / 'var/lib/docker'),
-        ])
-
     def prepare_image(self):
         image = self.platform.get_base_image()
         self.resize_partition(image, '8G')
@@ -107,8 +98,6 @@ class BaseBuilder:
 
         return image
 
-    def build(self, image, tags, docker=True):
+    def build(self, image, tags):
         with self.open_target(image) as target:
-            if docker:
-                self.install_docker_images(target)
             self.run_ansible('image_chroot.yml', tags)
