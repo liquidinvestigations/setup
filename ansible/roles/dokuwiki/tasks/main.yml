@@ -13,7 +13,7 @@
     state: directory
 
 - name: Download DokuWiki stable source code
-  shell: "wget https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz -O - | tar -xzvf - -C /tmp/doku --strip 1"
+  shell: "wget https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz -O - | tar -xzvf - -C /opt/dokuwiki --strip 1"
 
 - name: Set up file permissions
   file:
