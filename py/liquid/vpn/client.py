@@ -133,6 +133,8 @@ def revoke(id):
     if id not in get_revoked():
         raise RuntimeError('The key {} was not revoked'.format(id))
 
+    ca.copy_openvpn_keys()
+
 
 def sync_keys(vars):
     ca_keys = get_keys()
