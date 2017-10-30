@@ -1,16 +1,32 @@
 ---
-- name: OpenVPN server configuration file
-  copy:
-    src: vpn-server/server.ovpn
-    dest: /var/lib/liquid/vpn/server/server.ovpn
+- when: liquid_vpn.server.enabled
+  block:
+  - name: OpenVPN server configuration file
+    copy:
+      src: vpn-server/server.ovpn
+      dest: /var/lib/liquid/vpn/server/server.ovpn
+  
+  - name: Set up CA on first boot
+    copy:
+      src: vpn-server/initialize.d/vpn
+      dest: /opt/common/initialize.d/60-vpn.sh
+      mode: 0755
+  
+  - name: Create the supervisor configuration file
+    copy:
+      src: vpn-server/supervisor/vpn-server.conf
+      dest: /etc/supervisor/conf.d/vpn-server.conf
+  tags:
+    - configure
 
-- name: Set up CA on first boot
-  copy:
-    src: vpn-server/initialize.d/vpn
-    dest: /opt/common/initialize.d/60-vpn
-    mode: 0755
-
-- name: Create the supervisor configuration file
-  copy:
-    src: vpn-server/supervisor/vpn-server.conf
-    dest: /etc/supervisor/conf.d/vpn-server.conf
+- when: not liquid_vpn.server.enabled
+  name: Remove configuration files for disabled vpn server
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/lib/liquid/vpn/server/server.ovpn
+    - /opt/common/initialize.d/60-vpn.sh
+    - /etc/supervisor/conf.d/vpn-server.conf
+  tags:
+    - configure

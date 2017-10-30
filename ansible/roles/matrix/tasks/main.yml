@@ -21,78 +21,97 @@
     path: /opt/matrix
     state: directory
     mode: 0755
-
-- name: Subscribe to hooks
-  copy:
-    src: hooks/{{ item }}
-    dest: /opt/common/hooks/{{ item }}.d/matrix
-    mode: 0755
-  with_items:
-    - user-created
-    - user-passwd
-    - user-deleted
+  tags:
+    - prerequisites
 
 - name: Copy the requirements file
   copy:
     src: requirements.txt
     dest: /opt/matrix/requirements.txt
+  tags:
+    - prerequisites
 
 - name: Install synapse homeserver
   pip:
     requirements: /opt/matrix/requirements.txt
     virtualenv: /opt/matrix/synapse
     virtualenv_python: python2.7
-
-- name: Run the default configuration
-  command: /opt/matrix/synapse/bin/python -m synapse.app.homeserver --server-name matrix.{{ liquid_domain }} --config-path homeserver.yaml --generate-config --report-stats=no
-  args:
-    chdir: /opt/matrix/synapse
-    creates: /opt/matrix/synapse/homeserver.yaml
   tags:
-    - configure
-
-# The "synapse.app.homeserver ...  --generate-config" from the previous task
-# auto-creates a bunch of files named after the hostname.  Additionally,
-# Matrix expects all these certificates and configurations to always be
-# somewhere, even if they're not used. And that default path is created by
-# appending an extension to the hostname.
-
-# The 'ls' checks for the destination log configuration. If it's there, that
-# means the `Run default configuration` task did not run this pass (because of
-# the `creates` directive), and so we don't move anything.
-- name: Move generated logging configuration
-  shell: ls /opt/matrix/synapse/homeserver.log.config || mv /opt/matrix/synapse/matrix.{{ liquid_domain }}.log.config /opt/matrix/synapse/homeserver.log.config
-  tags:
-    - configure
-
-# Same as above, but for all the unused security certificates.
-- name: Move away generated tls certificates
-  shell: for ext in tls.crt tls.key tls.dh signing.key; do (ls /opt/matrix/synapse/unused-certificate.$ext || mv /opt/matrix/synapse/matrix.{{ liquid_domain }}.$ext /opt/matrix/synapse/unused-certificate.$ext); done
-  tags:
-    - configure
-
-- name: Overwrite the configuration file
-  template:
-    src: homeserver.yaml
-    dest: /opt/matrix/synapse/homeserver.yaml
+    - prerequisites
 
 - name: Reset permissions on the synapse server
   command: chown -R liquid:liquid /opt/matrix/synapse
+  tags:
+    - prerequisites
 
-- name: Create the initialization script
-  copy:
-    src: initialize.d/matrix
-    dest: /opt/common/initialize.d/24-matrix.sh
-    mode: 0755
+- when: liquid_services.matrix.enabled
+  block:
+  - name: Run the default configuration
+    command: /opt/matrix/synapse/bin/python -m synapse.app.homeserver --server-name matrix.{{ liquid_domain }} --config-path homeserver.yaml --generate-config --report-stats=no
+    args:
+      chdir: /opt/matrix/synapse
+      creates: /opt/matrix/synapse/homeserver.yaml
+  
+  # The "synapse.app.homeserver ...  --generate-config" from the previous task
+  # auto-creates a bunch of files named after the hostname.  Additionally,
+  # Matrix expects all these certificates and configurations to always be
+  # somewhere, even if they're not used. And that default path is created by
+  # appending an extension to the hostname.
+  
+  # The 'ls' checks for the destination log configuration. If it's there, that
+  # means the `Run default configuration` task did not run this pass (because of
+  # the `creates` directive), and so we don't move anything.
+  - name: Move generated logging configuration
+    shell: ls /opt/matrix/synapse/homeserver.log.config || mv /opt/matrix/synapse/matrix.{{ liquid_domain }}.log.config /opt/matrix/synapse/homeserver.log.config
+  
+  # Same as above, but for all the unused security certificates.
+  - name: Move away generated tls certificates
+    shell: for ext in tls.crt tls.key tls.dh signing.key; do (ls /opt/matrix/synapse/unused-certificate.$ext || mv /opt/matrix/synapse/matrix.{{ liquid_domain }}.$ext /opt/matrix/synapse/unused-certificate.$ext); done
+  
+  - name: Overwrite the configuration file
+    template:
+      src: homeserver.yaml
+      dest: /opt/matrix/synapse/homeserver.yaml
+  
+  - name: Create the initialization script
+    copy:
+      src: initialize.d/matrix
+      dest: /opt/common/initialize.d/24-matrix.sh
+      mode: 0755
+  
+  - name: Create supervisor config
+    copy:
+      src: supervisor/matrix.conf
+      dest: /etc/supervisor/conf.d/matrix.conf
+  
+  - name: Create nginx config
+    template:
+      src: nginx/matrix.conf
+      dest: /etc/nginx/sites-enabled/matrix.conf
+  
+  - name: Subscribe to hooks
+    copy:
+      src: hooks/{{ item }}
+      dest: /opt/common/hooks/{{ item }}.d/matrix
+      mode: 0755
+    with_items:
+      - user-created
+      - user-passwd
+      - user-deleted
+  tags:
+    - configure
 
-- name: Create supervisor config
-  copy:
-    src: supervisor/matrix.conf
-    dest: /etc/supervisor/conf.d/matrix.conf
-
-- name: Create nginx config
-  template:
-    src: nginx/matrix.conf
-    dest: /etc/nginx/sites-enabled/matrix.conf
+- when: not liquid_services.matrix.enabled
+  name: Remove configuration files for disabled service
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /opt/common/hooks/{{ item }}.d/matrix
+    - /etc/nginx/sites-enabled/matrix.conf
+    - /etc/supervisor/conf.d/matrix.conf
+    - /opt/common/initialize.d/24-matrix.sh
+    - /opt/common/initialize.d/24-matrix.sh
+    - /opt/matrix/synapse/homeserver.yaml
   tags:
     - configure

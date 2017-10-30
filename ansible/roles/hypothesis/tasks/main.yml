@@ -90,14 +90,6 @@
     chdir: /opt/hypothesis/elasticsearch-1.7.2
     creates: /opt/hypothesis/elasticsearch-1.7.2/plugins/analysis-icu
 
-- name: Create the initialization script
-  template:
-    src: initialize.d/hypothesis.sh
-    dest: /opt/common/initialize.d/23-hypothesis.sh
-    mode: 0755
-  tags:
-    - configure
-
 - name: Create the libexec folder
   file:
     path: /opt/hypothesis/libexec
@@ -110,32 +102,52 @@
     dest: /opt/hypothesis/libexec/elasticsearch
     mode: 0755
 
-- name: Create the hypothesis run helper
-  template:
-    src: libexec/run-h
-    dest: /opt/hypothesis/libexec/run-h
-    mode: 0755
-  tags:
-    - configure
+- when: liquid_services.hypothesis.enabled
+  block:
+  - name: Create the hypothesis run helper
+    template:
+      src: libexec/run-h
+      dest: /opt/hypothesis/libexec/run-h
+      mode: 0755
+  
+  - name: Create the supervisor configuration file
+    template:
+      src: supervisor/hypothesis.conf
+      dest: /etc/supervisor/conf.d/hypothesis.conf
+  
+  - name: Create the nginx configuration file
+    template:
+      src: nginx/hypothesis.conf
+      dest: /etc/nginx/sites-enabled/hypothesis.conf
+  
+  - name: Subscribe to hooks
+    copy:
+      src: hooks/user
+      dest: /opt/common/hooks/{{ item }}.d/hypothesis
+      mode: 0755
+    with_items:
+      - user-created
+      - user-passwd
+      - user-deleted
+  
+  - name: Create the initialization script
+    template:
+      src: initialize.d/hypothesis.sh
+      dest: /opt/common/initialize.d/23-hypothesis.sh
+      mode: 0755
 
-- name: Create the supervisor configuration file
-  template:
-    src: supervisor/hypothesis.conf
-    dest: /etc/supervisor/conf.d/hypothesis.conf
-
-- name: Create the nginx configuration file
-  template:
-    src: nginx/hypothesis.conf
-    dest: /etc/nginx/sites-enabled/hypothesis.conf
-  tags:
-    - configure
-
-- name: Subscribe to hooks
-  copy:
-    src: hooks/user
-    dest: /opt/common/hooks/{{ item }}.d/hypothesis
-    mode: 0755
+- when: not liquid_services.hypothesis.enabled
+  name: Remove configuration files for disabled service
+  file:
+    path: "{{ item }}"
+    state: absent
   with_items:
-    - user-created
-    - user-passwd
-    - user-deleted
+    - /opt/hypothesis/libexec/run-h
+    - /etc/supervisor/conf.d/hypothesis.conf
+    - /etc/nginx/sites-enabled/hypothesis.conf
+    - /opt/common/hooks/user-created.d/hypothesis
+    - /opt/common/hooks/user-passwd.d/hypothesis
+    - /opt/common/hooks/user-deleted.d/hypothesis
+    - /opt/common/initialize.d/23-hypothesis.sh
+  tags:
+    - configure

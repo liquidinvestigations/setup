@@ -61,6 +61,8 @@
       shell: "rm -rf /opt/hoover"
     - name: Fail the task because Hoover failed to install
       command: /bin/false
+  tags:
+    - prerequisites
 
 - name: Update source code for hoover search
   git:
@@ -80,17 +82,29 @@
     dest: /opt/hoover/ui
     version: "{{ git_repo_versions.hoover.ui }}"
 
+- name: Clone the testdata repo
+  git:
+    repo: https://github.com/hoover/testdata.git
+    dest: /opt/hoover/testdata
+    version: "{{ git_repo_versions.hoover.testdata }}"
+  tags:
+    - prerequisites
+
 - name: Download elasticsearch v2
   unarchive:
     src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.3.tar.gz
     dest: /opt/hoover
     remote_src: yes
     creates: /opt/hoover/elasticsearch-2.4.3
+  tags:
+    - prerequisites
 
 - name: Write the elasticsearch configuration file
   template:
     src: elasticsearch-config/elasticsearch.yml
     dest: /opt/hoover/elasticsearch-2.4.3/config/elasticsearch.yml
+  tags:
+    - configure
 
 - name: Change ownership of elasticsearch data and logs folders
   file:
@@ -99,24 +113,17 @@
     group: liquid
     state: directory
     recurse: true
+  tags:
+    - prerequisites
 
 - name: Download Apache Tika
   get_url:
     dest: /opt/hoover/
     url: http://apache.javapipe.com/tika/tika-server-1.16.jar
-
-- name: Create the supervisor configuration file
-  template:
-    src: supervisor/hoover.conf
-    dest: /etc/supervisor/conf.d/hoover.conf
-
-- name: Create the nginx configuration file
-  template:
-    src: nginx/hoover.conf
-    dest: /etc/nginx/sites-enabled/hoover.conf
   tags:
-    - configure
+    - prerequisites
 
+#### INSTALL SCRIPTS ####
 - name: Create the libexec folder
   file:
     path: /opt/hoover/libexec
@@ -146,26 +153,6 @@
     group: liquid
     recurse: true
 
-- name: Create the initialization script
-  template:
-    src: initialize.d/hoover.sh
-    dest: /opt/common/initialize.d/22-hoover.sh
-    mode: 0755
-  tags:
-    - configure
-
-- name: Create the davros sync script
-  template:
-    src: initialize.d/import-davros-sync.sh
-    dest: /opt/common/initialize.d/41-hoover-import-davros-sync.sh
-    mode: 0755
-
-- name: Clone the testdata repo
-  git:
-    repo: https://github.com/hoover/testdata.git
-    dest: /opt/hoover/testdata
-    version: "{{ git_repo_versions.hoover.testdata }}"
-
 - name: Create the testing_local.py config for snoop
   copy:
     src: snoop-testing-local.py
@@ -183,15 +170,6 @@
     group: liquid
     state: touch
 
-- name: Create the local.py config for search
-  template:
-    src: search-local.py
-    dest: /opt/hoover/search/hoover/site/settings/local.py
-    owner: liquid
-    group: liquid
-  tags:
-    - configure
-
 - name: Touch the secret_key.py config for search
   file:
     dest: /opt/hoover/search/hoover/site/settings/secret_key.py
@@ -205,3 +183,50 @@
     owner: liquid
     group: liquid
     state: touch
+
+- when: liquid_services.hoover.enabled
+  block:
+  - name: Create the supervisor configuration file
+    template:
+      src: supervisor/hoover.conf
+      dest: /etc/supervisor/conf.d/hoover.conf
+  
+  - name: Create the nginx configuration file
+    template:
+      src: nginx/hoover.conf
+      dest: /etc/nginx/sites-enabled/hoover.conf
+  
+  - name: Create the initialization script
+    template:
+      src: initialize.d/hoover.sh
+      dest: /opt/common/initialize.d/22-hoover.sh
+      mode: 0755
+  
+  - name: Create the davros sync script
+    template:
+      src: initialize.d/import-davros-sync.sh
+      dest: /opt/common/initialize.d/41-hoover-import-davros-sync.sh
+      mode: 0755
+  
+  - name: Create the local.py config for search
+    template:
+      src: search-local.py
+      dest: /opt/hoover/search/hoover/site/settings/local.py
+      owner: liquid
+      group: liquid
+  tags:
+    - configure
+
+- when: not liquid_services.hoover.enabled
+  name: Remove configuration files for disabled service
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/supervisor/conf.d/hoover.conf
+    - /etc/nginx/sites-enabled/hoover.conf
+    - /opt/common/initialize.d/22-hoover.sh
+    - /opt/common/initialize.d/41-hoover-import-davros-sync.sh
+    - /opt/hoover/search/hoover/site/settings/local.py
+  tags:
+    - configure
