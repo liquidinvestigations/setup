@@ -6,6 +6,8 @@
     repo: https://github.com/mnutt/davros.git
     dest: /opt/davros/davros
     version: master
+  tags:
+    - prerequisites
 
 - name: Set up file permissions
   file:
@@ -14,6 +16,8 @@
     owner: liquid
     group: liquid
     recurse: true
+  tags:
+    - prerequisites
 
 - name: Install dependencies and run build
   shell: |
@@ -28,26 +32,8 @@
     chdir: /opt/davros/davros
   become: yes
   become_user: liquid
-
-- name: Create supervisor config
-  copy:
-    src: supervisor/davros.conf
-    dest: /etc/supervisor/conf.d/davros.conf
-
-- name: Create nginx config
-  template:
-    src: nginx/davros.conf
-    dest: /etc/nginx/sites-enabled/davros.conf
   tags:
-    - configure
-
-- name: Copy the initialization script
-  template:
-    src: initialize.d/davros.sh
-    dest: /opt/common/initialize.d/20-davros.sh
-    mode: 0755
-  tags:
-    - configure
+    - prerequisites
 
 - name: Create empty data dir for davros-sync
   file:
@@ -58,3 +44,35 @@
   with_items:
     - "/var/lib/liquid/data"
     - "/var/lib/liquid/data/davros-sync"
+
+- when: liquid_services.davros.enabled
+  block:
+  - name: Create supervisor config
+    copy:
+      src: supervisor/davros.conf
+      dest: /etc/supervisor/conf.d/davros.conf
+  
+  - name: Create nginx config
+    template:
+      src: nginx/davros.conf
+      dest: /etc/nginx/sites-enabled/davros.conf
+  
+  - name: Copy the initialization script
+    template:
+      src: initialize.d/davros.sh
+      dest: /opt/common/initialize.d/20-davros.sh
+      mode: 0755
+  tags:
+    - configure
+
+- when: not liquid_services.davros.enabled
+  name: Remove configuration files for disabled service
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/supervisor/conf.d/davros.conf
+    - /etc/nginx/sites-enabled/davros.conf
+    - /opt/common/initialize.d/20-davros.sh
+  tags:
+    - configure

@@ -39,25 +39,41 @@
   tags:
     - prerequisites
 
-- name: Create nginx config
-  template:
-    src: nginx/dokuwiki.conf
-    dest: /etc/nginx/sites-enabled/dokuwiki.conf
+- when: liquid_services.dokuwiki.enabled
+  block:
+  - name: Create nginx config
+    template:
+      src: nginx/dokuwiki.conf
+      dest: /etc/nginx/sites-enabled/dokuwiki.conf
+  
+  - name: Create the initialization script
+    copy:
+      src: initialize.d/dokuwiki
+      dest: /opt/common/initialize.d/21-dokuwiki.sh
+      mode: 0755
+  
+  - name: Subscribe to hooks
+    copy:
+      src: hooks/user
+      dest: /opt/common/hooks/{{ item }}.d/dokuwiki
+      mode: 0755
+    with_items:
+      - user-created
+      - user-passwd
+      - user-deleted
   tags:
     - configure
 
-- name: Create the initialization script
-  copy:
-    src: initialize.d/dokuwiki
-    dest: /opt/common/initialize.d/21-dokuwiki.sh
-    mode: 0755
-
-- name: Subscribe to hooks
-  copy:
-    src: hooks/user
-    dest: /opt/common/hooks/{{ item }}.d/dokuwiki
-    mode: 0755
+- when: not liquid_services.dokuwiki.enabled
+  name: Remove configuration files for disabled service
+  file:
+    path: "{{ item }}"
+    state: absent
   with_items:
-    - user-created
-    - user-passwd
-    - user-deleted
+    - /etc/nginx/sites-enabled/dokuwiki.conf
+    - /opt/common/initialize.d/21-dokuwiki.sh
+    - /opt/common/hooks/user-created.d/dokuwiki
+    - /opt/common/hooks/user-passwd.d/dokuwiki
+    - /opt/common/hooks/user-deleted.d/dokuwiki
+  tags:
+    - configure

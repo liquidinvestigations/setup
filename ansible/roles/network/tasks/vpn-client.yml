@@ -1,5 +1,5 @@
 ---
-- when: liquid_vpn.client.config
+- when: liquid_vpn.client.config and liquid_vpn.client.enabled
   block:
 
   - name: OpenVPN client configuration file
@@ -16,7 +16,7 @@
     - configure
 
 - name: Remove the client configuration files
-  when: not liquid_vpn.client.config
+  when: not (liquid_vpn.client.config and liquid_vpn.client.enabled)
   file:
     path: "{{ item }}"
     state: absent
