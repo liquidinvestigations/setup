@@ -7,13 +7,27 @@
     dest: /opt/davros/davros
     version: master
 
+- name: Set up file permissions
+  file:
+    path: /opt/davros/davros
+    state: directory
+    owner: liquid
+    group: liquid
+    recurse: true
+
 - name: Install dependencies and run build
   shell: |
+    set -e
+    set -x
+    npm set progress=false
+    npm set color=false
     npm install
-    ./node_modules/bower/bin/bower install
+    ./node_modules/bower/bin/bower --no-color install
     ./node_modules/ember-cli/bin/ember build
   args:
     chdir: /opt/davros/davros
+  become: yes
+  become_user: liquid
 
 - name: Create supervisor config
   copy:
