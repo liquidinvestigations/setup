@@ -1,5 +1,28 @@
 liquid_domain: liquid.example.org
-liquid_vpn: {server: {"enabled": false}, client: {config: null, "enabled": false}}
+
+liquid_vpn: 
+  server: 
+    enabled: false
+  client: 
+    config: null
+    enabled: false
+
+liquid_services:
+  davros:
+    enabled: true
+  dokuwiki:
+    enabled: true
+  hoover:
+    enabled: true
+  hypothesis:
+    enabled: true
+  matrix:
+    enabled: true
+liquid_ssh:
+  authorized_keys: []
+  enabled: true
+  port: 22
+
 devel: false
 use_https: false
 
