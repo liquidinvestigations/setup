@@ -26,7 +26,6 @@
     state: absent
   with_items:
     - /var/lib/liquid/vpn/server/server.ovpn
-    - /opt/common/initialize.d/60-vpn.sh
     - /etc/supervisor/conf.d/vpn-server.conf
   tags:
     - configure
