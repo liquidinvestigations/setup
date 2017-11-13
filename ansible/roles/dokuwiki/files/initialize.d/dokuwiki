@@ -73,7 +73,12 @@ def render(target, **extra):
     options = {'timestamp': get_timestamp()}
     options.update(extra)
     content = FILES[target.name].format(**options)
-    write(target, content)
+    if target.exists():
+        print("skipping, already exists:", target)
+    else:
+        print("writing:", target)
+        write(target, content)
+
 
 def random_salt():
     urandom = random.SystemRandom()
