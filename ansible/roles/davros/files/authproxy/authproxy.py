@@ -3,11 +3,13 @@
 import sys
 import requests
 from paste.proxy import Proxy
+from werkzeug.contrib.fixers import ProxyFix
 import flask
 
 upstream = Proxy('http://127.0.0.1:51358')
 
 app = flask.Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 config = app.config
 config.from_pyfile('config/basename.py')
