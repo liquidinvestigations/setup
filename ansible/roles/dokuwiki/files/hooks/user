@@ -87,7 +87,7 @@ def main():
         pw = json.loads(os.environ['LIQUID_HOOK_DATA'])['password']
         users.create(options.username, pw)
 
-    def password(options):
+    def passwd(options):
         pw = json.loads(os.environ['LIQUID_HOOK_DATA'])['password']
         users.set_password(options.username, pw)
 
@@ -96,7 +96,7 @@ def main():
 
     hooks = {
         'user-{}'.format(fn.__name__): fn
-        for fn in [created, password, deleted]
+        for fn in [created, passwd, deleted]
     }
 
     parser = ArgumentParser()
