@@ -113,8 +113,6 @@
     group: liquid
     state: directory
     recurse: true
-  tags:
-    - prerequisites
 
 - name: Download Apache Tika
   get_url:
