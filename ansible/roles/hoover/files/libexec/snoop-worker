@@ -1,6 +1,9 @@
 #!/bin/bash
-set -ex
+set -e
 
 sleep 3
 cd /opt/hoover
-/opt/hoover/bin/hoover snoop worker digest
+while true; do
+	sleep 20
+	/opt/hoover/bin/hoover snoop worker digest > /dev/null
+done

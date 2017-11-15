@@ -1,7 +1,9 @@
 #!/bin/bash
-set -ex
+set -e
 
 sleep 3
 cd /opt/hoover
-/opt/hoover/bin/hoover snoop walk davros-sync
-sleep 20
+while true; do
+	sleep 40
+	/opt/hoover/bin/hoover snoop walk davros-sync > /dev/null
+done
