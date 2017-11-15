@@ -1,3 +1,5 @@
 pytest
 requests
 pip-tools
+selenium
+splinter
