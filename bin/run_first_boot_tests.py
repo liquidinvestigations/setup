@@ -72,8 +72,11 @@ class SetupTest(PyTestWrapper):
     pre_commands = [
         "virtualenv -p python3 /mnt/setup/tests/venv",
         "/mnt/setup/tests/venv/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
-        "apt install firefox",
+        "/mnt/setup/tests/install_browsers.sh",
     ]
+    env = {
+        "PATH": "/mnt/setup/tests/bin:{}".format(os.environ.get("PATH", "")),
+    }
     pytest = "/mnt/setup/tests/venv/bin/py.test"
     chdir = "/mnt/setup/tests"
     xml_file = "/mnt/setup/tests/results/liquid-setup.xml"
