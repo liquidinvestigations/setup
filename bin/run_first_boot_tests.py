@@ -55,7 +55,7 @@ class PyTestWrapper:
             subprocess.run([command], shell=True, check=True, env=env)
         pytest_cmd = [self.pytest, '--junit-xml', self.xml_file]
         print("+", " ".join(pytest_cmd))
-        subprocess.run(pytest_cmd, cwd=self.chdir, env=env, check=True)
+        subprocess.run(pytest_cmd, cwd=self.chdir, env=env, check=False)
 
 
 class CoreTest(PyTestWrapper):
@@ -63,7 +63,6 @@ class CoreTest(PyTestWrapper):
     chdir = "/opt/liquid-core/liquid-core"
     xml_file = "/mnt/setup/tests/results/liquid-core.xml"
     pre_commands = [
-        "sudo chmod -R a+rwX /mnt/setup/tests",
         'sudo chown -R liquid:liquid /opt/liquid-core/liquid-core/'
     ]
     env = {
@@ -75,7 +74,6 @@ class CoreTest(PyTestWrapper):
 
 class SetupTest(PyTestWrapper):
     pre_commands = [
-        "sudo chmod -R a+rwX /mnt/setup/tests",
         "virtualenv -p python3 /mnt/setup/tests/venv",
         "/mnt/setup/tests/venv/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
         "sudo /mnt/setup/tests/install_browsers.sh",
