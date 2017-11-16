@@ -25,7 +25,8 @@ SLEEP_SECS = 3
 
 def cat(filename):
     with open(filename, 'r') as f:
-        shutil.copyfileobj(f, sys.stdout)
+        sys.stdout.write(f.read())
+    sys.stdout.flush()
 
 
 def cat_log(message, log_filename=FILE_LOG):
@@ -61,6 +62,9 @@ class CoreTest(PyTestWrapper):
     pytest = "/opt/liquid-core/venv/bin/py.test"
     chdir = "/opt/liquid-core/liquid-core"
     xml_file = "/mnt/setup/tests/results/liquid-core.xml"
+    pre_commands = [
+        'sudo chown -R liquid:liquid /opt/liquid-core/liquid-core/'
+    ]
     env = {
         "PYTHONPATH": "/opt/liquid-core/liquid-core:{}".format(
             os.environ.get("PYTHONPATH",'')
@@ -72,7 +76,7 @@ class SetupTest(PyTestWrapper):
     pre_commands = [
         "virtualenv -p python3 /mnt/setup/tests/venv",
         "/mnt/setup/tests/venv/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
-        "/mnt/setup/tests/install_browsers.sh",
+        "sudo /mnt/setup/tests/install_browsers.sh",
     ]
     env = {
         "PATH": "/mnt/setup/tests/bin:{}".format(os.environ.get("PATH", "")),
@@ -111,6 +115,7 @@ def cat_first_boot_logs():
     if exists(FILE_FAIL):
         cat_log("First boot failed!")
         cat('/opt/common/first_boot_status')
+        exit(1)
     elif exists(FILE_DONE):
         cat_log("First boot done.")
     else:

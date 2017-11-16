@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+export DEBIAN_FRONTEND="noninteractive"
+
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TMP=$(mktemp -d)
 
@@ -27,3 +29,7 @@ wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.de
 
 cd $HERE
 rm -rf TMP
+
+if [ ! -L bin/google-chrome ]; then
+    ln -s `which google-chrome-stable` bin/google-chrome
+fi
