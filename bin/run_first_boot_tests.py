@@ -77,6 +77,7 @@ class SetupTest(PyTestWrapper):
         "virtualenv -p python3 /mnt/setup/tests/venv",
         "/mnt/setup/tests/venv/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
         "sudo /mnt/setup/tests/install_browsers.sh",
+        "sudo chmod -R a+rw /mnt/setup/tests",
     ]
     env = {
         "PATH": "/mnt/setup/tests/bin:{}".format(os.environ.get("PATH", "")),
