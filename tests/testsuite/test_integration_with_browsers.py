@@ -1,6 +1,6 @@
-import time
 import splinter
 import pytest
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 DOMAIN = 'liquid.example.org'
 URL = 'http://'+DOMAIN
@@ -23,11 +23,15 @@ BROWSERS = [
     'chrome',
 ]
 
+chrome_options = ChromeOptions()
+chrome_options.add_argument('--no-sandbox')
+
 BROWSER_OPTS = {
     'firefox': {
     },
     'chrome': {
         'service_args': ['--verbose', '--log-path=chromedriver.log'],
+        'options': chrome_options,
     },
 }
 
@@ -249,7 +253,7 @@ def test_admin_network_status_tab(browser):
 def test_admin_network_lan_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/network')
-    time.sleep(3)
+    assert browser.is_element_not_present_by_css('div.loading')
     browser.click_link_by_href('/admin-ui/network/lan')
 
     # TODO test these; they don't show up as text because they're inside inputs
@@ -262,7 +266,7 @@ def test_admin_network_lan_tab(browser):
 def test_admin_network_wan_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/network')
-    time.sleep(3)
+    assert browser.is_element_not_present_by_css('div.loading')
     browser.click_link_by_href('/admin-ui/network/wan')
 
     assert browser.is_text_present('DHCP')
@@ -273,7 +277,7 @@ def test_admin_network_wan_tab(browser):
 def test_admin_network_ssh_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/network')
-    time.sleep(3)
+    assert browser.is_element_not_present_by_css('div.loading')
     browser.click_link_by_href('/admin-ui/network/ssh')
 
     assert browser.is_text_present('SSH')
@@ -294,7 +298,7 @@ def test_admin_vpn_status_tab(browser):
 def test_admin_vpn_server_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/vpn')
-    time.sleep(3)
+    assert browser.is_element_not_present_by_css('div.loading')
     browser.click_link_by_href('/admin-ui/vpn/server')
     #assert browser.is_text_present("Enable VPN server")
     assert browser.is_text_present("Generate new key")
@@ -304,7 +308,7 @@ def test_admin_vpn_server_tab(browser):
 def test_admin_vpn_client_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/vpn')
-    time.sleep(3)
+    assert browser.is_element_not_present_by_css('div.loading')
     browser.click_link_by_href('/admin-ui/vpn/client')
     #assert browser.is_text_present("Enable VPN client")
     #assert browser.is_text_present("Upload key")
@@ -313,7 +317,7 @@ def test_admin_vpn_client_tab(browser):
 def test_admin_services_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/services')
-    time.sleep(3)
+    assert browser.is_element_not_present_by_css('div.loading')
     assert browser.is_text_present("Services")
     for app_name in APP_NAMES:
         assert browser.is_text_present(app_name.upper())
