@@ -70,15 +70,14 @@ def test_browser_welcome(browser):
 
 def test_view_home_page(browser):
     skip_if_welcome_not_set()
-
     assert browser.is_text_present("Liquid Investigations")
+
     for app_name in APP_NAMES:
         assert browser.is_text_present(app_name)
 
 
 def test_login_into_home_page(browser):
     skip_if_welcome_not_set()
-
     assert browser.is_text_present("Liquid Investigations")
 
     # login
@@ -101,7 +100,6 @@ def test_login_into_home_page(browser):
 
 def test_login_into_dokuwiki(browser):
     skip_if_welcome_not_set()
-
     assert browser.is_text_present("Liquid Investigations")
     
     # navigate to dokuwiki and login
@@ -122,7 +120,6 @@ def test_login_into_dokuwiki(browser):
 
 def test_login_into_hypothesis(browser):
     skip_if_welcome_not_set()
-
     assert browser.is_text_present("Liquid Investigations")
     
     # navigate to hypothesis and login
@@ -139,7 +136,6 @@ def test_login_into_hypothesis(browser):
 
 def test_login_into_matrix(browser):
     skip_if_welcome_not_set()
-
     assert browser.is_text_present("Liquid Investigations")
     
     # navigate to matrix and login
@@ -160,7 +156,6 @@ def test_login_into_matrix(browser):
 
 def test_login_into_davros(browser):
     skip_if_welcome_not_set()
-
     assert browser.is_text_present("Liquid Investigations")
     
     # navigate to davros and login
@@ -176,7 +171,6 @@ def test_login_into_davros(browser):
 
 def test_login_into_hoover(browser):
     skip_if_welcome_not_set()
-
     assert browser.is_text_present("Liquid Investigations")
 
     # login
@@ -210,3 +204,84 @@ def test_login_into_hoover(browser):
     # and check that we're logged out
     browser.find_by_id('loggedin-btngroup').click()
     assert browser.is_text_present("login")
+
+# no chrome on admin UI because clickin issues in menu
+@pytest.mark.parametrize('browser', ['firefox'], indirect=True)
+def test_navigation_through_admin(browser):
+    skip_if_welcome_not_set()
+    assert browser.is_text_present("Liquid Investigations")
+
+    # login
+    browser.find_by_text('[login]').click()
+    browser.fill('username', ADMIN_USERNAME)
+    browser.fill('password', ADMIN_PASSWORD)
+    browser.find_by_text('login').click()
+
+    browser.find_by_text('[admin]').click()
+
+    # we're in the admin now
+    assert browser.is_text_present("admin")
+    assert browser.is_text_present("Logged in as: {}".format(ADMIN_USERNAME))
+
+    # click on all the buttons
+    browser.click_link_by_href('/admin-ui/status')
+    assert browser.is_text_present("General Status")
+
+    browser.click_link_by_href('/admin-ui/network')
+    assert browser.is_text_present("Network Configuration")
+    assert browser.is_text_present("Domain")
+    assert browser.is_text_present(DOMAIN)
+    assert browser.is_text_present("Lan configuration")
+    assert browser.is_text_present(HOTSPOT_SSID)
+
+    browser.click_link_by_href('/admin-ui/network/lan')
+    # TODO test these; they don't show up as text because they're inside inputs
+    #assert browser.is_text_present(HOTSPOT_SSID)
+    #assert browser.is_text_present(HOTSPOT_PASSWORD)
+    assert browser.is_text_present('Use Ethernet on LAN')
+
+    browser.click_link_by_href('/admin-ui/network/wan')
+    assert browser.is_text_present('DHCP')
+    assert browser.is_text_present('Gateway')
+    assert browser.is_text_present('DNS Server')
+
+    browser.click_link_by_href('/admin-ui/network/ssh')
+    assert browser.is_text_present('SSH')
+    assert browser.is_text_present('Port')
+    assert browser.is_text_present('Update')
+
+    browser.click_link_by_href('/admin-ui/vpn')
+    assert browser.is_text_present("VPN Configuration")
+    assert browser.is_text_present("Server configuration")
+    assert browser.is_text_present("Client configuration")
+    assert browser.is_text_present("Connection count")
+
+    browser.click_link_by_href('/admin-ui/vpn/server')
+    assert browser.is_text_present("Enable VPN server")
+    assert browser.is_text_present("Generate new key")
+    assert browser.is_text_present("Active keys")
+
+    browser.click_link_by_href('/admin-ui/vpn/client')
+    assert browser.is_text_present("Enable VPN client")
+    assert browser.is_text_present("Upload key")
+
+    browser.click_link_by_href('/admin-ui/services')
+    assert browser.is_text_present("Services")
+    for app_name in APP_NAMES:
+        assert browser.is_text_present(app_name.upper())
+    for app_desc in ['Search Tool', 'Annotations', 'Chat', 'Wiki', 'File Sharing']:
+        assert browser.is_text_present(app_name.upper())
+
+    browser.click_link_by_href('/admin-ui/users')
+    assert browser.is_text_present("Users")
+    assert browser.is_text_present("Active users")
+    assert browser.is_text_present("Inactive users")
+
+    browser.click_link_by_href('/admin-ui/discovery')
+    assert browser.is_text_present("Discovery")
+    assert browser.is_text_present("Trusted nodes")
+    assert browser.is_text_present("Untrusted nodes")
+
+    browser.click_link_by_href('/admin-ui/about')
+    assert browser.is_text_present("Lorem ipsum dolor sit amet")
+
