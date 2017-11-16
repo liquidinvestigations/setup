@@ -270,7 +270,7 @@ def test_navigation_through_admin(browser):
     for app_name in APP_NAMES:
         assert browser.is_text_present(app_name.upper())
     for app_desc in ['Search Tool', 'Annotations', 'Chat', 'Wiki', 'File Sharing']:
-        assert browser.is_text_present(app_name.upper())
+        assert browser.is_text_present(app_desc)
 
     browser.click_link_by_href('/admin-ui/users')
     assert browser.is_text_present("Users")
