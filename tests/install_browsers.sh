@@ -7,6 +7,8 @@ TMP=$(mktemp -d)
 
 cd $TMP
 
+apt-get -qq update > /dev/null
+
 # get dependencies
 apt-get -yqq install unzip > /dev/null
 
