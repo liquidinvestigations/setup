@@ -39,7 +39,7 @@ BROWSER_OPTS = {
 def skip_if_welcome_not_set(browser):
     browser.visit(URL)
     if browser.url.endswith('/welcome/'):
-        pytest.skip('welcome done')
+        pytest.skip('welcome not done, skipping')
 
 
 @pytest.fixture(params=['firefox', 'chrome'])
@@ -54,8 +54,7 @@ def browser(request):
 @pytest.mark.parametrize('browser', ['firefox'], indirect=True)
 def test_browser_welcome(browser):
     assert browser.url.endswith('/welcome/')
-
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
     assert browser.is_text_present("Congratulations")
     
     browser.fill('admin-username', ADMIN_USERNAME)
@@ -65,7 +64,7 @@ def test_browser_welcome(browser):
     
     browser.find_by_text('Apply').click()
 
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
     assert browser.is_text_present("Your settings are being applied")
     assert browser.is_text_present("Wait a minute")
 
@@ -75,7 +74,7 @@ def test_browser_welcome(browser):
 
 def test_view_home_page(browser):
     skip_if_welcome_not_set(browser)
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
 
     for app_name in APP_NAMES:
         assert browser.is_text_present(app_name)
@@ -83,7 +82,7 @@ def test_view_home_page(browser):
 
 def test_login_into_home_page(browser):
     skip_if_welcome_not_set(browser)
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
 
     # login
     browser.find_by_text('[login]').click()
@@ -92,40 +91,40 @@ def test_login_into_home_page(browser):
     browser.find_by_text('login').click()
     
     # check that we're logged in
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
     assert browser.is_text_present("[admin]")
     assert browser.is_text_present("[logout]")
     assert browser.is_text_present(ADMIN_USERNAME)
 
     # logout
     browser.find_by_text('[logout]').click()
-    assert browser.is_text_present("[login]")
+    assert browser.is_element_present_by_text("[login]")
     assert not browser.is_text_present(ADMIN_USERNAME)
 
 
 def test_login_into_dokuwiki(browser):
     skip_if_welcome_not_set(browser)
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
     
     # navigate to dokuwiki and login
     browser.find_by_text('DokuWiki').click()
-    assert browser.is_text_present("Permission Denied")
+    assert browser.is_element_present_by_text("Permission Denied")
     browser.fill('u', ADMIN_USERNAME)
     browser.fill('p', ADMIN_PASSWORD)
     browser.find_by_css('#dw__login button[type=submit]').click()
 
     # we should be logged in now, let's check
-    assert browser.is_text_present(ADMIN_USERNAME)
+    assert browser.is_element_present_by_text(ADMIN_USERNAME)
     assert browser.is_text_present("Admin")
     assert browser.is_text_present("Log Out")
 
     browser.find_by_text('Log Out').click()
-    assert browser.is_text_present("Permission Denied")
+    assert browser.is_element_present_by_text("Permission Denied")
 
 
 def test_login_into_hypothesis(browser):
     skip_if_welcome_not_set(browser)
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
     
     # navigate to hypothesis and login
     browser.find_by_text('Hypothesis').click()
@@ -135,33 +134,33 @@ def test_login_into_hypothesis(browser):
     browser.find_by_css('#deformLog_in').click()
 
     # we should be logged in now, let's check
-    assert browser.is_text_present(ADMIN_USERNAME)
+    assert browser.is_element_present_by_text(ADMIN_USERNAME)
     assert browser.is_text_present("How to get started")
 
 
 def test_login_into_matrix(browser):
     skip_if_welcome_not_set(browser)
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
     
     # navigate to matrix and login
     browser.find_by_text('Matrix').click()
-    assert browser.is_text_present("Matrix ID (e.g. @bob:matrix.org or bob)")
+    assert browser.is_element_present_by_text("Matrix ID (e.g. @bob:matrix.org or bob)")
     browser.find_by_css('#user_id').fill(ADMIN_USERNAME)
     browser.find_by_css('#password').fill(ADMIN_PASSWORD)
     browser.find_by_css('button#login').click()
 
     # we should be logged in now, let's check
-    assert browser.is_text_present(ADMIN_USERNAME)
+    assert browser.is_element_present_by_text(ADMIN_USERNAME)
     assert browser.is_text_present("Welcome to homeserver")
     assert browser.is_text_present("Log out")
 
     browser.find_by_text('Log out').click()
-    assert browser.is_text_present("Matrix ID (e.g. @bob:matrix.org or bob)")
+    assert browser.is_element_present_by_text("Matrix ID (e.g. @bob:matrix.org or bob)")
 
 
 def test_login_into_davros(browser):
     skip_if_welcome_not_set(browser)
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
     
     # navigate to davros and login
     browser.find_by_text('Davros').click()
@@ -169,14 +168,14 @@ def test_login_into_davros(browser):
     browser.fill('password', ADMIN_PASSWORD)
     browser.find_by_text('login').click()
 
-    assert browser.is_text_present(".gitkeep")
+    assert browser.is_element_present_by_text(".gitkeep")
     assert browser.is_text_present("Updated")
     assert browser.is_text_present("Files in home")
 
 
 def test_login_into_hoover(browser):
     skip_if_welcome_not_set(browser)
-    assert browser.is_text_present("Liquid Investigations")
+    assert browser.is_element_present_by_text("Liquid Investigations")
 
     # login
     browser.find_by_text('[login]').click()
@@ -189,18 +188,18 @@ def test_login_into_hoover(browser):
 
     # click on the menu and on "login"
     browser.find_by_id('loggedin-btngroup').click()
-    assert browser.is_text_present("login")
+    assert browser.is_element_present_by_text("login")
     browser.find_by_text('login').click()
 
     # we should be logged in because oauth
     browser.find_by_id('loggedin-btngroup').click()
-    assert browser.is_text_present("admin")
+    assert browser.is_element_present_by_text("admin")
     assert browser.is_text_present("change password")
     assert browser.is_text_present("({}) logout".format(ADMIN_USERNAME))
 
     # let's wander around the hoover django admin
     browser.find_by_text('admin').click()
-    assert browser.is_text_present("Site administration")
+    assert browser.is_element_present_by_text("Site administration")
     assert browser.is_text_present("LOG OUT")
 
     # let's log out from the django admin
@@ -208,7 +207,7 @@ def test_login_into_hoover(browser):
 
     # and check that we're logged out
     browser.find_by_id('loggedin-btngroup').click()
-    assert browser.is_text_present("login")
+    assert browser.is_element_present_by_text("login")
 
 
 def navigate_to_admin(browser):
@@ -243,7 +242,7 @@ def test_admin_network_status_tab(browser):
     browser.click_link_by_href('/admin-ui/network')
     assert browser.url.endswith('/admin-ui/network/status')
 
-    assert browser.is_text_present("Network Configuration")
+    assert browser.is_element_present_by_text("Network Configuration")
     assert browser.is_text_present("Domain")
     assert browser.is_text_present(DOMAIN)
     assert browser.is_text_present("Lan configuration")
@@ -280,7 +279,7 @@ def test_admin_network_ssh_tab(browser):
     assert browser.is_element_not_present_by_css('div.loading')
     browser.click_link_by_href('/admin-ui/network/ssh')
 
-    assert browser.is_text_present('SSH')
+    assert browser.is_element_present_by_text('SSH')
     #assert browser.is_text_present('Port')
 
 
@@ -289,7 +288,7 @@ def test_admin_vpn_status_tab(browser):
     browser.click_link_by_href('/admin-ui/vpn')
     assert browser.url.endswith('/admin-ui/vpn/status')
 
-    assert browser.is_text_present("VPN Configuration")
+    assert browser.is_element_present_by_text("VPN Configuration")
     assert browser.is_text_present("Server configuration")
     assert browser.is_text_present("Client configuration")
     assert browser.is_text_present("Connection count")
@@ -329,7 +328,7 @@ def test_admin_users_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/users')
 
-    assert browser.is_text_present("Users")
+    assert browser.is_element_present_by_text("Users")
     assert browser.is_text_present("Active users")
     assert browser.is_text_present("Inactive users")
 
@@ -338,14 +337,14 @@ def test_admin_discovery_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/discovery')
 
-    assert browser.is_text_present("Discovery")
+    assert browser.is_element_present_by_text("Discovery")
     assert browser.is_text_present("Trusted nodes")
     assert browser.is_text_present("Untrusted nodes")
 
 
 def test_admin_about_tab(browser):
     navigate_to_admin(browser)
-
     browser.click_link_by_href('/admin-ui/about')
+
     assert browser.is_text_present("Lorem ipsum dolor sit amet")
 
