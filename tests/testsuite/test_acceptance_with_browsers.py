@@ -168,9 +168,9 @@ def test_login_into_davros(browser):
     browser.fill('password', ADMIN_PASSWORD)
     browser.find_by_text('login').click()
 
-    assert browser.is_element_present_by_text(".gitkeep")
-    assert browser.is_text_present("Updated")
+    assert browser.is_element_present_by_text("Updated")
     assert browser.is_text_present("Files in home")
+    assert browser.is_text_present(".gitkeep")
 
 
 def test_login_into_hoover(browser):
