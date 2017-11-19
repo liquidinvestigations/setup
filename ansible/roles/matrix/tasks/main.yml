@@ -107,7 +107,9 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - /opt/common/hooks/{{ item }}.d/matrix
+    - /opt/common/hooks/user-created.d/matrix
+    - /opt/common/hooks/user-passwd.d/matrix
+    - /opt/common/hooks/user-deleted.d/matrix
     - /etc/nginx/sites-enabled/matrix.conf
     - /etc/supervisor/conf.d/matrix.conf
     - /opt/common/initialize.d/24-matrix.sh
