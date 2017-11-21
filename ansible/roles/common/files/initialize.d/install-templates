@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+import json
+import subprocess
+
+
+def run(cmd):
+    print('+', cmd)
+    subprocess.run(cmd, shell=True, check=True)
+
+with open('/var/lib/liquid/conf/options.json', encoding='utf8') as f:
+    global_options = json.load(f)
+
+print('installing ui-templates')
+run('/opt/common/ui-templates/install.py {} {}'.format(
+    'https' if global_options['use_https'] else 'http',
+    global_options['domain'],
+))

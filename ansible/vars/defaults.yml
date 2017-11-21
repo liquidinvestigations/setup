@@ -41,6 +41,7 @@ git_repo_versions:
   liquid_core: master
   setup: master
   web_ui: master
+  ui_templates: master
 
 web_ui_override: false
 web_ui_override_path: "/home/liquid/web-ui"

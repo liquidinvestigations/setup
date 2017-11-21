@@ -95,7 +95,7 @@ def wait_for_reconfigure():
     pytest.fail("{} timed out".format(RECONFIGURE_URL))
 
 
-@pytest.fixture(params=['firefox', 'chrome'])
+@pytest.fixture(params=BROWSERS)
 def browser(request):
     browser_name = request.param
     with splinter.Browser(browser_name, headless=True, wait_time=10, **BROWSER_OPTS[browser_name]) as browser:
@@ -104,10 +104,10 @@ def browser(request):
         yield browser
 
 
-@pytest.mark.parametrize('browser', ['firefox'], indirect=True)
+@pytest.mark.parametrize('browser', [BROWSERS[0]], indirect=True)
 def test_browser_welcome(browser):
     assert browser.url.endswith('/welcome/')
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    assert browser.is_element_present_by_text("Welcome!")
     assert browser.is_text_present("Congratulations")
 
     browser.fill('admin-username', ADMIN_USERNAME)
@@ -115,9 +115,9 @@ def test_browser_welcome(browser):
     browser.fill('hotspot-ssid', HOTSPOT_SSID)
     browser.fill('hotspot-password', HOTSPOT_PASSWORD)
 
-    browser.find_by_text('Apply').click()
+    browser.find_by_css('button[type=submit]').click()
 
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    assert browser.is_element_present_by_text("Welcome!")
     assert browser.is_text_present("Your settings are being applied")
     assert browser.is_text_present("Wait a minute")
 
@@ -126,40 +126,42 @@ def test_browser_welcome(browser):
     browser.visit(URL)
     assert not browser.url.endswith('/welcome/')
 
+def login_admin_into_homepage(browser):
+    skip_if_welcome_not_set(browser)
+
+    browser.visit(URL)
+    assert browser.url.endswith('/accounts/login/')
+    browser.fill('username', ADMIN_USERNAME)
+    browser.fill('password', ADMIN_PASSWORD)
+    browser.find_by_css('button[type=submit]').click()
+
+    assert browser.is_element_present_by_text("Hello {}!".format(ADMIN_USERNAME))
+
 
 def test_view_home_page(browser):
-    skip_if_welcome_not_set(browser)
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    login_admin_into_homepage(browser)
 
     for app_name in APP_NAMES:
-        assert browser.is_text_present(app_name)
+        assert browser.is_text_present(app_name.upper())
 
 
 def test_login_into_home_page(browser):
-    skip_if_welcome_not_set(browser)
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    login_admin_into_homepage(browser)
 
-    # login
-    browser.find_by_text('[login]').click()
-    browser.fill('username', ADMIN_USERNAME)
-    browser.fill('password', ADMIN_PASSWORD)
-    browser.find_by_text('login').click()
-
-    # check that we're logged in
-    assert browser.is_element_present_by_text("Liquid Investigations")
-    assert browser.is_text_present("[admin]")
-    assert browser.is_text_present("[logout]")
+    assert browser.is_text_present("Admin")
+    assert browser.is_text_present("Django Admin")
+    assert browser.is_text_present("Reconfigure")
     assert browser.is_text_present(ADMIN_USERNAME)
 
     # logout
-    browser.find_by_text('[logout]').click()
-    assert browser.is_element_present_by_text("[login]")
-    assert not browser.is_text_present(ADMIN_USERNAME)
+    with browser.get_iframe('liMenu') as menu:
+        menu.click_link_by_partial_href("/accounts/logout/")
+
+    assert browser.url.endswith('/accounts/login/')
 
 
 def test_login_into_dokuwiki(browser):
-    skip_if_welcome_not_set(browser)
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    login_admin_into_homepage(browser)
 
     # navigate to dokuwiki and login
     browser.find_by_text('DokuWiki').click()
@@ -178,8 +180,7 @@ def test_login_into_dokuwiki(browser):
 
 
 def test_login_into_hypothesis(browser):
-    skip_if_welcome_not_set(browser)
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    login_admin_into_homepage(browser)
 
     # navigate to hypothesis and login
     browser.find_by_text('Hypothesis').click()
@@ -194,8 +195,7 @@ def test_login_into_hypothesis(browser):
 
 
 def test_login_into_matrix(browser):
-    skip_if_welcome_not_set(browser)
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    login_admin_into_homepage(browser)
 
     # navigate to matrix and login
     browser.find_by_text('Matrix').click()
@@ -207,21 +207,13 @@ def test_login_into_matrix(browser):
     # we should be logged in now, let's check
     assert browser.is_element_present_by_text(ADMIN_USERNAME)
     assert browser.is_text_present("Welcome to homeserver")
-    assert browser.is_text_present("Log out")
-
-    browser.find_by_text('Log out').click()
-    assert browser.is_element_present_by_text("Matrix ID (e.g. @bob:matrix.org or bob)")
 
 
 def test_login_into_davros(browser):
-    skip_if_welcome_not_set(browser)
-    assert browser.is_element_present_by_text("Liquid Investigations")
+    login_admin_into_homepage(browser)
 
     # navigate to davros and login
     browser.find_by_text('Davros').click()
-    browser.fill('username', ADMIN_USERNAME)
-    browser.fill('password', ADMIN_PASSWORD)
-    browser.find_by_text('login').click()
 
     assert browser.is_element_present_by_text("Updated")
     assert browser.is_text_present("Files in home")
@@ -229,14 +221,7 @@ def test_login_into_davros(browser):
 
 
 def test_login_into_hoover(browser):
-    skip_if_welcome_not_set(browser)
-    assert browser.is_element_present_by_text("Liquid Investigations")
-
-    # login
-    browser.find_by_text('[login]').click()
-    browser.fill('username', ADMIN_USERNAME)
-    browser.fill('password', ADMIN_PASSWORD)
-    browser.find_by_text('login').click()
+    login_admin_into_homepage(browser)
 
     # navigate to hoover
     browser.find_by_text('Hoover').click()
@@ -266,14 +251,10 @@ def test_login_into_hoover(browser):
 
 
 def navigate_to_admin(browser):
-    skip_if_welcome_not_set(browser)
+    login_admin_into_homepage(browser)
 
     # login
-    browser.find_by_text('[login]').click()
-    browser.fill('username', ADMIN_USERNAME)
-    browser.fill('password', ADMIN_PASSWORD)
-    browser.find_by_text('login').click()
-    browser.find_by_text('[admin]').click()
+    browser.find_by_text('Admin').click()
 
 
 def test_admin_header_and_redirect_to_status(browser):
