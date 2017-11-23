@@ -1,2 +1,7 @@
 /venv
 /results
+/.cache
+*.log
+/bin/geckodriver
+/bin/chromedriver
+/bin/google-chrome
