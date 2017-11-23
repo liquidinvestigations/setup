@@ -69,6 +69,7 @@ class CoreTest(PyTestWrapper):
         "PYTHONPATH": "/opt/liquid-core/liquid-core:{}".format(
             os.environ.get("PYTHONPATH",'')
         ),
+        "PYTHONUNBUFFERED": "yeah",
     }
 
 
@@ -80,6 +81,7 @@ class SetupTest(PyTestWrapper):
     ]
     env = {
         "PATH": "/mnt/setup/tests/bin:{}".format(os.environ.get("PATH", "")),
+        "PYTHONUNBUFFERED": "yeah",
     }
     pytest = "/mnt/setup/tests/venv/bin/py.test"
     chdir = "/mnt/setup/tests"
