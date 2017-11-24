@@ -55,7 +55,7 @@ class PyTestWrapper:
             subprocess.run([command], shell=True, check=True, env=env)
         pytest_cmd = [self.pytest, '--junit-xml', self.xml_file]
         print("+", " ".join(pytest_cmd))
-        subprocess.run(pytest_cmd, cwd=self.chdir, env=env, check=False)
+        subprocess.run(pytest_cmd, cwd=self.chdir, env=env, check=True)
 
 
 class CoreTest(PyTestWrapper):
