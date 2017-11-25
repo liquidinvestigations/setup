@@ -1,7 +1,13 @@
+import re
+
 DEBUG = True
 ALLOWED_HOSTS = ['{{ liquid_domain }}']
 AUTH_PASSWORD_VALIDATORS = []
-CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_REGEX_WHITELIST = [
+    '^(https?://)?(\w+\.)?' + re.escape('{{ liquid_domain }}') + r'$',
+]
+CORS_ALLOW_CREDENTIALS = True
 
 DATABASES = {
     'default': {
