@@ -1,5 +1,5 @@
 liquid_domain: liquid.example.org
-devel: true
+devel: false
 use_https: false
 
 # Default of different git repos checked out on the images
