@@ -7,6 +7,15 @@ liquid_vpn:
     config: null
     enabled: false
 
+liquid_lan:
+  dhcp_range: "10.103.0.100,10.103.0.200,72h"
+  ip: "10.103.0.1"
+  netmask": "255.255.255.0"
+  eth: false
+  hotspot:
+    ssid: null
+    password: null
+
 liquid_services:
   davros:
     enabled: true

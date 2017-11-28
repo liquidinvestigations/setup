@@ -23,9 +23,12 @@
     path: "{{ item }}"
     state: directory
   with_items:
+    - /var/lib/liquid/lan
     - /var/lib/liquid/vpn
     - /var/lib/liquid/vpn/server
     - /var/lib/liquid/vpn/server/keys
+
+- import_tasks: tasks/lan.yml
 
 - import_tasks: tasks/vpn-server.yml
 

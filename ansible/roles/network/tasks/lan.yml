@@ -1,0 +1,12 @@
+---
+- name: Lan DHCP
+  template:
+    src: lan/dnsmasq.conf
+    dest: /var/lib/liquid/lan/dnsmasq.conf
+  tags:
+    - configure
+
+- name: Create the lan supervisor configuration
+  copy:
+    src: lan/supervisor/lan.conf
+    dest: /etc/supervisor/conf.d/lan.conf

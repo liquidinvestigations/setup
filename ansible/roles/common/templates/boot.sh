@@ -13,6 +13,8 @@ echo 'supervisor up'
 supervisorctl update
 service postgresql start
 
+brctl addbr lan
+
 FIRST_BOOT=NOT_STARTED
 
 # Errors on, try to start first boot.
