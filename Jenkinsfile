@@ -10,8 +10,9 @@ node('cloud') {
     stage('CLOUD: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
-    deleteDir()
-    checkout scm
+    dir('setup') {
+        checkout scm
+    }
     try {
         stage('CLOUD: Build a Factory & Prepare Cloud Image') {
             sh 'git clone https://github.com/liquidinvestigations/factory'
@@ -23,14 +24,14 @@ node('cloud') {
             }
         }
         stage('CLOUD: Prepare the build') {
-            sh 'cp jenkins-config.yml ansible/vars/config.yml'
+            sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
             sh 'mkdir images'
             sh "wget -q $liquid_prerequisites_cloud_image -O images/pre.img.xz"
             sh 'xzcat images/pre.img.xz > images/ubuntu-x86_64-raw.img'
             sh 'rm images/pre.img.xz'
         }
         stage('CLOUD: Build Image') {
-            sh 'factory/factory run --smp 2 --memory 2048 --share .:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --image /mnt/images/ubuntu-x86_64-raw.img'
+            sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --image /mnt/images/ubuntu-x86_64-raw.img'
         }
         stage('CLOUD: Test and Archive') {
             parallel(
@@ -38,9 +39,9 @@ node('cloud') {
                     stage("CLOUD: Run first boot") {
                         sh 'mkdir factory/images/liquid'
                         sh 'cp images/ubuntu-x86_64-raw.img factory/images/liquid/disk.img'
-                        sh 'factory/factory run --share .:/mnt/setup --share factory/images/liquid:/mnt/liquid /mnt/setup/bin/with-image-chroot /mnt/liquid/disk.img bash < ci/prepare-image-for-testing'
+                        sh 'factory/factory run --share setup:/mnt/setup --share factory/images/liquid:/mnt/liquid /mnt/setup/bin/with-image-chroot /mnt/liquid/disk.img bash < setup/ci/prepare-image-for-testing'
                         sh 'echo \'{"login": {"username": "liquid", "password": "liquid"}}\' > factory/images/liquid/config.json'
-                        sh 'factory/factory run --image liquid --smp 2 --memory 2048  --share .:/mnt/setup PYTHONUNBUFFERED=yeah /mnt/setup/bin/run_first_boot_tests.py'
+                        sh 'factory/factory run --image liquid --smp 2 --memory 2048  --share setup:/mnt/setup PYTHONUNBUFFERED=yeah /mnt/setup/bin/run_first_boot_tests.py'
                         junit 'tests/results/*.xml'
                     }
                 },
