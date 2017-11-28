@@ -87,8 +87,8 @@ class BaseBuilder:
                           stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
-    def run_ansible(self, playbook, tags=None):
-        cmd = ['ansible-playbook', '-i', 'hosts', playbook]
+    def run_ansible(self, playbook, host_pattern, tags=None):
+        cmd = ['ansible-playbook', '-i', 'hosts', '-l', host_pattern, playbook]
         if tags:
             cmd += ['--tags', tags]
         run(cmd, cwd=str(self.setup / 'ansible'))
@@ -105,4 +105,4 @@ class BaseBuilder:
 
     def build(self, image, tags):
         with self.open_target(image) as target:
-            self.run_ansible('image_chroot.yml', tags)
+            self.run_ansible('liquid.yml', 'image', tags)
