@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+(
+  echo "Configuring lan"
+  set -x
+  /opt/liquid-core/libexec/manage putconfig lan '{"dhcp-range": "10.103.0.100,10.103.0.200,72h", "eth": true, "hotspot": {"ssid": "", "password": ""}, "ip": "10.103.0.1", "netmask": "255.255.255.0"}'
+)
