@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import subprocess
 from images.builders.cloud import Builder_cloud
+from .lan import configure_lan
 from .wifi import configure_wifi
 from .vpn import client
 from . import discover
@@ -34,6 +35,9 @@ def on_reconfigure():
 
     ansible(vars)
     run('/opt/common/initialize.sh')
+
+    print('configure_lan')
+    configure_lan(vars)
 
     print('configure_wifi')
     configure_wifi(vars)
