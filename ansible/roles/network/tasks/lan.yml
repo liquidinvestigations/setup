@@ -10,3 +10,9 @@
   copy:
     src: lan/supervisor/lan.conf
     dest: /etc/supervisor/conf.d/lan.conf
+
+- name: First boot script
+  copy:
+    src: hooks/first-boot/80-lan
+    dest: /opt/common/hooks/first-boot.d/80-lan
+    mode: 0755

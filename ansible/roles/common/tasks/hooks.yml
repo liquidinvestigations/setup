@@ -19,6 +19,7 @@
     - user-created
     - user-deleted
     - user-passwd
+    - first-boot
 
 - name: Configure sudo rights for liquid-apps
   copy:

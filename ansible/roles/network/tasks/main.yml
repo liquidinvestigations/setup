@@ -46,9 +46,3 @@
     mode: 0644
   tags:
     - configure
-
-- name: First boot script
-  copy:
-    src: initialize.d/99-network
-    dest: /opt/common/initialize.d/99-network
-    mode: 0755
