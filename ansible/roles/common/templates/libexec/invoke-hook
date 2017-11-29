@@ -12,7 +12,18 @@ def log(*args):
 name = sys.argv[1]
 args = sys.argv[2:]
 scripts_d = Path('/opt/common/hooks') / '{}.d'.format(name)
+
+failure = False
 if scripts_d.exists():
     for callback in scripts_d.iterdir():
         log('+', callback.name)
-        subprocess.run([str(callback)] + args, env=dict(os.environ, HOOK=name))
+        try:
+            subprocess.run(
+                [str(callback)] + args,
+                env=dict(os.environ, HOOK=name),
+                check=True,
+            )
+        except subprocess.CalledProcessError:
+            failure = True
+
+sys.exit(failure)
