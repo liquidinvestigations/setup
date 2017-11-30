@@ -12,10 +12,10 @@
     - network
     - discover
     - liquid-core
-    - node6
     - web-ui
-    - hoover
-    - hypothesis
-    - dokuwiki
-    - matrix
-    - davros
+    - {tags: ['apps'], role: node6}
+    - {tags: ['apps'], role: hoover}
+    - {tags: ['apps'], role: hypothesis}
+    - {tags: ['apps'], role: dokuwiki}
+    - {tags: ['apps'], role: matrix}
+    - {tags: ['apps'], role: davros}
