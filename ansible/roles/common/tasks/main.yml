@@ -234,3 +234,13 @@
     repo: https://github.com/liquidinvestigations/setup.git
     dest: /opt/setup
     version: "{{ git_repo_versions.setup }}"
+
+- name: Create /etc/systemd/system/getty@.service.d directory
+  file:
+    path: /etc/systemd/system/getty@.service.d
+    state: directory
+
+- name: Don't clear tty1 after boot
+  copy:
+    content: "[Service]\nTTYVTDisallocate=no\n"
+    dest: /etc/systemd/system/getty@.service.d/noclear.conf
