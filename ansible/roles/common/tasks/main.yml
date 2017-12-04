@@ -222,11 +222,3 @@
     repo: https://github.com/liquidinvestigations/setup.git
     dest: /opt/setup
     version: "{{ git_repo_versions.setup }}"
-    update: false
-
-- name: Clone the ui-templates repo
-  git:
-    repo: https://github.com/liquidinvestigations/ui-templates.git
-    dest: /opt/common/ui-templates
-    version: "{{ git_repo_versions.ui_templates }}"
-    update: false

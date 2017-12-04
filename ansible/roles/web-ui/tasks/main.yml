@@ -1,9 +1,15 @@
 ---
-- name: Download the source code
+- name: Download the web-ui source code
   git:
     repo: https://github.com/liquidinvestigations/web-ui.git
     dest: /opt/web-ui
     version: "{{ git_repo_versions.web_ui }}"
+
+- name: Clone the ui-templates repo
+  git:
+    repo: https://github.com/liquidinvestigations/ui-templates.git
+    dest: /opt/ui-templates
+    version: "{{ git_repo_versions.ui_templates }}"
 
 - name: Web UI dist artifacts
   unarchive:
@@ -14,8 +20,11 @@
 
 - name: Set up file permissions
   file:
-    path: /opt/web-ui
+    path: "{{ item }}"
     state: directory
     owner: liquid
     group: liquid
     recurse: true
+  with_items:
+    - /opt/web-ui
+    - /opt/ui-templates
