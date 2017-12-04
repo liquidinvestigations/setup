@@ -80,7 +80,6 @@ class SetupTest(PyTestWrapper):
         "sudo /mnt/setup/tests/install_browsers.sh",
     ]
     env = {
-        "PATH": "/mnt/setup/tests/bin:{}".format(os.environ.get("PATH", "")),
         "PYTHONUNBUFFERED": "yeah",
     }
     pytest = "/mnt/setup/tests/venv/bin/py.test"
