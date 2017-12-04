@@ -174,12 +174,11 @@ def test_login_into_dokuwiki(browser):
     browser.find_by_css('#dw__login button[type=submit]').click()
 
     # we should be logged in now, let's check
+    browser.is_element_present_by_css("ul#dw__user_menu")
+    browser.find_by_css("ul#dw__user_menu").click()
     assert browser.is_element_present_by_text(ADMIN_USERNAME)
     assert browser.is_text_present("Admin")
     assert browser.is_text_present("Log Out")
-
-    browser.find_by_text('Log Out').click()
-    assert browser.is_element_present_by_text("Permission Denied")
 
 
 def test_login_into_hypothesis(browser):
