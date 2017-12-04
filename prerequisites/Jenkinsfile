@@ -16,7 +16,7 @@ node('cloud') {
             sh "#!/bin/bash\npython3 <(curl -sL https://github.com/liquidinvestigations/factory/raw/master/install.py) factory"
         }
         stage('CLOUD: Build prerequisites image') {
-            sh 'cp jenkins-config.yml ansible/vars/config.yml'
+            sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
             sh 'mkdir images'
             sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --tags prerequisites'
         }
