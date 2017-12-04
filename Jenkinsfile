@@ -5,7 +5,6 @@ properties([
 ])
 
 node('cloud') {
-    def cloud_image = 'https://jenkins.liquiddemo.org/job/liquidinvestigations/job/factory/job/master/lastSuccessfulBuild/artifact/cloud-x86_64-image.tar.xz'
     def liquid_prerequisites_cloud_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites/job/master/lastSuccessfulBuild/artifact/liquid-cloud-x86_64-prerequisites.img.xz'
     stage('CLOUD: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
@@ -14,14 +13,8 @@ node('cloud') {
         checkout scm
     }
     try {
-        stage('CLOUD: Build a Factory & Prepare Cloud Image') {
-            sh 'git clone https://github.com/liquidinvestigations/factory'
-            sh 'mkdir -pv factory/images/cloud-x86_64/'
-            dir('factory/images/cloud-x86_64') {
-                sh "wget -q $cloud_image -O tmp.tar.xz;"
-                sh 'xzcat tmp.tar.xz | tar x'
-                sh 'rm tmp.tar.xz'
-            }
+        stage('CLOUD: Prepare factory') {
+            sh "#!/bin/bash\npython3 <(curl -sL https://github.com/liquidinvestigations/factory/raw/master/install.py) factory"
         }
         stage('CLOUD: Prepare the build') {
             sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
