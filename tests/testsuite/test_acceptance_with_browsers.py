@@ -157,6 +157,7 @@ def test_login_into_home_page(browser):
     with browser.get_iframe('liMenu') as menu:
         menu.click_link_by_partial_href("/accounts/logout/")
 
+    browser.visit(URL)
     assert browser.url.endswith('/accounts/login/')
 
 
