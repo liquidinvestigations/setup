@@ -39,7 +39,7 @@ node('cloud') {
                         }
                     }
                     finally {
-                        junit 'tests/results/*.xml'
+                        junit 'setup/tests/results/*.xml'
                     }
                 },
                 archive_raw_image: {
