@@ -1,3 +1,4 @@
 {
-  "domain": "{{ liquid_domain }}"
+  "domain": "{{ liquid_domain }}",
+  "use_https": {{ use_https | to_json }}
 }

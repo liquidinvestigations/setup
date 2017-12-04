@@ -9,6 +9,7 @@ sudo -u postgres psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='liqui
 INITIALIZE_RESULT=0
 
 set +e
+truncate -s 0 /opt/common/first_boot_status
 for file in /opt/common/initialize.d/*
 do
   "$file"

@@ -2,6 +2,7 @@
 
 export DEBIAN_FRONTEND="noninteractive"
 
+WEBDRIVER_BIN=/usr/local/bin
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TMP=$(mktemp -d)
 
@@ -18,12 +19,12 @@ apt-get -yqq install firefox  > /dev/null
 # get geckodriver
 wget -q https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz -O geckodriver.tar.gz
 tar xzvf geckodriver.tar.gz
-cp --no-preserve=ownership geckodriver $HERE/bin
+cp --no-preserve=ownership geckodriver $WEBDRIVER_BIN
 
 # get chromedriver
 wget -q https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip -O chromedriver.zip
 unzip chromedriver.zip
-cp --no-preserve=ownership chromedriver $HERE/bin
+cp --no-preserve=ownership chromedriver $WEBDRIVER_BIN
 
 # get chrome
 wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -33,5 +34,5 @@ cd $HERE
 rm -rf TMP
 
 if [ ! -L bin/google-chrome ]; then
-    ln -s `which google-chrome-stable` bin/google-chrome
+    ln -s `which google-chrome-stable` $WEBDRIVER_BIN/google-chrome
 fi
