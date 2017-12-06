@@ -1,0 +1,32 @@
+// vim: ft=groovy
+properties([
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '3')),
+    pipelineTriggers([[$class: 'PeriodicFolderTrigger', interval: '2d']])
+])
+
+node('arm64') {
+    stage('ODROID C2: Host Debug Information') {
+        sh 'set -x && hostname && uname -a && free -h && df -h'
+    }
+    deleteDir()
+    dir('setup') {
+        checkout scm
+    }
+    try {
+        stage('ODROID C2: Prepare factory') {
+            sh "#!/bin/bash\npython3 <(curl -sL https://github.com/liquidinvestigations/factory/raw/master/install.py) factory"
+        }
+        stage('ODROID C2: Build prerequisites image') {
+            sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
+            sh 'touch setup/ansible/vars/liquidcore.yml'
+            sh 'mkdir images'
+            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --tags prerequisites --skip-tags apps'
+        }
+        stage('ODROID C2: Archive prerequisites image') {
+            sh 'xz -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-prerequisites.img.xz'
+            archiveArtifacts 'liquid-odroid_c2-arm64-prerequisites.img.xz'
+        }
+    } finally {
+        deleteDir()
+    }
+}
