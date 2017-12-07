@@ -98,7 +98,7 @@ def wait_for_reconfigure():
 @pytest.fixture(params=BROWSERS)
 def browser(request):
     browser_name = request.param
-    with splinter.Browser(browser_name, headless=True, wait_time=10, **BROWSER_OPTS[browser_name]) as browser:
+    with splinter.Browser(browser_name, headless=True, wait_time=15, **BROWSER_OPTS[browser_name]) as browser:
         browser.driver.set_window_size(1920, 1080)
         browser.visit(URL)
         yield browser
