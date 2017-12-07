@@ -20,7 +20,7 @@
     - user-deleted
     - user-passwd
 
-- name: Configure sudo rights for liquid
+- name: Configure sudo rights for liquid-apps
   copy:
     src: sudoers.d/liquid-hooks
     dest: /etc/sudoers.d/liquid-hooks

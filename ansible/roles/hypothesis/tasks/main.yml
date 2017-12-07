@@ -25,8 +25,8 @@
 - name: Change ownership of h folder
   file:
     path: /opt/hypothesis/h
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
 
 - name: Install virtualenv with latest setuptools and pip
   pip:
@@ -76,8 +76,8 @@
 - name: Change ownership of data and logs folders
   file:
     path: "/opt/hypothesis/elasticsearch-1.7.2/{{ item }}"
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     state: directory
     recurse: true
   with_items:

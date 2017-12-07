@@ -92,18 +92,31 @@
     name: supervisor
     enabled: yes
 
-- name: Create liquid system user
+- name: Create liquid-apps system user
   user:
-    name: liquid
+    name: liquid-apps
+    shell: /bin/false
+
+- name: Create liquid-admin system user
+  user:
+    name: liquid-admin
     shell: /bin/bash
 
-- name: Add the liquid user to the sudo group
-  command: adduser liquid sudo
+- name: Add the liquid-apps user to the sudo group
+  command: adduser liquid-apps sudo
 
-- name: Configure passwordless sudo for liquid
+- name: Add the liquid-admin user to the sudo group
+  command: adduser liquid-admin sudo
+
+- name: Configure passwordless sudo for liquid-apps
   copy:
-    content: "liquid ALL=(ALL:ALL) NOPASSWD: ALL\n"
-    dest: /etc/sudoers.d/liquid
+    content: "liquid-apps ALL=(ALL:ALL) NOPASSWD: ALL\n"
+    dest: /etc/sudoers.d/liquid-apps
+
+- name: Configure passwordless sudo for liquid-admin
+  copy:
+    content: "liquid-admin ALL=(ALL:ALL) NOPASSWD: ALL\n"
+    dest: /etc/sudoers.d/liquid-admin
 
 - name: Create the supervisor global config
   template:

@@ -14,7 +14,7 @@ env.pop('DJANGO_SETTINGS_MODULE', None)
 
 def h_user(user_args):
     base_args = [
-        '/usr/bin/sudo', '-u', 'liquid',
+        '/usr/bin/sudo', '-u', 'liquid-apps',
         '/opt/hypothesis/libexec/run-h',
         'bin/hypothesis', 'user',
     ]

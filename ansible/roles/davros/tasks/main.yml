@@ -13,8 +13,8 @@
   file:
     path: /opt/davros/davros
     state: directory
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     recurse: true
   tags:
     - prerequisites
@@ -31,7 +31,7 @@
   args:
     chdir: /opt/davros/davros
   become: yes
-  become_user: liquid
+  become_user: liquid-apps
   tags:
     - prerequisites
 
@@ -39,8 +39,8 @@
   file:
     path: "{{item}}"
     state: directory
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
   with_items:
     - "/var/lib/liquid/data"
     - "/var/lib/liquid/data/davros-sync"

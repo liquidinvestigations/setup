@@ -34,7 +34,7 @@ node('cloud') {
                             sh 'mkdir factory/images/liquid'
                             sh 'cp images/ubuntu-x86_64-raw.img factory/images/liquid/disk.img'
                             sh 'factory/factory run --share setup:/mnt/setup --share factory/images/liquid:/mnt/liquid /mnt/setup/bin/with-image-chroot /mnt/liquid/disk.img bash /opt/setup/ci/prepare-image-for-testing'
-                            sh 'echo \'{"login": {"username": "liquid", "password": "liquid"}}\' > factory/images/liquid/config.json'
+                            sh 'echo \'{"login": {"username": "liquid-admin", "password": "liquid"}}\' > factory/images/liquid/config.json'
                             sh 'factory/factory run --image liquid --smp 2 --memory 2048  --share setup:/mnt/setup PYTHONUNBUFFERED=yeah /mnt/setup/bin/run_first_boot_tests.py'
                         }
                     }

@@ -22,7 +22,7 @@ supervisorctl start davros
 DAVROS_DATA_PATH=/var/lib/liquid/data/davros-sync
 
 # if the davros-sync collection exists, exit
-have_davros_sync=$(sudo -u liquid /opt/hoover/bin/hoover snoop collection | grep davros-sync | wc -l)
+have_davros_sync=$(sudo -u liquid-apps /opt/hoover/bin/hoover snoop collection | grep davros-sync | wc -l)
 if [[ $have_davros_sync -ne 0 ]]; then exit 0; fi
 
 # create the davros-sync collection
@@ -30,7 +30,7 @@ supervisorctl start hoover-tika
 supervisorctl start hoover-snoop
 
 # create the davros-sync collection and walk / digest it
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover snoop createcollection '$DAVROS_DATA_PATH' davros-sync davros-sync "Davros Upload", "Davros Upload"
 /opt/hoover/bin/hoover snoop walk davros-sync
@@ -40,7 +40,7 @@ EOF
 tika_url="http://localhost:15423"
 wait_url $tika_url
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover snoop worker digest
 EOF
@@ -52,7 +52,7 @@ supervisorctl start hoover-elasticsearch
 es_url="http://localhost:14352"
 wait_url $es_url
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover snoop resetindex davros-sync
 EOF
@@ -61,14 +61,14 @@ snoop_url="http://localhost:11941"
 wait_url $snoop_url/davros-sync/json
 
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/davros-sync/json"
 /opt/hoover/bin/hoover search update davros-sync
 EOF
 
 # DON'T MAKE THIS COLLECTION PUBLIC
-#sudo -u liquid /opt/hoover/bin/hoover search shell <<EOF
+#sudo -u liquid-apps /opt/hoover/bin/hoover search shell <<EOF
 #from hoover.search.models import Collection
 #c = Collection.objects.get(name='davros-sync')
 #c.public = True
@@ -78,7 +78,7 @@ EOF
 supervisorctl stop hoover-snoop
 supervisorctl stop hoover-elasticsearch
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 . /opt/hoover/venvs/snoop/bin/activate
 cd /opt/hoover/snoop

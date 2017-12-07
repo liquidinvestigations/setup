@@ -40,7 +40,7 @@
     - prerequisites
 
 - name: Reset permissions on the synapse server
-  command: chown -R liquid:liquid /opt/matrix/synapse
+  command: chown -R liquid-apps:liquid-apps /opt/matrix/synapse
   tags:
     - prerequisites
 

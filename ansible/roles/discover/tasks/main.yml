@@ -44,8 +44,8 @@
 - name: Touch the secret_key.py config for discover
   file:
     dest: /opt/discover/discover/settings/secret_key.py
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     state: touch
 
 - name: Create the configuration file

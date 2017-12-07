@@ -14,13 +14,13 @@ if [ ! -s /opt/hoover/search/hoover/site/settings/secret_key.py ]; then
 )
 fi
 
-sudo -u liquid /opt/liquid-core/libexec/create-oauth-application "hoover" "{{ http_scheme }}://hoover.{{ liquid_domain }}/accounts/oauth2-exchange/"
+sudo -u liquid-apps /opt/liquid-core/libexec/create-oauth-application "hoover" "{{ http_scheme }}://hoover.{{ liquid_domain }}/accounts/oauth2-exchange/"
 source /var/lib/liquid/oauth_keys/hoover
 echo "CLIENT_ID = '$CLIENT_ID'" > /opt/hoover/search/hoover/site/settings/oauth.py
 echo "CLIENT_SECRET = '$CLIENT_SECRET'" >> /opt/hoover/search/hoover/site/settings/oauth.py
 
 # create and migrate dbs
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 psql -lqt | cut -d \| -f 1 | grep -qw hoover-search || createdb hoover-search
 psql -lqt | cut -d \| -f 1 | grep -qw hoover-snoop || createdb hoover-snoop

@@ -30,7 +30,7 @@ supervisorctl start hypothesis-elasticsearch
 # Wait for hypothesis-elasticsearch because hypothesis init must be able to connect
 wait_url 'http://127.0.0.1:14312'
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 createdb hypothesis
 psql hypothesis -c 'create extension if not exists "uuid-ossp";'
