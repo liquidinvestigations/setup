@@ -25,7 +25,19 @@
     - prerequisites
 
 - name: Download DokuWiki stable source code
-  shell: "wget https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz -O - | tar -xzvf - -C /opt/dokuwiki --strip 1"
+  shell: "wget https://download.dokuwiki.org/src/dokuwiki/dokuwiki-2017-02-19e.tgz -O - | tar -xzf - -C /opt/dokuwiki --strip 1"
+  tags:
+    - prerequisites
+
+- name: Create dokuwiki bootstrap template directory
+  file:
+    path: /opt/dokuwiki/lib/tpl/bootstrap-template
+    state: directory
+  tags:
+    - prerequisites
+
+- name: Download DokuWiki bootstrap template coode
+  shell: "wget https://github.com/LotarProject/dokuwiki-template-bootstrap3/tarball/2ae0cefbd25ce2304914bd01e6350d4eb83310f3 -O - | tar -xzf - -C /opt/dokuwiki/lib/tpl/bootstrap-template --strip 1"
   tags:
     - prerequisites
 

@@ -4,8 +4,6 @@ import splinter
 import pytest
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 
-pytestmark = pytest.mark.skip("Browser tests are broken because of UI changes")
-
 DOMAIN = 'liquid.example.org'
 URL = 'http://'+DOMAIN
 
@@ -150,11 +148,6 @@ def test_view_home_page(browser):
 def test_login_into_home_page(browser):
     login_admin_into_homepage(browser)
 
-    assert browser.is_text_present("Admin")
-    assert browser.is_text_present("Django Admin")
-    assert browser.is_text_present("Reconfigure")
-    assert browser.is_text_present(ADMIN_USERNAME)
-
     # logout
     with browser.get_iframe('liMenu') as menu:
         menu.click_link_by_partial_href("/accounts/logout/")
@@ -174,12 +167,11 @@ def test_login_into_dokuwiki(browser):
     browser.find_by_css('#dw__login button[type=submit]').click()
 
     # we should be logged in now, let's check
+    browser.is_element_present_by_css("ul#dw__user_menu")
+    browser.find_by_css("ul#dw__user_menu").click()
     assert browser.is_element_present_by_text(ADMIN_USERNAME)
     assert browser.is_text_present("Admin")
     assert browser.is_text_present("Log Out")
-
-    browser.find_by_text('Log Out').click()
-    assert browser.is_element_present_by_text("Permission Denied")
 
 
 def test_login_into_hypothesis(browser):
@@ -256,8 +248,11 @@ def test_login_into_hoover(browser):
 def navigate_to_admin(browser):
     login_admin_into_homepage(browser)
 
-    # login
-    browser.find_by_text('Admin').click()
+    with browser.get_iframe('liMenu') as menu:
+        menu.click_link_by_href("/admin-ui")
+
+    # wait for the admin page to pop up
+    assert browser.is_text_present("General Status")
 
 
 def test_admin_header_and_redirect_to_status(browser):

@@ -150,12 +150,6 @@
     dest: /opt/common/initialize.d/00-common
     mode: 0755
 
-- name: Create the common install-templates script
-  copy:
-    src: initialize.d/install-templates
-    dest: /opt/common/initialize.d/70-install-templates.py
-    mode: 0755
-
 - name: Create the boot script
   template:
     src: boot.sh
@@ -222,11 +216,3 @@
     repo: https://github.com/liquidinvestigations/setup.git
     dest: /opt/setup
     version: "{{ git_repo_versions.setup }}"
-    update: false
-
-- name: Clone the ui-templates repo
-  git:
-    repo: https://github.com/liquidinvestigations/ui-templates.git
-    dest: /opt/common/ui-templates
-    version: "{{ git_repo_versions.ui_templates }}"
-    update: false
