@@ -16,9 +16,9 @@
   tags:
     - prerequisites
 
-- name: Add user liquid to group www-data
+- name: Add user liquid-apps to group www-data
   user:
-    name: liquid
+    name: liquid-apps
     groups: www-data
     append: yes
   tags:

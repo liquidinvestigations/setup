@@ -3,8 +3,8 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     recurse: true
   with_items:
     - /opt/ui
@@ -17,7 +17,7 @@
     dest: /opt/ui/web-ui
     version: "{{ git_repo_versions.web_ui }}"
   become: yes
-  become_user: liquid
+  become_user: liquid-apps
 
 - name: Download the ui-templates source code
   git:
@@ -25,7 +25,7 @@
     dest: /opt/ui/ui-templates
     version: "{{ git_repo_versions.ui_templates }}"
   become: yes
-  become_user: liquid
+  become_user: liquid-apps
 
 - name: Web UI dist artifacts
   unarchive:
@@ -34,7 +34,7 @@
     remote_src: yes
     creates: /opt/ui/web-ui/dist
   become: yes
-  become_user: liquid
+  become_user: liquid-apps
 
 - name: Create the common install-templates script
   copy:

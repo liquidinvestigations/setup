@@ -19,7 +19,7 @@ function wait_url {
 supervisorctl start hoover-elasticsearch
 
 # if the testdata collection exists, exit
-have_testdata=$(sudo -u liquid /opt/hoover/bin/hoover snoop collection | grep testdata | wc -l)
+have_testdata=$(sudo -u liquid-apps /opt/hoover/bin/hoover snoop collection | grep testdata | wc -l)
 if [[ $have_testdata -ne 0 ]]; then exit 0; fi
 
 # create the testdata collection
@@ -27,7 +27,7 @@ supervisorctl start hoover-tika
 supervisorctl start hoover-snoop
 
 # create the testdata collection and walk / digest it
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover snoop createcollection /opt/hoover/testdata testdata testdata "Hoover Test Data", "Hoover Test Data"
 /opt/hoover/bin/hoover snoop walk testdata
@@ -37,7 +37,7 @@ EOF
 tika_url="http://localhost:15423"
 wait_url $tika_url
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover snoop worker digest
 EOF
@@ -49,7 +49,7 @@ supervisorctl start hoover-elasticsearch
 es_url="http://localhost:14352"
 wait_url $es_url
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover snoop resetindex testdata
 EOF
@@ -58,13 +58,13 @@ snoop_url="http://localhost:11941"
 wait_url $snoop_url/testdata/json
 
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover search addcollection testdata "$snoop_url/testdata/json"
 /opt/hoover/bin/hoover search update testdata
 EOF
 
-sudo -u liquid /opt/hoover/bin/hoover search shell <<EOF
+sudo -u liquid-apps /opt/hoover/bin/hoover search shell <<EOF
 from hoover.search.models import Collection
 c = Collection.objects.get(name='testdata')
 c.public = True
@@ -74,7 +74,7 @@ EOF
 supervisorctl stop hoover-snoop
 supervisorctl stop hoover-elasticsearch
 
-sudo -u liquid bash <<EOF
+sudo -u liquid-apps bash <<EOF
 set -x
 . /opt/hoover/venvs/snoop/bin/activate
 cd /opt/hoover/snoop

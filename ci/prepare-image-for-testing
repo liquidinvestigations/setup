@@ -1,5 +1,5 @@
 #!/bin/bash
 set -ex
 
-echo 'liquid:liquid' | chpasswd
+echo 'liquid-admin:liquid' | chpasswd
 sed -i '/PasswordAuthentication /c\PasswordAuthentication yes' /etc/ssh/sshd_config

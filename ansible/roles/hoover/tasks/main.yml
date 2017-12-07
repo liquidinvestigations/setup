@@ -109,8 +109,8 @@
 - name: Change ownership of elasticsearch data and logs folders
   file:
     path: "/opt/hoover/elasticsearch-2.4.3"
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     state: directory
     recurse: true
 
@@ -147,8 +147,8 @@
     path: /opt/hoover/cache
     state: directory
     mode: 0755
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     recurse: true
 
 - name: Create the testing_local.py config for snoop
@@ -164,22 +164,22 @@
 - name: Touch the secret_key.py config for snoop
   file:
     dest: /opt/hoover/snoop/snoop/site/settings/secret_key.py
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     state: touch
 
 - name: Touch the secret_key.py config for search
   file:
     dest: /opt/hoover/search/hoover/site/settings/secret_key.py
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     state: touch
 
 - name: Touch the oauth.py config for search
   file:
     dest: /opt/hoover/search/hoover/site/settings/oauth.py
-    owner: liquid
-    group: liquid
+    owner: liquid-apps
+    group: liquid-apps
     state: touch
 
 - when: liquid_services.hoover.enabled
@@ -210,8 +210,8 @@
     template:
       src: search-local.py
       dest: /opt/hoover/search/hoover/site/settings/local.py
-      owner: liquid
-      group: liquid
+      owner: liquid-apps
+      group: liquid-apps
   tags:
     - configure
 

@@ -63,7 +63,7 @@ class CoreTest(PyTestWrapper):
     chdir = "/opt/liquid-core/liquid-core"
     xml_file = "/mnt/setup/tests/results/liquid-core.xml"
     pre_commands = [
-        'sudo chown -R liquid:liquid /opt/liquid-core/liquid-core/'
+        'sudo chown -R liquid-apps:liquid-apps /opt/liquid-core/liquid-core/'
     ]
     env = {
         "PYTHONPATH": "/opt/liquid-core/liquid-core:{}".format(
