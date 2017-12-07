@@ -21,8 +21,8 @@ node('cloud') {
             sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --tags prerequisites'
         }
         stage('CLOUD: Archive prerequisites image') {
-            sh 'xz -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-prerequisites.img.xz'
-            archiveArtifacts 'liquid-cloud-x86_64-prerequisites.img.xz'
+            sh 'gzip -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-prerequisites.img.gz'
+            archiveArtifacts 'liquid-cloud-x86_64-prerequisites.img.gz'
         }
     } finally {
         deleteDir()

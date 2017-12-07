@@ -5,7 +5,7 @@ properties([
 ])
 
 node('cloud') {
-    def liquid_prerequisites_cloud_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites/job/master/lastSuccessfulBuild/artifact/liquid-cloud-x86_64-prerequisites.img.xz'
+    def liquid_prerequisites_cloud_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites/job/master/lastSuccessfulBuild/artifact/liquid-cloud-x86_64-prerequisites.img.gz'
     stage('CLOUD: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
@@ -19,9 +19,9 @@ node('cloud') {
         stage('CLOUD: Prepare the build') {
             sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
             sh 'mkdir images'
-            sh "wget -q $liquid_prerequisites_cloud_image -O images/pre.img.xz"
-            sh 'xzcat images/pre.img.xz > images/ubuntu-x86_64-raw.img'
-            sh 'rm images/pre.img.xz'
+            sh "wget -q $liquid_prerequisites_cloud_image -O images/pre.img.gz"
+            sh 'zcat images/pre.img.gz > images/ubuntu-x86_64-raw.img'
+            sh 'rm images/pre.img.gz'
         }
         stage('CLOUD: Build Image') {
             sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --image /mnt/images/ubuntu-x86_64-raw.img'
@@ -44,8 +44,8 @@ node('cloud') {
                 },
                 archive_raw_image: {
                     stage('CLOUD: Archive Raw Image') {
-                        sh 'xz -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-raw.img.xz'
-                        archiveArtifacts 'liquid-cloud-x86_64-raw.img.xz'
+                        sh 'gzip -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-raw.img.gz'
+                        archiveArtifacts 'liquid-cloud-x86_64-raw.img.gz'
                     }
                 }
             )

@@ -22,8 +22,8 @@ node('arm64') {
             sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --tags prerequisites'
         }
         stage('ODROID C2: Archive prerequisites image') {
-            sh 'xz -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-prerequisites.img.xz'
-            archiveArtifacts 'liquid-odroid_c2-arm64-prerequisites.img.xz'
+            sh 'gzip -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-prerequisites.img.gz'
+            archiveArtifacts 'liquid-odroid_c2-arm64-prerequisites.img.gz'
         }
     } finally {
         deleteDir()

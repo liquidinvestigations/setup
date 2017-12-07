@@ -5,7 +5,7 @@ properties([
 ])
 
 node('arm64') {
-    def liquid_prerequisites_odroid_c2_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites-arm64/job/master/lastSuccessfulBuild/artifact/liquid-odroid_c2-arm64-prerequisites.img.xz'
+    def liquid_prerequisites_odroid_c2_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites-arm64/job/master/lastSuccessfulBuild/artifact/liquid-odroid_c2-arm64-prerequisites.img.gz'
     stage('ODROID C2: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
@@ -19,16 +19,16 @@ node('arm64') {
         stage('ODROID C2: Prepare the build') {
             sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
             sh 'mkdir images'
-            sh "wget -q $liquid_prerequisites_odroid_c2_image -O images/pre.img.xz"
-            sh 'xzcat images/pre.img.xz > images/ubuntu-odroid_c2-raw.img'
-            sh 'rm images/pre.img.xz'
+            sh "wget -q $liquid_prerequisites_odroid_c2_image -O images/pre.img.gz"
+            sh 'zcat images/pre.img.gz > images/ubuntu-odroid_c2-raw.img'
+            sh 'rm images/pre.img.gz'
         }
         stage('ODROID C2: Build Image') {
             sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --image /mnt/images/ubuntu-odroid_c2-raw.img'
         }
         stage('ODROID C2: Archive Raw Image') {
-            sh 'xz -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-raw.img.xz'
-            archiveArtifacts 'liquid-odroid_c2-arm64-raw.img.xz'
+            sh 'gzip -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-raw.img.gz'
+            archiveArtifacts 'liquid-odroid_c2-arm64-raw.img.gz'
         }
     } finally {
         deleteDir()
