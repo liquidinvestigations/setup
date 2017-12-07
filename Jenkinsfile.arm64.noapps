@@ -5,6 +5,7 @@ properties([
 ])
 
 node('arm64') {
+    def liquid_noapps_prerequisites_odroid_c2_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites-arm64-noapps/job/PR-103/lastSuccessfulBuild/artifact/liquid-odroid_c2-arm64-prerequisites.img.xz'
     stage('ODROID C2: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
@@ -21,7 +22,11 @@ node('arm64') {
             sh 'touch setup/ansible/vars/liquidcore.yml'
             sh 'mkdir images'
 
-            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --skip-tags apps'
+            sh "wget -q $liquid_noapps_prerequisites_odroid_c2_image -O images/pre.img.xz"
+            sh 'xzcat images/pre.img.xz > images/ubuntu-odroid_c2-raw.img'
+            sh 'rm images/pre.img.xz'
+
+            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --image /mnt/images/ubuntu-odroid_c2-raw.img --skip-tags apps'
 
             sh 'gzip -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-noapps-raw.img.gz'
             archiveArtifacts 'liquid-odroid_c2-arm64-noapps-raw.img.gz'
