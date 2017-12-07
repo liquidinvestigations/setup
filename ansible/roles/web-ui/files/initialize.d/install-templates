@@ -12,7 +12,7 @@ with open('/var/lib/liquid/conf/options.json', encoding='utf8') as f:
     global_options = json.load(f)
 
 print('installing ui-templates')
-run('/opt/ui-templates/install.py {} {}'.format(
+run('/opt/ui/ui-templates/install.py {} {}'.format(
     'https' if global_options['use_https'] else 'http',
     global_options['domain'],
 ))

@@ -150,12 +150,6 @@
     dest: /opt/common/initialize.d/00-common
     mode: 0755
 
-- name: Create the common install-templates script
-  copy:
-    src: initialize.d/install-templates
-    dest: /opt/common/initialize.d/70-install-templates.py
-    mode: 0755
-
 - name: Create the boot script
   template:
     src: boot.sh
