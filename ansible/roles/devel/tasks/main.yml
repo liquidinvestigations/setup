@@ -17,7 +17,7 @@
         - prerequisites
 
     - name: Set up a default password for the liquid user
-      command: bash -c "echo liquid:liquid | chpasswd"
+      command: bash -c "echo liquid-admin:liquid | chpasswd"
 
     - name: Permit password sshd auth
       lineinfile:
