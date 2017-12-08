@@ -95,9 +95,9 @@ class BaseBuilder:
             cmd += ['--skip-tags', skip_tags]
         run(cmd, cwd=str(self.setup / 'ansible'))
 
-    def prepare_image(self):
+    def prepare_image(self, image_size):
         image = self.platform.get_base_image()
-        self.resize_partition(image, '8G')
+        self.resize_partition(image, image_size)
 
         with self.open_target(image) as target:
             run(['resize2fs', target.device])

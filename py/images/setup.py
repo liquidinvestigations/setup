@@ -9,7 +9,7 @@ FLAVOURS = {
 }
 
 
-def build(flavor, tags, skip_tags, image_path):
+def build(flavor, tags, skip_tags, image_path, image_size):
     builder_cls = FLAVOURS[flavor]
     builder = builder_cls()
     builder.install_ansible()
@@ -19,7 +19,7 @@ def build(flavor, tags, skip_tags, image_path):
 
     else:
         builder.install_qemu_utils()
-        image = builder.prepare_image()
+        image = builder.prepare_image(image_size)
 
     builder.build(image, tags, skip_tags)
 
