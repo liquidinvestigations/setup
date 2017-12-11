@@ -21,7 +21,7 @@ node('cloud') {
             sh 'touch setup/ansible/vars/liquidcore.yml'
             sh 'mkdir images'
 
-            sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --image-size 2G --skip-tags apps'
+            sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --skip-tags apps'
 
             sh 'gzip -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-noapps-raw.img.gz'
             archiveArtifacts 'liquid-cloud-x86_64-noapps-raw.img.gz'
