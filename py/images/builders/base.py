@@ -87,15 +87,17 @@ class BaseBuilder:
                           stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
-    def run_ansible(self, playbook, tags=None):
-        cmd = ['ansible-playbook', '-i', 'hosts', playbook]
+    def run_ansible(self, playbook, host_pattern, tags=None, skip_tags=None):
+        cmd = ['ansible-playbook', '-i', 'hosts', '-l', host_pattern, playbook]
         if tags:
             cmd += ['--tags', tags]
+        if skip_tags:
+            cmd += ['--skip-tags', skip_tags]
         run(cmd, cwd=str(self.setup / 'ansible'))
 
-    def prepare_image(self):
+    def prepare_image(self, image_size):
         image = self.platform.get_base_image()
-        self.resize_partition(image, '8G')
+        self.resize_partition(image, image_size)
 
         with self.open_target(image) as target:
             run(['resize2fs', target.device])
@@ -103,6 +105,6 @@ class BaseBuilder:
 
         return image
 
-    def build(self, image, tags):
+    def build(self, image, tags, skip_tags):
         with self.open_target(image) as target:
-            self.run_ansible('image_chroot.yml', tags)
+            self.run_ansible('liquid.yml', 'image', tags, skip_tags)

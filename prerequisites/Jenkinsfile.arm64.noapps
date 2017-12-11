@@ -20,7 +20,7 @@ node('arm64') {
             sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
             sh 'touch setup/ansible/vars/liquidcore.yml'
             sh 'mkdir images'
-            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --tags prerequisites'
+            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --image-size 2G --tags prerequisites --skip-tags apps'
         }
         stage('ODROID C2: Archive prerequisites image') {
             sh 'gzip -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-prerequisites.img.gz'

@@ -1,6 +1,6 @@
 ---
 - name: Install the server version of the Liquid Investigations toolkit
-  hosts: local
+  hosts: all
   vars_files:
     - vars/defaults.yml
     - vars/config.yml
@@ -14,8 +14,8 @@
     - liquid-core
     - node6
     - web-ui
-    - hoover
-    - hypothesis
-    - dokuwiki
-    - matrix
-    - davros
+    - {tags: ['apps'], role: hoover}
+    - {tags: ['apps'], role: hypothesis}
+    - {tags: ['apps'], role: dokuwiki}
+    - {tags: ['apps'], role: matrix}
+    - {tags: ['apps'], role: davros}

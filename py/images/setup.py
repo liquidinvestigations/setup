@@ -9,7 +9,7 @@ FLAVOURS = {
 }
 
 
-def build(flavor, tags, image_path):
+def build(flavor, tags, skip_tags, image_path, image_size):
     builder_cls = FLAVOURS[flavor]
     builder = builder_cls()
     builder.install_ansible()
@@ -19,13 +19,13 @@ def build(flavor, tags, image_path):
 
     else:
         builder.install_qemu_utils()
-        image = builder.prepare_image()
+        image = builder.prepare_image(image_size)
 
-    builder.build(image, tags)
+    builder.build(image, tags, skip_tags)
 
 
-def install(tags):
+def install(tags=None, skip_tags=None):
     builder = Builder_cloud()
     (builder.setup / 'ansible' / 'vars' / 'config.yml').touch()
     (builder.setup / 'ansible' / 'vars' / 'liquidcore.yml').touch()
-    builder.run_ansible('server.yml', tags)
+    builder.run_ansible('liquid.yml', 'local', tags, skip_tags)
