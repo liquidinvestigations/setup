@@ -14,11 +14,11 @@ def run(cmd):
     subprocess.run(cmd, shell=True, check=True)
 
 
-def ansible():
+def ansible(vars):
     builder = Builder_cloud()
     (builder.setup / 'ansible' / 'vars' / 'config.yml').touch()
     (builder.setup / 'ansible' / 'vars' / 'liquidcore.yml').touch()
-    builder.update(tags='configure', skip_tags=None)
+    builder.update('configure', None, vars)
 
 
 def on_reconfigure():
@@ -30,7 +30,7 @@ def on_reconfigure():
     with vars_path.open('w', encoding='utf8') as f:
         print(json.dumps(vars, indent=2, sort_keys=True), file=f)
 
-    ansible()
+    ansible({})
     run('/opt/common/initialize.sh')
 
     print('configure_wifi')

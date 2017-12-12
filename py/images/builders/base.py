@@ -1,4 +1,5 @@
 import re
+import json
 from pathlib import Path
 from contextlib import contextmanager
 import subprocess
@@ -87,12 +88,14 @@ class BaseBuilder:
                           stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
-    def run_ansible(self, host_pattern, tags, skip_tags):
+    def run_ansible(self, host_pattern, tags, skip_tags, vars):
         cmd = ['ansible-playbook', '-i', 'hosts', '-l', host_pattern, 'liquid.yml']
         if tags:
             cmd += ['--tags', tags]
         if skip_tags:
             cmd += ['--skip-tags', skip_tags]
+        if vars:
+            cmd += ['--extra-vars', json.dumps(vars)]
         run(cmd, cwd=str(self.setup / 'ansible'))
 
     def prepare_image(self, image_size):
@@ -105,9 +108,9 @@ class BaseBuilder:
 
         return image
 
-    def build(self, image, tags, skip_tags):
+    def build(self, image, tags, skip_tags, vars):
         with self.open_target(image) as target:
-            self.run_ansible('image', tags, skip_tags)
+            self.run_ansible('image', tags, skip_tags, vars)
 
-    def update(self, tags, skip_tags):
-        self.run_ansible('local', tags, skip_tags)
+    def update(self, tags, skip_tags, vars):
+        self.run_ansible('local', tags, skip_tags, vars)

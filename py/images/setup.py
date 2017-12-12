@@ -21,11 +21,11 @@ def build(flavor, tags, skip_tags, image_path, image_size):
         builder.install_qemu_utils()
         image = builder.prepare_image(image_size)
 
-    builder.build(image, tags, skip_tags)
+    builder.build(image, tags, skip_tags, None)
 
 
 def install(tags=None, skip_tags=None):
     builder = Builder_cloud()
     (builder.setup / 'ansible' / 'vars' / 'config.yml').touch()
     (builder.setup / 'ansible' / 'vars' / 'liquidcore.yml').touch()
-    builder.update(tags, skip_tags)
+    builder.update(tags, skip_tags, None)
