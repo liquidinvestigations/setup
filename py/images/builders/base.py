@@ -108,3 +108,6 @@ class BaseBuilder:
     def build(self, image, tags, skip_tags):
         with self.open_target(image) as target:
             self.run_ansible('image', tags, skip_tags)
+
+    def update(self, tags, skip_tags):
+        self.run_ansible('local', tags, skip_tags)
