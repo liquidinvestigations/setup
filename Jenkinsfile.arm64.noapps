@@ -25,7 +25,7 @@ node('arm64') {
             sh 'zcat images/pre.img.gz > images/ubuntu-odroid_c2-raw.img'
             sh 'rm images/pre.img.gz'
 
-            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --image /mnt/images/ubuntu-odroid_c2-raw.img --skip-tags apps'
+            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image odroid_c2 --image /mnt/images/ubuntu-odroid_c2-raw.img --no-apps'
 
             sh 'gzip -1 < images/ubuntu-odroid_c2-raw.img > liquid-odroid_c2-arm64-noapps-raw.img.gz'
             archiveArtifacts 'liquid-odroid_c2-arm64-noapps-raw.img.gz'

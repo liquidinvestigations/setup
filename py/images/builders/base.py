@@ -89,13 +89,28 @@ class BaseBuilder:
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
     def run_ansible(self, host_pattern, tags, skip_tags, vars):
-        cmd = ['ansible-playbook', '-i', 'hosts', '-l', host_pattern, 'liquid.yml']
+        vars = dict(vars)
+        vars.setdefault('liquid_apps', True)
+
+        if not vars['liquid_apps']:
+            if skip_tags:
+                skip_tags += ',apps'
+            else:
+                skip_tags = 'apps'
+
+        cmd = [
+            'ansible-playbook',
+            'liquid.yml',
+            '--inventory', 'hosts',
+            '--limit', host_pattern,
+            '--extra-vars', json.dumps(vars),
+        ]
+
         if tags:
             cmd += ['--tags', tags]
         if skip_tags:
             cmd += ['--skip-tags', skip_tags]
-        if vars:
-            cmd += ['--extra-vars', json.dumps(vars)]
+
         run(cmd, cwd=str(self.setup / 'ansible'))
 
     def prepare_image(self, image_size):

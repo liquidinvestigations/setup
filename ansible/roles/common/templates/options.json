@@ -1,4 +1,5 @@
 {
   "domain": "{{ liquid_domain }}",
-  "use_https": {{ use_https | to_json }}
+  "use_https": {{ use_https | to_json }},
+  "apps": {{ liquid_apps | to_json }}
 }
