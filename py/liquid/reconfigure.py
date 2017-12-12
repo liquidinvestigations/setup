@@ -7,7 +7,6 @@ from .wifi import configure_wifi
 from .vpn import client
 from . import discover
 
-ANSIBLE_VARS = Path(__file__).parent.parent.parent / 'ansible' / 'vars'
 
 def run(cmd):
     print('+', cmd)
@@ -17,7 +16,6 @@ def run(cmd):
 def ansible(vars):
     builder = Builder_cloud()
     (builder.setup / 'ansible' / 'vars' / 'config.yml').touch()
-    (builder.setup / 'ansible' / 'vars' / 'liquidcore.yml').touch()
     builder.update('configure', None, vars)
 
 
@@ -26,11 +24,7 @@ def on_reconfigure():
     options = json.load(sys.stdin)
     vars = {'liquid_{}'.format(k): v for k, v in options['vars'].items()}
 
-    vars_path = ANSIBLE_VARS / 'liquidcore.yml'
-    with vars_path.open('w', encoding='utf8') as f:
-        print(json.dumps(vars, indent=2, sort_keys=True), file=f)
-
-    ansible({})
+    ansible(vars)
     run('/opt/common/initialize.sh')
 
     print('configure_wifi')

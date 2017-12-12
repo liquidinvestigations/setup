@@ -19,7 +19,6 @@ node('arm64') {
             sh "#!/bin/bash\npython3 <(curl -sL https://github.com/liquidinvestigations/factory/raw/master/install.py) factory"
 
             sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
-            sh 'touch setup/ansible/vars/liquidcore.yml'
             sh 'mkdir images'
 
             sh "wget -q $liquid_noapps_prerequisites_odroid_c2_image -O images/pre.img.gz"

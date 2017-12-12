@@ -4,7 +4,6 @@
   vars_files:
     - vars/defaults.yml
     - vars/config.yml
-    - vars/liquidcore.yml
     - vars/computed.yml
   roles:
     - common
