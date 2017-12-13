@@ -135,7 +135,13 @@ def login_admin_into_homepage(browser):
     browser.fill('password', ADMIN_PASSWORD)
     browser.find_by_css('button[type=submit]').click()
 
-    assert browser.is_element_present_by_text("Hello {}!".format(ADMIN_USERNAME))
+    for _ in range(3):
+        hello_message = "Hello {}!".format(ADMIN_USERNAME)
+        if browser.is_element_present_by_text(hello_message):
+            break
+        browser.reload()
+    else:
+        pytest.fail("Didn't find the hello message on the homepage")
 
 
 def test_view_home_page(browser):
