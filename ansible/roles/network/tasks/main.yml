@@ -7,6 +7,8 @@
     - network-manager
     - openvpn
     - easy-rsa
+    - modemmanager
+    - usb-modeswitch
   tags:
     - prerequisites
 
