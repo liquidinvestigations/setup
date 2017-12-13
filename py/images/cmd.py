@@ -10,6 +10,7 @@ def build_image():
     parser.add_argument('flavor', choices=setup.FLAVOURS.keys())
     parser.add_argument('--tags', default=None)
     parser.add_argument('--skip-tags', default=None)
+    parser.add_argument('--no-apps', action='store_false', dest='apps')
     parser.add_argument('-d', '--debug', action='store_true')
     parser.add_argument('--image', default=None)
     parser.add_argument('--image-size', default='8G')
@@ -19,6 +20,7 @@ def build_image():
         options.flavor,
         options.tags,
         options.skip_tags,
+        options.apps,
         options.image,
         options.image_size,
     )

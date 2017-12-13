@@ -1,4 +1,5 @@
 import re
+import json
 from pathlib import Path
 from contextlib import contextmanager
 import subprocess
@@ -87,12 +88,29 @@ class BaseBuilder:
                           stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
-    def run_ansible(self, playbook, host_pattern, tags=None, skip_tags=None):
-        cmd = ['ansible-playbook', '-i', 'hosts', '-l', host_pattern, playbook]
+    def run_ansible(self, host_pattern, tags, skip_tags, vars):
+        vars = dict(vars)
+        vars.setdefault('liquid_apps', True)
+
+        if not vars['liquid_apps']:
+            if skip_tags:
+                skip_tags += ',apps'
+            else:
+                skip_tags = 'apps'
+
+        cmd = [
+            'ansible-playbook',
+            'liquid.yml',
+            '--inventory', 'hosts',
+            '--limit', host_pattern,
+            '--extra-vars', json.dumps(vars),
+        ]
+
         if tags:
             cmd += ['--tags', tags]
         if skip_tags:
             cmd += ['--skip-tags', skip_tags]
+
         run(cmd, cwd=str(self.setup / 'ansible'))
 
     def prepare_image(self, image_size):
@@ -105,6 +123,9 @@ class BaseBuilder:
 
         return image
 
-    def build(self, image, tags, skip_tags):
+    def build(self, image, tags, skip_tags, vars):
         with self.open_target(image) as target:
-            self.run_ansible('liquid.yml', 'image', tags, skip_tags)
+            self.run_ansible('image', tags, skip_tags, vars)
+
+    def update(self, tags, skip_tags, vars):
+        self.run_ansible('local', tags, skip_tags, vars)

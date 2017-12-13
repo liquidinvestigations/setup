@@ -2,28 +2,37 @@ import sys
 import json
 from pathlib import Path
 import subprocess
-from images.setup import install
+from images.builders.cloud import Builder_cloud
 from .wifi import configure_wifi
 from .vpn import client
 from . import discover
 
-ANSIBLE_VARS = Path(__file__).parent.parent.parent / 'ansible' / 'vars'
+GLOBAL_LIQUID_OPTIONS = '/var/lib/liquid/conf/options.json'
+
+
+def get_liquid_options():
+    with open(GLOBAL_LIQUID_OPTIONS, encoding='utf8') as f:
+        return json.load(f)
+
 
 def run(cmd):
     print('+', cmd)
     subprocess.run(cmd, shell=True, check=True)
 
 
+def ansible(vars):
+    builder = Builder_cloud()
+    (builder.setup / 'ansible' / 'vars' / 'config.yml').touch()
+    builder.update('configure', None, vars)
+
+
 def on_reconfigure():
     print('on_reconfigure')
     options = json.load(sys.stdin)
     vars = {'liquid_{}'.format(k): v for k, v in options['vars'].items()}
+    vars['liquid_apps'] = get_liquid_options().get('apps', True)
 
-    vars_path = ANSIBLE_VARS / 'liquidcore.yml'
-    with vars_path.open('w', encoding='utf8') as f:
-        print(json.dumps(vars, indent=2, sort_keys=True), file=f)
-
-    install(tags='configure')
+    ansible(vars)
     run('/opt/common/initialize.sh')
 
     print('configure_wifi')

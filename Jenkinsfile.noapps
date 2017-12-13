@@ -18,10 +18,9 @@ node('cloud') {
             sh "#!/bin/bash\npython3 <(curl -sL https://github.com/liquidinvestigations/factory/raw/master/install.py) factory"
 
             sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
-            sh 'touch setup/ansible/vars/liquidcore.yml'
             sh 'mkdir images'
 
-            sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --skip-tags apps'
+            sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --no-apps'
 
             sh 'gzip -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-noapps-raw.img.gz'
             archiveArtifacts 'liquid-cloud-x86_64-noapps-raw.img.gz'
