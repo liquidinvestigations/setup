@@ -1,3 +1,4 @@
+import os
 import pytest
 import requests
 
@@ -10,6 +11,8 @@ SUBDOMAINS = [
     'dokuwiki',
     'davros',
 ]
+if os.environ.get('NOAPPS'):
+    SUBDOMAINS = []
 FQDN_LIST = [DOMAIN] + [sub + '.' + DOMAIN for sub in SUBDOMAINS]
 URLS = ['http://' + fqdn for fqdn in FQDN_LIST]
 
