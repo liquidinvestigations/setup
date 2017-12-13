@@ -25,7 +25,7 @@ LogLevel INFO
 
 # Authentication:
 LoginGraceTime 120
-PermitRootLogin prohibit-password
+PermitRootLogin no
 StrictModes yes
 
 RSAAuthentication yes
@@ -61,12 +61,14 @@ PasswordAuthentication {% if devel %}yes{% else %}no{% endif %}
 #GSSAPIAuthentication no
 #GSSAPICleanupCredentials yes
 
-X11Forwarding yes
+X11Forwarding no
 X11DisplayOffset 10
 PrintMotd no
 PrintLastLog yes
 TCPKeepAlive yes
 #UseLogin no
+
+UseDNS no
 
 #MaxStartups 10:30:60
 #Banner /etc/issue.net
@@ -86,3 +88,5 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 # PAM authentication, then enable this but set PasswordAuthentication
 # and ChallengeResponseAuthentication to 'no'.
 UsePAM yes
+
+AllowUsers liquid-admin
