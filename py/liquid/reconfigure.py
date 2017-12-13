@@ -45,5 +45,6 @@ def on_reconfigure():
     discover.configure_avahi(vars)
 
     run('service nginx restart')
+    run('service sshd reload')
     run('supervisorctl update')
     run('supervisorctl restart all')
