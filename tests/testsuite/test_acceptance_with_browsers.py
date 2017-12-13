@@ -20,6 +20,14 @@ APP_NAMES = [
     "Davros",
 ]
 
+APP_DESCRIPTIONS = [
+    'Search Tool',
+    'Annotations',
+    'Chat',
+    'Wiki',
+    'File Sharing',
+]
+
 BROWSERS = [
     'firefox',
     'chrome',
@@ -360,7 +368,7 @@ def test_admin_services_tab(browser):
     assert browser.is_text_present("Services")
     for app_name in APP_NAMES:
         assert browser.is_text_present(app_name.upper())
-    for app_desc in ['Search Tool', 'Annotations', 'Chat', 'Wiki', 'File Sharing']:
+    for app_desc in APP_DESCRIPTIONS:
         assert browser.is_text_present(app_desc)
 
 
