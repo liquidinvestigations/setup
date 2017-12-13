@@ -1,3 +1,4 @@
+
 // vim: ft=groovy
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '3')),
@@ -21,9 +22,29 @@ node('cloud') {
       sh 'factory/factory run --smp 2 --memory 2048 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image cloud --no-apps'
 
     }
-    stage('Compress and archive the image') {
-      sh 'gzip -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-noapps-raw.img.gz'
-      archiveArtifacts 'liquid-cloud-x86_64-noapps-raw.img.gz'
+    stage('Test and archive') {
+      parallel(
+        test: {
+          stage('Run test suite') {
+            sh 'mkdir factory/images/liquid'
+            sh 'cp images/ubuntu-x86_64-raw.img factory/images/liquid/disk.img'
+            sh 'factory/factory run --share setup:/mnt/setup --share factory/images/liquid:/mnt/liquid /mnt/setup/bin/with-image-chroot /mnt/liquid/disk.img bash /opt/setup/ci/prepare-image-for-testing'
+            sh 'echo \'{"login": {"username": "liquid-admin", "password": "liquid"}}\' > factory/images/liquid/config.json'
+            try {
+              sh 'factory/factory run --image liquid --smp 2 --memory 2048  --share setup:/mnt/setup PYTHONUNBUFFERED=yeah NOAPPS=yessir /mnt/setup/bin/run_first_boot_tests.py'
+            }
+            finally {
+              junit 'setup/tests/results/*.xml'
+            }
+          }
+        },
+        archive: {
+          stage('Compress and archive the image') {
+            sh 'gzip -1 < images/ubuntu-x86_64-raw.img > liquid-cloud-x86_64-noapps-raw.img.gz'
+            archiveArtifacts 'liquid-cloud-x86_64-noapps-raw.img.gz'
+          }
+        }
+      )
     }
   }
   finally {
