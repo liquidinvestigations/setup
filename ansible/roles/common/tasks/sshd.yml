@@ -1,13 +1,13 @@
-- name: move sshd config file
+- name: Write sshd_config file
   template:
     src: sshd_config
     dest: /etc/ssh/sshd_config
   tags:
     - configure
 
-- name: Enable sshd if configured
+- name: Enable ssh server if configured
   service:
-    name: sshd
+    name: ssh
     enabled: "{{ liquid_ssh.enabled }}"
   tags:
     - configure

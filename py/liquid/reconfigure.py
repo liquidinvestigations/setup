@@ -44,7 +44,11 @@ def on_reconfigure():
     print('configuring avahi interfaces')
     discover.configure_avahi(vars)
 
+    if vars['liquid_ssh']['enabled']:
+        run('systemctl reload-or-restart ssh')
+    else:
+        run('systemctl stop ssh')
+
     run('service nginx restart')
-    run('service sshd reload')
     run('supervisorctl update')
     run('supervisorctl restart all')
