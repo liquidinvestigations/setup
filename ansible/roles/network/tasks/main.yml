@@ -5,7 +5,6 @@
     state: latest
   with_items:
     - network-manager
-    - bridge-utils
     - openvpn
     - easy-rsa
     - modemmanager

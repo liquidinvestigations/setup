@@ -1,47 +1,88 @@
-import subprocess
-from collections import defaultdict
+from .network_manager import nmcli
+from .network_manager import get_connections
+from .network_manager import get_connection_properties
 
 ETHERNET_INTERFACE = 'eth0'
 
 
-def brctl(*args):
-    cmd = ['brctl'] + list(args)
-    print('+', ' '.join(cmd))
-    return subprocess.check_output(cmd).decode('latin1')
-
-
 def get_bridge_interfaces():
-    bridge_name = None
-    bridges = defaultdict(list)
+    connections = list(get_connections())
+    rv = {}
 
-    for line in brctl('show').splitlines()[1:]:
-        bits = line.split()
-        if len(bits) > 1:
-            bridge_name = bits[0]
+    for item in connections:
+        if item['type'] == 'bridge':
+            rv[item['name']] = {}
 
-        interface = bits[-1]
-        bridges[bridge_name].append(interface)
+    for item in connections:
+        if item['type'] == '802-3-ethernet':
+            properties = get_connection_properties(item['uuid'])
+            if properties.get('connection.slave-type') == 'bridge':
+                bridge_name = properties['connection.master']
+                interface = properties['connection.interface-name']
+                rv[bridge_name][interface] = item['uuid']
 
-    return dict(bridges)
+    return rv
+
+
+def get_netmask_bits(netmask):
+    """ Count the number of bits in the netmask """
+    rv = 0
+    stop = False
+    for chunk in netmask.split('.'):
+        byte = int(chunk)
+        for bit in reversed(range(8)):
+            if byte & 2**bit:
+                if stop:
+                    raise RuntimeError("One bit after zero bit")
+                rv += 1
+            else:
+                stop = True
+    return rv
 
 
 def configure_lan(vars):
-    lan_interfaces = get_bridge_interfaces().get('lan', [])
     liquid_lan = vars.get('liquid_lan', {})
+    bridge_interfaces = get_bridge_interfaces()
+
+    if 'lan' not in bridge_interfaces:
+        lan_address = liquid_lan.get('ip')
+        lan_netmask = liquid_lan.get('netmask')
+
+        if not (lan_address and lan_netmask):
+            return
+
+        try:
+            lan_netmask_bits = get_netmask_bits(lan_netmask)
+
+        except:
+            print("Invalid netmask %r, skipping" % lan_netmask)
+            return
+
+        print(nmcli(
+            'connection', 'add',
+            'ifname', 'lan',
+            'type', 'bridge',
+            'con-name', 'lan',
+            'ip4', '{}/{}'.format(lan_address, lan_netmask_bits),
+        ))
+        print(nmcli(
+            'connection', 'modify',
+            'lan',
+            'bridge.stp', 'no',
+        ))
+
+        bridge_interfaces['lan'] = {}
 
     if liquid_lan.get('eth'):
-        if ETHERNET_INTERFACE not in lan_interfaces:
-            brctl('addif', 'lan', ETHERNET_INTERFACE)
+        if ETHERNET_INTERFACE not in bridge_interfaces['lan']:
+            print(nmcli(
+                'connection', 'add',
+                'type', 'bridge-slave',
+                'ifname', ETHERNET_INTERFACE,
+                'master', 'lan',
+            ))
 
     else:
-        if ETHERNET_INTERFACE in lan_interfaces:
-            brctl('delif', 'lan', ETHERNET_INTERFACE)
-
-    lan_address = liquid_lan.get('ip')
-    lan_netmask = liquid_lan.get('netmask')
-    if lan_address and lan_netmask:
-        subprocess.run([
-            'ifconfig', 'lan',
-            lan_address,
-            'netmask', lan_netmask,
-        ], check=True)
+        uuid = bridge_interfaces['lan'].get(ETHERNET_INTERFACE)
+        if uuid:
+            print(nmcli('connection', 'del', uuid))
