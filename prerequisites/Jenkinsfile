@@ -8,6 +8,7 @@ node('cloud') {
     stage('CLOUD: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
+    deleteDir()
     dir('setup') {
         checkout scm
     }

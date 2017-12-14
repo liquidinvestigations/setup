@@ -9,6 +9,7 @@ node('arm64') {
     stage('ODROID C2: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
+    deleteDir()
     dir('setup') {
         checkout scm
     }
