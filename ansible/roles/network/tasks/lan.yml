@@ -1,4 +1,12 @@
 ---
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /var/lib/liquid/lan
+    - /etc/systemd/system/networking.service.d
+
 - name: Lan DHCP
   template:
     src: lan/dnsmasq.conf
@@ -16,3 +24,8 @@
     src: hooks/first-boot/80-lan
     dest: /opt/common/hooks/first-boot.d/80-lan
     mode: 0755
+
+- name: Reduce boot delay for network interfaces
+  copy:
+    src: lan/systemd/reduce-timeout.conf
+    dest: /etc/systemd/system/networking.service.d/reduce-timeout.conf
