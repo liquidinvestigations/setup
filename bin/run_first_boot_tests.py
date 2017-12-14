@@ -75,14 +75,14 @@ class CoreTest(PyTestWrapper):
 
 class SetupTest(PyTestWrapper):
     pre_commands = [
-        "virtualenv -p python3 /opt/setup/tests/venv",
-        "/opt/setup/tests/venv/bin/pip install -qqr /opt/setup/tests/requirements.txt",
-        "sudo /opt/setup/tests/install_browsers.sh",
+        "virtualenv -p python3 /tmp/setup-tests-venv",
+        "/tmp/setup-tests-venv/bin/pip install -qqr /opt/setup/tests/requirements.txt",
+        "/opt/setup/tests/install_browsers.sh",
     ]
     env = {
         "PYTHONUNBUFFERED": "yeah",
     }
-    pytest = "/opt/setup/tests/venv/bin/py.test"
+    pytest = "/tmp/setup-tests-venv/bin/py.test"
     chdir = "/opt/setup/tests"
     xml_file = "/opt/setup/tests/results/liquid-setup.xml"
 
