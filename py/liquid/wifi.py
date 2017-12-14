@@ -1,36 +1,19 @@
-import re
-import subprocess
-
-
-def nmcli(*args):
-    cmd = ['nmcli'] + list(args)
-    print('+', ' '.join(cmd))
-    return subprocess.check_output(cmd).decode('latin1')
+from .network_manager import nmcli
+from .network_manager import get_devices
+from .network_manager import get_connections
+from .network_manager import get_connection_properties
 
 
 def get_wifi_devices():
-    for line in nmcli('-t', '-f', 'device,type', 'dev').splitlines():
-        (device, type) = line.split(':')
-        if type == 'wifi':
-            yield device
+    for item in get_devices():
+        if item['type'] == 'wifi':
+            yield item['device']
 
 
 def get_wifi_cons():
-    for line in nmcli('-t', '-f', 'uuid,type,device,name', 'con').splitlines():
-        (uuid, type, device, name) = line.split(':')
-        if type == '802-11-wireless':
-            yield uuid, device
-
-
-def get_con_properties(uuid):
-    properties = {}
-    for line in nmcli('con', 'show', '--show-secrets', uuid).splitlines():
-        m = re.match(r'^(?P<key>[^:]+):\s+(?P<value>.*)$', line.strip())
-        if not m:
-            continue
-        properties[m.group('key')] = m.group('value')
-
-    return properties
+    for item in get_connections():
+        if item['type'] == '802-11-wireless':
+            yield item['uuid'], item['device']
 
 
 def delete_connection(uuid):
@@ -62,7 +45,7 @@ def configure_wifi(vars):
             delete_connection(uuid)
             continue
 
-        properties = get_con_properties(uuid)
+        properties = get_connection_properties(uuid)
 
         if properties['802-11-wireless.mode'] == 'ap':
             print('found a hotspot:', device, uuid)
