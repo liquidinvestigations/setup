@@ -116,7 +116,7 @@
 
 - name: Download Apache Tika
   get_url:
-    dest: /opt/hoover/
+    dest: /opt/hoover/tika-server.jar
     url: http://apache.javapipe.com/tika/tika-server-1.17.jar
   tags:
     - prerequisites
