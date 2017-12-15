@@ -1,9 +1,4 @@
-# Package generated configuration file
-# See the sshd_config(5) manpage for details
-
-# What ports, IPs and protocols we listen for
 Port {{ liquid_ssh.port }}
-# Use these options to restrict which interfaces/protocols sshd will bind to
 #ListenAddress ::
 #ListenAddress 0.0.0.0
 Protocol 2
@@ -51,16 +46,6 @@ ChallengeResponseAuthentication no
 # Change to no to disable tunnelled clear text passwords
 PasswordAuthentication {% if devel %}yes{% else %}no{% endif %}
 
-# Kerberos options
-#KerberosAuthentication no
-#KerberosGetAFSToken no
-#KerberosOrLocalPasswd yes
-#KerberosTicketCleanup yes
-
-# GSSAPI options
-#GSSAPIAuthentication no
-#GSSAPICleanupCredentials yes
-
 X11Forwarding no
 X11DisplayOffset 10
 PrintMotd no
@@ -82,11 +67,11 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 # and session processing. If this is enabled, PAM authentication will
 # be allowed through the ChallengeResponseAuthentication and
 # PasswordAuthentication.  Depending on your PAM configuration,
-# PAM authentication via ChallengeResponseAuthentication may bypass
-# the setting of "PermitRootLogin without-password".
-# If you just want the PAM account and session checks to run without
-# PAM authentication, then enable this but set PasswordAuthentication
-# and ChallengeResponseAuthentication to 'no'.
+# pam authentication via challengeresponseauthentication may bypass
+# the setting of "permitrootlogin without-password".
+# if you just want the pam account and session checks to run without
+# pam authentication, then enable this but set passwordauthentication
+# and challengeresponseauthentication to 'no'.
 UsePAM yes
 
 AllowUsers liquid-admin
