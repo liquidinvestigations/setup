@@ -2,4 +2,5 @@
 set -ex
 
 echo 'liquid-admin:liquid' | chpasswd
-sed -i '/PasswordAuthentication /c\PasswordAuthentication yes' /etc/ssh/sshd_config
+echo 'devel: true' >> /opt/setup/ansible/vars/config.yml
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
