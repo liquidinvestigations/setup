@@ -5,6 +5,13 @@
   tags:
     - configure
 
+- name: Write ssh banner
+  template:
+    src: ssh_banner.txt
+    dest: /etc/ssh_banner.txt
+  tags:
+    - configure
+
 - name: Enable ssh server if configured
   service:
     name: ssh
