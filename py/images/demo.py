@@ -60,6 +60,7 @@ class DemoBuilder(Builder_cloud):
             with target_config_yml.open('w', encoding='utf8') as g:
                 g.write(f.read())
 
+        print("\nRunning ansible...")
         self.run_ansible('image', None, None, {})
 
     def kill_testdata(self, target):
@@ -79,14 +80,26 @@ class DemoBuilder(Builder_cloud):
     def setup_demo(self, image, config_yml, users_json, shell, no_testdata, serial):
         with self.open_target(image) as target:
             if shell:
+                print("Running interactive shell...")
                 run(['bash'], cwd=str(target.mount_point))
                 return
+
+            print("Creating swap file...")
             self.create_swapfile(target)
+
+            print("\nSetting up network...")
             self.setup_network(target)
+
             if serial:
+                print("\nSetting up serial console...")
                 self.setup_console(target)
+
+            print("\nSetting up ansible...")
             self.setup_ansible(target, config_yml)
+
+            print("\nCopying the users file...")
             self.copy_users(target, users_json)
+
             if no_testdata:
                 self.kill_testdata(target)
 
