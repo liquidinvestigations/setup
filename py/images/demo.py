@@ -52,17 +52,15 @@ class DemoBuilder(Builder_cloud):
             self.install_ansible()
             self.install_qemu_utils()
 
-        setup_path = target.mount_point / 'opt' / 'setup'
-        target_config_yml = setup_path / 'ansible/vars/config.yml'
+        # overwrite self.setup so self.run_ansible runs in
+        # /mnt/target/opt/setup/ansible and finds its vars
+        self.setup = target.mount_point / 'opt' / 'setup'
+        target_config_yml = self.setup / 'ansible/vars/config.yml'
         with config_yml.open(encoding='utf8') as f:
             with target_config_yml.open('w', encoding='utf8') as g:
                 g.write(f.read())
 
-        run([
-            'ansible-playbook',
-            '-i', 'hosts',
-            'liquid.yml',
-        ], cwd=str(setup_path / 'ansible'))
+        self.run_ansible('image', None, None, {})
 
     def kill_testdata(self, target):
         import_testdata = (
