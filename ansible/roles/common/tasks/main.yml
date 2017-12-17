@@ -244,3 +244,8 @@
   copy:
     content: "[Service]\nTTYVTDisallocate=no\n"
     dest: /etc/systemd/system/getty@.service.d/noclear.conf
+
+- name: Disable first-boot partition resizing on odroids
+  file:
+    path: /aafirstboot
+    state: absent
