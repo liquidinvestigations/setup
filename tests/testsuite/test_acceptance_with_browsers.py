@@ -1,8 +1,11 @@
 import time
+import os
 import requests
 import splinter
 import pytest
 from selenium.webdriver.chrome.options import Options as ChromeOptions
+
+NOAPPS = bool(os.environ.get('NOAPPS'))
 
 DOMAIN = 'liquid.example.org'
 URL = 'http://'+DOMAIN
@@ -20,6 +23,18 @@ APP_NAMES = [
     "Davros",
 ]
 
+APP_DESCRIPTIONS = [
+    'Search Tool',
+    'Annotations',
+    'Chat',
+    'Wiki',
+    'File Sharing',
+]
+
+if NOAPPS:
+    APP_NAMES = []
+    APP_DESCRIPTIONS = []
+
 BROWSERS = [
     'firefox',
     'chrome',
@@ -36,6 +51,13 @@ BROWSER_OPTS = {
         'options': chrome_options,
     },
 }
+
+
+def app_test(func):
+    """ Decorator for app-specific tests """
+    if NOAPPS:
+        func = pytest.mark.skip("Not testing apps on a no-apps build")(func)
+    return func
 
 
 def skip_if_welcome_not_set(browser):
@@ -162,6 +184,7 @@ def test_login_into_home_page(browser):
     assert browser.url.endswith('/accounts/login/')
 
 
+@app_test
 def test_login_into_dokuwiki(browser):
     login_admin_into_homepage(browser)
 
@@ -180,6 +203,7 @@ def test_login_into_dokuwiki(browser):
     assert browser.is_text_present("Log Out")
 
 
+@app_test
 def test_login_into_hypothesis(browser):
     login_admin_into_homepage(browser)
 
@@ -195,6 +219,7 @@ def test_login_into_hypothesis(browser):
     assert browser.is_text_present("How to get started")
 
 
+@app_test
 def test_login_into_matrix(browser):
     login_admin_into_homepage(browser)
 
@@ -210,6 +235,7 @@ def test_login_into_matrix(browser):
     assert browser.is_text_present("Welcome to homeserver")
 
 
+@app_test
 def test_login_into_davros(browser):
     login_admin_into_homepage(browser)
 
@@ -221,6 +247,7 @@ def test_login_into_davros(browser):
     assert browser.is_text_present(".gitkeep")
 
 
+@app_test
 def test_login_into_hoover(browser):
     login_admin_into_homepage(browser)
 
@@ -360,7 +387,7 @@ def test_admin_services_tab(browser):
     assert browser.is_text_present("Services")
     for app_name in APP_NAMES:
         assert browser.is_text_present(app_name.upper())
-    for app_desc in ['Search Tool', 'Annotations', 'Chat', 'Wiki', 'File Sharing']:
+    for app_desc in APP_DESCRIPTIONS:
         assert browser.is_text_present(app_desc)
 
 
