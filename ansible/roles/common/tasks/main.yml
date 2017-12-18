@@ -212,6 +212,8 @@
 
 - import_tasks: tasks/hooks.yml
 
+- import_tasks: tasks/sshd.yml
+
 - name: Create the firewall script
   copy:
     src: libexec/firewall

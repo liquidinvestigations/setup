@@ -13,14 +13,9 @@
         - vim
         - htop
         - zsh
+        - sl
       tags:
         - prerequisites
 
     - name: Set up a default password for the liquid user
       command: bash -c "echo liquid-admin:liquid | chpasswd"
-
-    - name: Permit password sshd auth
-      lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: "^#?PasswordAuthentication "
-        line: "PasswordAuthentication yes"

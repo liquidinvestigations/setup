@@ -1,0 +1,38 @@
+- name: Write sshd_config file
+  template:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+  tags:
+    - configure
+
+- name: Write ssh banner
+  template:
+    src: ssh_banner.txt
+    dest: /etc/ssh_banner.txt
+  tags:
+    - configure
+
+- name: Enable ssh server if configured
+  service:
+    name: ssh
+    enabled: "{{ liquid_ssh.enabled }}"
+  tags:
+    - configure
+
+- name: Set up .ssh dir for liquid-admin user
+  file:
+    path: /home/liquid-admin/.ssh
+    state: directory
+    mode: 0700
+    owner: liquid-admin
+    group: liquid-admin
+
+- name: Fill out ssh keys for the liquid-admin user
+  copy:
+    content: "{% for key in liquid_ssh.authorized_keys %}{{ key.key }}\n{% endfor %}"
+    dest: /home/liquid-admin/.ssh/authorized_keys
+    mode: 0600
+    owner: liquid-admin
+    group: liquid-admin
+  tags:
+    - configure
