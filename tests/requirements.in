@@ -1,4 +1,5 @@
 pytest
+flaky
 requests
 pip-tools
 selenium
