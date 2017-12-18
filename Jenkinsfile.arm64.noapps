@@ -5,7 +5,7 @@ properties([
 ])
 
 node('arm64') {
-    def liquid_noapps_prerequisites_odroid_c2_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites-arm64-noapps/job/PR-103/lastSuccessfulBuild/artifact/liquid-odroid_c2-arm64-prerequisites.img.gz'
+    def liquid_noapps_prerequisites_odroid_c2_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites-arm64-noapps/job/master/lastSuccessfulBuild/artifact/liquid-odroid_c2-arm64-prerequisites.img.gz'
     stage('ODROID C2: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
