@@ -118,6 +118,9 @@
     content: "liquid-admin ALL=(ALL:ALL) NOPASSWD: ALL\n"
     dest: /etc/sudoers.d/liquid-admin
 
+- name: Disable the root user login
+  command: passwd -l root
+
 - name: Create the supervisor global config
   template:
     src: supervisor/supervisor.conf
