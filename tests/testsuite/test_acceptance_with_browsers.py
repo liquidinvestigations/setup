@@ -3,6 +3,7 @@ import os
 import requests
 import splinter
 import pytest
+from flaky import flaky
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 NOAPPS = bool(os.environ.get('NOAPPS'))
@@ -165,7 +166,7 @@ def login_admin_into_homepage(browser):
     else:
         pytest.fail("Didn't find the hello message on the homepage")
 
-
+@flaky
 def test_view_home_page(browser):
     login_admin_into_homepage(browser)
 
@@ -173,6 +174,7 @@ def test_view_home_page(browser):
         assert browser.is_text_present(app_name.upper())
 
 
+@flaky
 def test_login_into_home_page(browser):
     login_admin_into_homepage(browser)
 
@@ -185,6 +187,7 @@ def test_login_into_home_page(browser):
 
 
 @app_test
+@flaky
 def test_login_into_dokuwiki(browser):
     login_admin_into_homepage(browser)
 
@@ -204,6 +207,7 @@ def test_login_into_dokuwiki(browser):
 
 
 @app_test
+@flaky
 def test_login_into_hypothesis(browser):
     login_admin_into_homepage(browser)
 
@@ -220,6 +224,7 @@ def test_login_into_hypothesis(browser):
 
 
 @app_test
+@flaky
 def test_login_into_matrix(browser):
     login_admin_into_homepage(browser)
 
@@ -236,6 +241,7 @@ def test_login_into_matrix(browser):
 
 
 @app_test
+@flaky
 def test_login_into_davros(browser):
     login_admin_into_homepage(browser)
 
@@ -248,6 +254,7 @@ def test_login_into_davros(browser):
 
 
 @app_test
+@flaky
 def test_login_into_hoover(browser):
     login_admin_into_homepage(browser)
 
@@ -288,6 +295,8 @@ def navigate_to_admin(browser):
     assert browser.is_text_present("General Status")
 
 
+# Admin tests are extra flaky
+@flaky(max_runs=3)
 def test_admin_header_and_redirect_to_status(browser):
     navigate_to_admin(browser)
 
@@ -295,6 +304,7 @@ def test_admin_header_and_redirect_to_status(browser):
     assert browser.is_text_present("Logged in as: {}".format(ADMIN_USERNAME))
 
 
+@flaky(max_runs=3)
 def test_admin_general_status_tab(browser):
     navigate_to_admin(browser)
     assert browser.url.endswith("/admin-ui/status")
@@ -304,6 +314,7 @@ def test_admin_general_status_tab(browser):
     assert browser.is_text_present("General Status")
 
 
+@flaky(max_runs=3)
 def test_admin_network_status_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/network')
@@ -316,6 +327,7 @@ def test_admin_network_status_tab(browser):
     assert browser.is_text_present(HOTSPOT_SSID)
 
 
+@flaky(max_runs=3)
 def test_admin_network_lan_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/network')
@@ -329,6 +341,7 @@ def test_admin_network_lan_tab(browser):
     assert browser.is_text_present('Netmask')
 
 
+@flaky(max_runs=3)
 def test_admin_network_wan_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/network')
@@ -340,6 +353,7 @@ def test_admin_network_wan_tab(browser):
     assert browser.is_text_present('DNS Server')
 
 
+@flaky(max_runs=3)
 def test_admin_network_ssh_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/network')
@@ -350,6 +364,7 @@ def test_admin_network_ssh_tab(browser):
     # assert browser.is_text_present('Port')
 
 
+@flaky(max_runs=3)
 def test_admin_vpn_status_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/vpn')
@@ -361,6 +376,7 @@ def test_admin_vpn_status_tab(browser):
     assert browser.is_text_present("Connection count")
 
 
+@flaky(max_runs=3)
 def test_admin_vpn_server_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/vpn')
@@ -371,6 +387,7 @@ def test_admin_vpn_server_tab(browser):
     assert browser.is_text_present("Active keys")
 
 
+@flaky(max_runs=3)
 def test_admin_vpn_client_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/vpn')
@@ -380,6 +397,7 @@ def test_admin_vpn_client_tab(browser):
     # assert browser.is_text_present("Upload key")
 
 
+@flaky(max_runs=3)
 def test_admin_services_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/services')
@@ -391,6 +409,7 @@ def test_admin_services_tab(browser):
         assert browser.is_text_present(app_desc)
 
 
+@flaky(max_runs=3)
 def test_admin_users_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/users')
@@ -400,6 +419,7 @@ def test_admin_users_tab(browser):
     assert browser.is_text_present("Inactive users")
 
 
+@flaky(max_runs=3)
 def test_admin_discovery_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/discovery')
@@ -409,6 +429,7 @@ def test_admin_discovery_tab(browser):
     assert browser.is_text_present("Untrusted nodes")
 
 
+@flaky(max_runs=3)
 def test_admin_about_tab(browser):
     navigate_to_admin(browser)
     browser.click_link_by_href('/admin-ui/about')
