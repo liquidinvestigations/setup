@@ -61,7 +61,7 @@ class PyTestWrapper:
 class CoreTest(PyTestWrapper):
     pytest = "/opt/liquid-core/venv/bin/py.test"
     chdir = "/opt/liquid-core/liquid-core"
-    xml_file = "/mnt/setup/tests/results/liquid-core.xml"
+    xml_file = "/opt/setup/tests/results/liquid-core.xml"
     pre_commands = [
         'sudo chown -R liquid-apps:liquid-apps /opt/liquid-core/liquid-core/'
     ]
@@ -75,16 +75,16 @@ class CoreTest(PyTestWrapper):
 
 class SetupTest(PyTestWrapper):
     pre_commands = [
-        "virtualenv -p python3 /mnt/setup/tests/venv",
-        "/mnt/setup/tests/venv/bin/pip install -qqr /mnt/setup/tests/requirements.txt",
-        "sudo /mnt/setup/tests/install_browsers.sh",
+        "virtualenv -p python3 /tmp/setup-tests-venv",
+        "/tmp/setup-tests-venv/bin/pip install -qqr /opt/setup/tests/requirements.txt",
+        "/opt/setup/tests/install_browsers.sh",
     ]
     env = {
         "PYTHONUNBUFFERED": "yeah",
     }
-    pytest = "/mnt/setup/tests/venv/bin/py.test"
-    chdir = "/mnt/setup/tests"
-    xml_file = "/mnt/setup/tests/results/liquid-setup.xml"
+    pytest = "/tmp/setup-tests-venv/bin/py.test"
+    chdir = "/opt/setup/tests"
+    xml_file = "/opt/setup/tests/results/liquid-setup.xml"
 
 
 def run_tests():
