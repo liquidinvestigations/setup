@@ -157,9 +157,11 @@
     dest: /opt/hoover/snoop/snoop/site/settings/testing_local.py
 
 - name: Create the local.py config for snoop
-  copy:
+  template:
     src: snoop-local.py
     dest: /opt/hoover/snoop/snoop/site/settings/local.py
+  tags:
+    - configure
 
 - name: Touch the secret_key.py config for snoop
   file:
