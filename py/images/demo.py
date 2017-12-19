@@ -37,6 +37,12 @@ class DemoBuilder(Builder_cloud):
         with ens3_cfg.open('w', encoding='utf8') as f:
             f.write('auto ens3\niface ens3 inet dhcp\n')
 
+        disable_first_boot_server = (
+            target/mount_point /
+            'var/lib/liquid/lan/disable_first_boot_server'
+        )
+        disable_first_boot_server.touch()
+
     def setup_console(self, target):
         grub_files = [
             'boot/grub/grub.cfg',
