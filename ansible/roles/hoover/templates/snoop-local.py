@@ -1,3 +1,5 @@
+DEBUG = {% if devel %}True{% else %}False{% endif %}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

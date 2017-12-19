@@ -1,6 +1,7 @@
 import re
 
-DEBUG = True
+DEBUG = {% if devel %}True{% else %}False{% endif %}
+
 ALLOWED_HOSTS = ['{{ liquid_domain }}']
 AUTH_PASSWORD_VALIDATORS = []
 
