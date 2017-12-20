@@ -3,12 +3,14 @@ set -ex
 
 cd /tmp
 
+SLEEP_SECS=5
+
 case "$1" in
     poweroff)
-        nohup sh -c 'sleep 10 && poweroff' &> /dev/null &
+        nohup sh -c "sleep $SLEEP_SECS && poweroff" &> /dev/null &
         ;;
     reboot)
-        nohup sh -c 'sleep 10 && reboot' &> /dev/null &
+        nohup sh -c "sleep $SLEEP_SECS && reboot" &> /dev/null &
         ;;
     *)
         echo "$0: usage: $0 poweroff|reboot"
