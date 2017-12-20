@@ -12,6 +12,7 @@
 import shutil
 import sys
 from os.path import exists
+from pathlib import Path
 import os
 from time import sleep
 from sys import exit

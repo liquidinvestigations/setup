@@ -135,8 +135,6 @@ def test_browser_welcome(browser):
 
     browser.fill('admin-username', ADMIN_USERNAME)
     browser.fill('admin-password', ADMIN_PASSWORD)
-    browser.fill('hotspot-ssid', HOTSPOT_SSID)
-    browser.fill('hotspot-password', HOTSPOT_PASSWORD)
 
     browser.find_by_css('button[type=submit]').click()
 
@@ -324,7 +322,8 @@ def test_admin_network_status_tab(browser):
     assert browser.is_text_present("Domain")
     assert browser.is_text_present(DOMAIN)
     assert browser.is_text_present("Lan configuration")
-    assert browser.is_text_present(HOTSPOT_SSID)
+    # TODO set the hotspot SSID before checking its existence
+    # assert browser.is_text_present(HOTSPOT_SSID)
 
 
 @flaky(max_runs=3)

@@ -176,7 +176,7 @@
   lineinfile:
     dest: /etc/rc.local
     insertbefore: "exit 0"
-    line: "/opt/common/boot.sh >> /var/log/rc.local.log 2>&1"
+    line: "/opt/setup/libexec/boot"
 
 - name: Nginx hash bucket size
   lineinfile:
@@ -234,3 +234,18 @@
     repo: https://github.com/liquidinvestigations/setup.git
     dest: /opt/setup
     version: "{{ git_repo_versions.setup }}"
+
+- name: Create /etc/systemd/system/getty@.service.d directory
+  file:
+    path: /etc/systemd/system/getty@.service.d
+    state: directory
+
+- name: Don't clear tty1 after boot
+  copy:
+    content: "[Service]\nTTYVTDisallocate=no\n"
+    dest: /etc/systemd/system/getty@.service.d/noclear.conf
+
+- name: Disable first-boot partition resizing on odroids
+  file:
+    path: /aafirstboot
+    state: absent

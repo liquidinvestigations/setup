@@ -21,6 +21,7 @@ cd /opt/common
 if [ ! -f first_boot_done ] && [ ! -f first_boot_failed ]; then
   echo "Starting first boot."
   if ./initialize.sh ; then
+    /opt/common/libexec/invoke-hook first-boot
     echo "First boot done."
     FIRST_BOOT=DONE
   else

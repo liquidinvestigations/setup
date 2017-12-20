@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+(
+  /opt/common/boot.sh
+) 2>&1 | tee -a /var/log/rc.local.log

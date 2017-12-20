@@ -26,14 +26,11 @@
     - /var/lib/liquid/vpn/server
     - /var/lib/liquid/vpn/server/keys
 
+- import_tasks: tasks/lan.yml
+
 - import_tasks: tasks/vpn-server.yml
 
 - import_tasks: tasks/vpn-client.yml
-
-- name: Allow hotplug eth0 # so the system boots without an ethernet cable
-  copy:
-    src: network-interfaces/eth0
-    dest: /etc/network/interfaces.d/eth0
 
 - name: dnsmasq configuration for network-manager
   template:

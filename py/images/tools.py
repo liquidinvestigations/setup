@@ -40,9 +40,12 @@ def run(args, **kwargs):
 
 
 def download(url, path):
+    print("Downloading", path.name, "...")
     if path.is_file():
+        print(path, "already exists, skipping download")
         return
-    return run(['curl', '-sS', url, '-o', str(path)])
+    run(['curl', '-sS', url, '-o', str(path)])
+    print("Download complete", path.name)
 
 
 def xzcat(xz_path, content_path):
