@@ -33,11 +33,6 @@ def on_reconfigure():
     vars = {'liquid_{}'.format(k): v for k, v in options['vars'].items()}
     vars['liquid_apps'] = get_liquid_options().get('apps', True)
 
-    lan = vars.get('liquid_lan', {})
-    if 'dhcp-range' in lan:
-        # TODO change the variable name in liquid-core
-        lan['dhcp_range'] = lan.pop('dhcp-range')
-
     ansible(vars)
     run('/opt/common/initialize.sh')
 
