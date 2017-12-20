@@ -4,3 +4,4 @@ set -ex
 echo 'liquid-admin:liquid' | chpasswd
 echo 'devel: true' >> /opt/setup/ansible/vars/config.yml
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+touch /var/lib/liquid/lan/disable_first_boot_server

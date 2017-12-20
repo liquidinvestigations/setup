@@ -21,7 +21,6 @@ import subprocess
 FILE_FAIL = '/opt/common/first_boot_failed'
 FILE_DONE = '/opt/common/first_boot_done'
 FILE_LOG = '/var/log/rc.local.log'
-FILE_DISABLE_LAN_SERVER = '/var/lib/liquid/lan/disable_first_boot_server'
 
 SLEEP_SECS = 3
 
@@ -127,7 +126,6 @@ def cat_first_boot_logs():
 
 
 if __name__ == '__main__':
-    Path(FILE_DISABLE_LAN_SERVER).touch()
     wait_for_first_boot()
     cat_first_boot_logs()
     sys.exit(run_tests())
