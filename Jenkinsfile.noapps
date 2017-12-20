@@ -30,7 +30,7 @@ node('cloud') {
             sh 'factory/factory run --share setup:/mnt/setup --share factory/images/liquid:/mnt/liquid /mnt/setup/bin/with-image-chroot /mnt/liquid/disk.img bash /opt/setup/ci/prepare-image-for-testing'
             sh 'echo \'{"login": {"username": "liquid-admin", "password": "liquid"}}\' > factory/images/liquid/config.json'
             try {
-              sh 'factory/factory run --image liquid --smp 2 --memory 2048  --share setup:/opt/setup PYTHONUNBUFFERED=yeah NOAPPS=yessir /mnt/setup/bin/run_first_boot_tests.py'
+              sh 'factory/factory run --image liquid --smp 2 --memory 2048  --share setup:/opt/setup PYTHONUNBUFFERED=yeah NOAPPS=yessir /opt/setup/bin/run_first_boot_tests.py'
             }
             finally {
               junit 'setup/tests/results/*.xml'
