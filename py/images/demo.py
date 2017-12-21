@@ -37,11 +37,7 @@ class DemoBuilder(Builder_cloud):
         with ens3_cfg.open('w', encoding='utf8') as f:
             f.write('auto ens3\niface ens3 inet dhcp\n')
 
-        eth0_no_dhcp = (
-            target/mount_point /
-            'var/lib/liquid/lan/eth0_no_dhcp'
-        )
-        eth0_no_dhcp.touch()
+        (target.mount_point / 'var/lib/liquid/lan/eth0_no_dhcp').touch()
 
     def setup_console(self, target):
         grub_files = [
