@@ -141,6 +141,8 @@
   template:
     src: options.json
     dest: /var/lib/liquid/conf/options.json
+  tags:
+    - configure
 
 - name: Create common folder
   file:
