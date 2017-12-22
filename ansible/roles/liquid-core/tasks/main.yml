@@ -90,15 +90,20 @@
     - /var/lib/liquid/core
     - /var/lib/liquid/core/logs
 
-- name: Create the initialization script
+- name: Create the first boot script script
   template:
-    src: initialize.d/liquid-core.sh
-    dest: /opt/common/initialize.d/00-liquid-core.sh
+    src: first-boot.d/liquid-core.sh
+    dest: /opt/common/hooks/first-boot.d/00-liquid-core.sh
     mode: 0755
 
-- name: Create the devel initialization script
-  when: devel
+- name: Create the script that creates the users on initialize
   template:
-    src: initialize.d/liquid-core-devel.sh
-    dest: /opt/common/initialize.d/80-liquid-core-initial-user.sh
+    src: initialize.d/liquid-core-create-users.sh
+    dest: /opt/common/initialize.d/95-liquid-core-initial-users.sh
+    mode: 0755
+
+- name: Create the script that marks welcome as done
+  template:
+    src: initialize.d/liquid-core-mark-welcome-done.sh
+    dest: /opt/common/initialize.d/99-liquid-core-mark-welcome-done.sh
     mode: 0755

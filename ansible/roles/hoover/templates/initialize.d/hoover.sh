@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-printf '\n\n=== INITIALIZE HOOVER ===\n\n'
 set -x
 
 cd /opt/hoover
@@ -30,3 +29,4 @@ EOF
 
 # Start services
 supervisorctl start hoover-elasticsearch hoover-search hoover-snoop hoover-tika
+supervisorctl start hoover-snoop-worker hoover-snoop-updater hoover-search-updater

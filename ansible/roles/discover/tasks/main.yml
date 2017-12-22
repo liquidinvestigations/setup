@@ -73,10 +73,10 @@
     dest: /opt/discover/libexec/runserver
     mode: 0755
 
-- name: Create the initialization script
+- name: Create the first-boot script
   copy:
-    src: initialize.d/discover.sh
-    dest: /opt/common/initialize.d/25-discover.sh
+    src: first-boot.d/discover.sh
+    dest: /opt/common/hooks/first-boot.d/25-discover.sh
     mode: 0755
 
 - name: Create the supervisor conf for discover

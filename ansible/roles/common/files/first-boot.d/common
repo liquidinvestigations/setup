@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-printf '\n\n=== INITIALIZE COMMON ===\n\n'
 set -x
 
 dpkg-reconfigure openssh-server

@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-printf '\n\n=== INITIALIZE DAVROS ===\n\n'
 set -x
 
 sudo -u liquid-apps /opt/liquid-core/libexec/create-oauth-application "davros" "{{ http_scheme }}://davros.{{ liquid_domain }}/__auth/callback"

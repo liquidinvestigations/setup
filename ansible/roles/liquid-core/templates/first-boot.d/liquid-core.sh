@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-printf '\n\n=== INITIALIZE LIQUID-CORE ===\n\n'
 set -x
 
 if grep -qs -- '-- placeholder --' /opt/liquid-core/liquid-core/liquidcore/site/settings/secret_key.py; then
@@ -13,3 +12,5 @@ fi
 cd /opt/liquid-core/liquid-core
 ../venv/bin/python ./manage.py migrate
 chown liquid-apps: ../var/db.sqlite3
+
+supervisorctl start liquid-core

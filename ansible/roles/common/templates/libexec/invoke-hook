@@ -5,9 +5,11 @@ import os
 from pathlib import Path
 import subprocess
 
+
 def log(*args):
     print(*args, file=sys.stderr)
     sys.stderr.flush()
+
 
 name = sys.argv[1]
 args = sys.argv[2:]
@@ -16,14 +18,17 @@ scripts_d = Path('/opt/common/hooks') / '{}.d'.format(name)
 failure = False
 if scripts_d.exists():
     for callback in scripts_d.iterdir():
-        log('+', callback.name)
+        display_name = 'invoke-hook {} {}'.format(name, callback.name)
+        log('+' + display_name + " started")
         try:
             subprocess.run(
                 [str(callback)] + args,
                 env=dict(os.environ, HOOK=name),
                 check=True,
             )
+            log('+' + display_name + " succeeded")
         except subprocess.CalledProcessError:
+            log('+' + display_name + " failed")
             failure = True
 
 sys.exit(failure)

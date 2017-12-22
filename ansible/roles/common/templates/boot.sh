@@ -20,8 +20,7 @@ set -e
 cd /opt/common
 if [ ! -f first_boot_done ] && [ ! -f first_boot_failed ]; then
   echo "Starting first boot."
-  if ./initialize.sh ; then
-    /opt/common/libexec/invoke-hook first-boot
+  if /opt/common/libexec/invoke-hook first-boot; then
     echo "First boot done."
     FIRST_BOOT=DONE
   else
@@ -31,11 +30,9 @@ if [ ! -f first_boot_done ] && [ ! -f first_boot_failed ]; then
 else
   FIRST_BOOT=ALREADY_DONE
   echo "Not starting first boot, already done."
+  echo "Running initialize.sh"
+ ./initialize.sh
 fi
-
-echo "Restarting all services."
-# TODO: only start enabled services
-supervisorctl restart all
 
 # Mark first_boot_done and first_boot_failed only after the
 # services have been started and hooks have been ran.
