@@ -7,7 +7,7 @@ cd /opt/hypothesis
 
 function wait_url {
     X=0
-    until $(curl --output /dev/null --silent --head --fail $1); do
+    until $(curl --connect-timeout 3 --max-time 20 --output /dev/null --silent --head --fail $1); do
         sleep 3
         ((X=X+1))
         if [[ $X -gt 20 ]]; then
