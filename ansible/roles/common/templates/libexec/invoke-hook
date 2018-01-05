@@ -17,7 +17,7 @@ scripts_d = Path('/opt/common/hooks') / '{}.d'.format(name)
 
 failure = False
 if scripts_d.exists():
-    for callback in scripts_d.iterdir():
+    for callback in sorted(scripts_d.iterdir()):
         display_name = 'invoke-hook {} {}'.format(name, callback.name)
         log('+' + display_name + " started")
         try:
