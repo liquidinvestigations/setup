@@ -24,6 +24,8 @@ FILE_LOG = '/var/log/rc.local.log'
 
 SLEEP_SECS = 3
 
+AFTER_REBOOT = False
+
 def cat(filename):
     with open(filename, 'r') as f:
         sys.stdout.write(f.read())
@@ -41,6 +43,7 @@ def cat_log(message, log_filename=FILE_LOG):
 class PyTestWrapper:
     pre_commands = []
     pytest = 'py.test'
+    extra_pytest_args = []
     chdir = None
     xml_file = None
     env = None
@@ -54,7 +57,7 @@ class PyTestWrapper:
         for command in self.pre_commands:
             print("+", command)
             subprocess.run([command], shell=True, check=True, env=env)
-        pytest_cmd = [self.pytest, '--junit-xml', self.xml_file]
+        pytest_cmd = [self.pytest, '--junit-xml', self.xml_file] + self.extra_pytest_args
         print("+", " ".join(pytest_cmd))
         subprocess.run(pytest_cmd, cwd=self.chdir, env=env, check=True)
 
@@ -85,7 +88,12 @@ class SetupTest(PyTestWrapper):
     }
     pytest = "/tmp/setup-tests-venv/bin/py.test"
     chdir = "/opt/setup/tests"
-    xml_file = "/opt/setup/tests/results/liquid-setup.xml"
+    if AFTER_REBOOT:
+        # skip the welcome-related tests
+        extra_pytest_args = ['-k', 'not welcome']
+        xml_file = "/opt/setup/tests/results/liquid-setup-after-reboot.xml"
+    else:
+        xml_file = "/opt/setup/tests/results/liquid-setup.xml"
 
 
 def run_tests():
@@ -125,6 +133,10 @@ def cat_first_boot_logs():
 
 
 if __name__ == '__main__':
+    import sys
+    if '--after-reboot' in sys.argv[1:]:
+        AFTER_REBOOT = True
+
     wait_for_first_boot()
     cat_first_boot_logs()
     sys.exit(run_tests())
