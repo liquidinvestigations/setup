@@ -116,7 +116,6 @@ def wait_for_first_boot(wait_mins=10):
 def cat_first_boot_logs():
     if exists(FILE_FAIL):
         cat_log("First boot failed!")
-        cat('/opt/common/first_boot_status')
         exit(1)
     elif exists(FILE_DONE):
         cat_log("First boot done.")

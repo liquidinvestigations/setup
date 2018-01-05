@@ -108,11 +108,6 @@
 - name: Add the liquid-admin user to the sudo group
   command: adduser liquid-admin sudo
 
-- name: Configure passwordless sudo for liquid-apps
-  copy:
-    content: "liquid-apps ALL=(ALL:ALL) NOPASSWD: ALL\n"
-    dest: /etc/sudoers.d/liquid-apps
-
 - name: Configure passwordless sudo for liquid-admin
   copy:
     content: "liquid-admin ALL=(ALL:ALL) NOPASSWD: ALL\n"
@@ -162,10 +157,17 @@
     state: directory
     mode: 0755
 
-- name: Create the common initialization script
+- name: Create /opt/common/libexec directory
+  file:
+    path: /opt/common/libexec
+    state: directory
+
+- import_tasks: tasks/hooks.yml
+
+- name: Create the common first boot script
   copy:
-    src: initialize.d/common
-    dest: /opt/common/initialize.d/00-common
+    src: first-boot.d/common
+    dest: /opt/common/hooks/first-boot.d/00-common
     mode: 0755
 
 - name: Create the boot script
@@ -209,13 +211,6 @@
   copy:
     src: nginx/https.conf
     dest: /var/lib/liquid/https/nginx/https.conf
-
-- name: Create /opt/common/libexec directory
-  file:
-    path: /opt/common/libexec
-    state: directory
-
-- import_tasks: tasks/hooks.yml
 
 - import_tasks: tasks/sshd.yml
 

@@ -66,6 +66,33 @@ def skip_if_welcome_not_set(browser):
     if browser.url.endswith('/welcome/'):
         pytest.skip('welcome not done, skipping')
 
+def wait_for_welcome_done():
+    WELCOME_DONE_URL = URL + "/welcome/done/"
+    WAIT_TIME = 3 * 60
+    WAIT_INCREMENT = 3
+
+    t0 = time.time()
+    while time.time() < t0 + WAIT_TIME:
+        time.sleep(WAIT_INCREMENT)
+        try:
+            r = requests.get(WELCOME_DONE_URL)
+        except requests.exceptions.ConnectionError:
+            # retry on connection errors (because nginx or django is being restarted)
+            continue
+
+        if r.status_code >= 500:
+            # retry on internal errors
+            continue
+
+        assert r.status_code == 200
+        status = r.json()
+
+        if status['done']:
+            return
+        else:
+            continue
+
+    pytest.fail("{} timed out".format(WELCOME_DONE_URL))
 
 def wait_for_reconfigure():
     LOGIN_URL = URL + "/accounts/login/"
@@ -142,7 +169,7 @@ def test_browser_welcome(browser):
     assert browser.is_text_present("Your settings are being applied")
     assert browser.is_text_present("Wait a minute")
 
-    wait_for_reconfigure()
+    wait_for_welcome_done()
 
     browser.visit(URL)
     assert not browser.url.endswith('/welcome/')
@@ -156,13 +183,9 @@ def login_admin_into_homepage(browser):
     browser.fill('password', ADMIN_PASSWORD)
     browser.find_by_css('button[type=submit]').click()
 
-    for _ in range(3):
-        hello_message = "Hello {}!".format(ADMIN_USERNAME)
-        if browser.is_element_present_by_text(hello_message):
-            break
-        browser.reload()
-    else:
-        pytest.fail("Didn't find the hello message on the homepage")
+    hello_message = "Hello {}!".format(ADMIN_USERNAME)
+    # beware, the following looks for an exact match
+    assert browser.is_element_present_by_text(hello_message)
 
 @flaky
 def test_view_home_page(browser):

@@ -30,8 +30,6 @@ def random_salt():
     urandom = random.SystemRandom()
     return ''.join(urandom.choice('0123456789abcdef') for _ in range(128))
 
-print("\n\n=== INITIALIZE DOKUWIKI ===\n")
-
 data = Path('/opt/dokuwiki')
 
 render(data / 'conf/acl.auth.php')

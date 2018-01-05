@@ -36,8 +36,14 @@
   become: yes
   become_user: liquid-apps
 
-- name: Create the common install-templates script
+- name: Put the install-templates script into first-boot
   copy:
-    src: initialize.d/install-templates
+    src: first-boot.d/install-templates
+    dest: /opt/common/hooks/first-boot.d/70-install-templates.py
+    mode: 0755
+
+- name: Put the install-templates script into initialize.d
+  copy:
+    src: first-boot.d/install-templates
     dest: /opt/common/initialize.d/70-install-templates.py
     mode: 0755
