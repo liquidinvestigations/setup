@@ -8,8 +8,10 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 NOAPPS = bool(os.environ.get('NOAPPS'))
 
-DOMAIN = 'liquid.example.org'
-URL = 'http://'+DOMAIN
+INITIAL_DOMAIN = 'liquid.example.org'
+DOMAIN = 'li-acceptance-tests.org'
+INITIAL_URL = 'http://' + INITIAL_DOMAIN
+URL = 'http://' + DOMAIN
 
 ADMIN_USERNAME = 'testadmin'
 ADMIN_PASSWORD = 'test-liquid.example.org'
@@ -80,11 +82,10 @@ def wait_for_welcome_done():
             # retry on connection errors (because nginx or django is being restarted)
             continue
 
-        if r.status_code >= 500:
+        if r.status_code != 200:
             # retry on internal errors
             continue
 
-        assert r.status_code == 200
         status = r.json()
 
         if status['done']:
@@ -150,16 +151,18 @@ def browser(request):
     browser_name = request.param
     with splinter.Browser(browser_name, headless=True, wait_time=15, **BROWSER_OPTS[browser_name]) as browser:
         browser.driver.set_window_size(1920, 1080)
-        browser.visit(URL)
         yield browser
 
 
 @pytest.mark.parametrize('browser', [BROWSERS[0]], indirect=True)
 def test_browser_welcome(browser):
+    browser.visit(INITIAL_URL)
+
     assert browser.url.endswith('/welcome/')
     assert browser.is_element_present_by_text("Welcome!")
     assert browser.is_text_present("Congratulations")
 
+    browser.fill('domain', DOMAIN)
     browser.fill('admin-username', ADMIN_USERNAME)
     browser.fill('admin-password', ADMIN_PASSWORD)
 
