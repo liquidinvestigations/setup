@@ -62,7 +62,7 @@ wait_url $snoop_url/davros-sync/json
 
 sudo -u liquid-apps bash <<EOF
 set -x
-/opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/davros-sync/json"
+/opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/davros-sync/json" --public
 /opt/hoover/bin/hoover search update davros-sync
 EOF
 
