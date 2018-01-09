@@ -25,6 +25,12 @@
     dest: /opt/common/hooks/first-boot.d/80-lan
     mode: 0755
 
+- name: Initialize script
+  copy:
+    src: initialize.d/50-lan.sh
+    dest: /opt/common/initialize.d/50-lan.sh
+    mode: 0755
+
 - name: Reduce boot delay for network interfaces
   copy:
     src: lan/systemd/reduce-timeout.conf
