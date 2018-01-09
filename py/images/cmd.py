@@ -29,6 +29,7 @@ def build_image():
 def install():
     parser = ArgumentParser()
     parser.add_argument('--tags', default=None)
+    parser.add_argument('--skip-tags', default=None)
     options = parser.parse_args()
     setup.install(options.tags, options.skip_tags)
 
