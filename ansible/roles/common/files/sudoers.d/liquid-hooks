@@ -1,2 +1,2 @@
 Defaults!/opt/common/libexec/invoke-hook env_keep=LIQUID_HOOK_DATA
-liquid-apps ALL=(ALL) NOPASSWD: /opt/common/libexec/invoke-hook, /opt/setup/libexec/liquid-core-reconfigure
+liquid-apps ALL=(ALL) NOPASSWD: /opt/common/libexec/invoke-hook, /opt/setup/libexec/liquid-core-reconfigure, /opt/setup/libexec/shutdown
