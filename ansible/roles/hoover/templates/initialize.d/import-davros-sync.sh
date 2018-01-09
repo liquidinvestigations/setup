@@ -17,7 +17,6 @@ function wait_url {
 }
 
 supervisorctl start hoover-elasticsearch
-supervisorctl start davros
 
 DAVROS_DATA_PATH=/var/lib/liquid/data/davros-sync
 

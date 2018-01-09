@@ -20,3 +20,6 @@ DAVROS_DATA_SYNC="/var/lib/liquid/data/davros-sync"
 if ! $( mount | grep -q $DAVROS_DATA_SYNC ); then
     mount --bind /opt/davros/davros/data $DAVROS_DATA_SYNC
 fi
+
+supervisorctl start davros
+supervisorctl start davros-authproxy
