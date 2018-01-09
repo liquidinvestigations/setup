@@ -1,11 +1,13 @@
 from pathlib import Path
 from .builders.cloud import Builder_cloud
 from .builders.odroid import Builder_odroid_c2, Builder_odroid_xu4
+from .builders.rock64 import Builder_rock64
 
 FLAVOURS = {
     'cloud': Builder_cloud,
     'odroid_c2': Builder_odroid_c2,
     'odroid_xu4': Builder_odroid_xu4,
+    'rock64': Builder_rock64,
 }
 
 
