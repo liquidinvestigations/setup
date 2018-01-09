@@ -12,3 +12,5 @@ if [ -f $USERS ]; then
   sudo -u liquid-apps venv/bin/python liquid-core/manage.py createusers $USERS
   rm $USERS
 fi
+
+supervisorctl start liquid-core
