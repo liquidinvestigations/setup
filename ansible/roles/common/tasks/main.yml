@@ -212,6 +212,12 @@
     src: nginx/https.conf
     dest: /var/lib/liquid/https/nginx/https.conf
 
+- name: Reload nginx after starting services
+  copy:
+    src: initialize.d/99-nginx-reload.sh
+    dest: /opt/common/initialize.d/99-nginx-reload.sh
+    mode: 0755
+
 - import_tasks: tasks/sshd.yml
 
 - name: Create the firewall script
