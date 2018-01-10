@@ -4,6 +4,7 @@ import requests
 import splinter
 import pytest
 from flaky import flaky
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 NOAPPS = bool(os.environ.get('NOAPPS'))
@@ -148,11 +149,27 @@ def wait_for_reconfigure():
 @pytest.fixture(params=BROWSERS)
 def browser(request):
     browser_name = request.param
-    with splinter.Browser(browser_name, headless=True, wait_time=15, **BROWSER_OPTS[browser_name]) as browser:
+
+    last_browser_error = None
+    for _ in range(3):
+        try:
+            browser = splinter.Browser(
+                browser_name,
+                headless=True,
+                wait_time=15,
+                **BROWSER_OPTS[browser_name]
+            )
+        except WebDriverException as e:
+            last_browser_error = e
+            continue
+
         browser.driver.set_window_size(1920, 1080)
         browser.visit(URL)
         yield browser
-
+        browser.quit()
+        break
+    else:
+        raise last_browser_error
 
 @pytest.mark.parametrize('browser', [BROWSERS[0]], indirect=True)
 def test_browser_welcome(browser):
