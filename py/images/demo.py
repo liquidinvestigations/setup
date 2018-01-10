@@ -74,7 +74,7 @@ class DemoBuilder(Builder_cloud):
             f.write('#!/bin/bash\necho "no testdata"\n')
 
     def copy_users(self, target, users_json):
-        target_users_json = target.mount_point / 'opt/liquid-core/users.json'
+        target_users_json = target.mount_point / 'var/lib/liquid/core/users.json'
         with users_json.open('rb') as f:
             with target_users_json.open('wb') as g:
                 g.write(f.read())
