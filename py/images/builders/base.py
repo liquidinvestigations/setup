@@ -75,7 +75,7 @@ class BaseBuilder:
         mount_point = Path('/mnt/target')
         mount_point.mkdir(parents=True, exist_ok=True)
 
-        root_fs_size = self.platform.get_root_fs_size()
+        root_fs_size = self.platform.get_root_fs_size(image)
         with losetup(image, self.platform.offset, root_fs_size) as device:
             with mount_target(device, mount_point, ['proc', 'dev']) as target:
                 with patch_resolv_conf(target):
