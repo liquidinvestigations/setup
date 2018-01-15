@@ -13,6 +13,9 @@ class Platform:
     def get_base_image(self):
         raise NotImplementedError
 
+    def get_root_fs_size(self, image):
+        return None
+
 
 @contextmanager
 def patch_resolv_conf(target):
@@ -72,7 +75,8 @@ class BaseBuilder:
         mount_point = Path('/mnt/target')
         mount_point.mkdir(parents=True, exist_ok=True)
 
-        with losetup(image, self.platform.offset) as device:
+        root_fs_size = self.platform.get_root_fs_size()
+        with losetup(image, self.platform.offset, root_fs_size) as device:
             with mount_target(device, mount_point, ['proc', 'dev']) as target:
                 with patch_resolv_conf(target):
                     yield target

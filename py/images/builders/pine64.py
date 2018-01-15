@@ -22,6 +22,32 @@ class Platform_rock64(Platform):
 
         return image
 
+    def get_root_fs_size(self, image):
+        def get_sector_size(image):
+            fdisk_output = (
+                run(['/sbin/fdisk', '-l', str(image)], stdout=subprocess.PIPE)
+                .stdout.decode('latin1')
+                .splitlines(keepends=True)
+            )
+            for line in fdisk_output:
+                m = re.search(r'^Sector size.*\s+(?P<sector>\d+) bytes$', line)
+                if m:
+                    return int(m.group('sector'))
+
+
+        def get_size_in_sectors(image):
+            sfdisk_output = (
+                run(['/sbin/sfdisk', '-d', str(image)], stdout=subprocess.PIPE)
+                .stdout.decode('latin1')
+                .splitlines(keepends=True)
+            )
+            for line in sfdisk_output:
+                m = re.search(r'size=\s*(?P<size>\d+).*name="root"', line)
+                if m:
+                    return int(m.group('size'))
+
+        return get_size_in_sectors(image) * get_sector_size(image)
+
 
 class Builder_rock64(BaseBuilder):
 
