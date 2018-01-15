@@ -59,7 +59,7 @@ def losetup(image, offset, size):
     device = '/dev/loop0'
     cmd = ['losetup', device, str(image), '-o', str(offset)]
     if size is not None:
-        cmd += ['--sizelimit', size]
+        cmd += ['--sizelimit', str(size)]
     run(cmd)
     try:
         yield device
