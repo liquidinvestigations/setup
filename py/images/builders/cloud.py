@@ -2,7 +2,7 @@ from ..tools import download, run
 from .base import BaseBuilder, Platform, IMAGES
 
 
-class Platform_cloud:
+class Platform_cloud(Platform):
 
     offset = 1048576
 
