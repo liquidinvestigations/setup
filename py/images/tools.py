@@ -55,9 +55,12 @@ def xzcat(xz_path, content_path):
 
 
 @contextmanager
-def losetup(image, offset):
+def losetup(image, offset, size):
     device = '/dev/loop0'
-    run(['losetup', device, str(image), '-o', str(offset)])
+    cmd = ['losetup', device, str(image), '-o', str(offset)]
+    if size is not None:
+        cmd += ['--sizelimit', str(size)]
+    run(cmd)
     try:
         yield device
     finally:

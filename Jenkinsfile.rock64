@@ -1,0 +1,33 @@
+// vim: ft=groovy
+properties([
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '3')),
+    pipelineTriggers([[$class: 'PeriodicFolderTrigger', interval: '2d']])
+])
+
+node('arm64') {
+    stage('ROCK64: Host Debug Information') {
+        sh 'set -x && hostname && uname -a && free -h && df -h'
+    }
+    deleteDir()
+    dir('setup') {
+        checkout scm
+    }
+    try {
+        stage('ROCK64: Prepare factory') {
+            sh "#!/bin/bash\npython3 <(curl -sL https://github.com/liquidinvestigations/factory/raw/master/install.py) factory --image https://jenkins.liquiddemo.org/job/liquidinvestigations/job/factory/job/master/lastSuccessfulBuild/artifact/artful-arm64.factory.gz"
+        }
+        stage('ROCK64: Prepare the build') {
+            sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
+            sh 'mkdir images'
+        }
+        stage('ROCK64: Build Image') {
+            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image rock64'
+        }
+        stage('ROCK64: Archive Raw Image') {
+            sh 'gzip -1 < images/ubuntu-rock64-raw.img > liquid-rock64.img.gz'
+            archiveArtifacts 'liquid-rock64.img.gz'
+        }
+    } finally {
+        deleteDir()
+    }
+}
