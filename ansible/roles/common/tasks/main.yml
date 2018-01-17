@@ -39,7 +39,6 @@
     state: latest
   with_items:
     - sudo
-    - ansible
     - curl
     - git
     - apt-transport-https
@@ -55,6 +54,12 @@
     - postgresql-server-dev-all
     - python-psycopg2 # so that ansible can manage postgres users and dbs
     - openssh-server
+  tags:
+    - prerequisites
+
+- name: Install base packages
+  apt:
+    name: "ansible=2.4*"
   tags:
     - prerequisites
 

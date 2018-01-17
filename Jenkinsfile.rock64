@@ -5,6 +5,7 @@ properties([
 ])
 
 node('arm64') {
+    def liquid_prerequisites_rock64_image = 'https://jenkins.liquiddemo.org/job/setup-prerequisites-rock64/job/master/lastSuccessfulBuild/artifact/liquid-rock64-prerequisites.img.gz'
     stage('ROCK64: Host Debug Information') {
         sh 'set -x && hostname && uname -a && free -h && df -h'
     }
@@ -19,9 +20,12 @@ node('arm64') {
         stage('ROCK64: Prepare the build') {
             sh 'cp setup/jenkins-config.yml setup/ansible/vars/config.yml'
             sh 'mkdir images'
+            sh "wget -q $liquid_prerequisites_rock64_image -O images/pre.img.gz"
+            sh 'zcat images/pre.img.gz > images/ubuntu-rock64-raw.img'
+            sh 'rm images/pre.img.gz'
         }
         stage('ROCK64: Build Image') {
-            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image rock64'
+            sh 'factory/factory run --smp 2 --memory 1024 --share setup:/mnt/setup --share images:/mnt/images /mnt/setup/bin/jenkins_build /mnt/setup/bin/build_image rock64 --image /mnt/images/ubuntu-rock64-raw.img'
         }
         stage('ROCK64: Archive Raw Image') {
             sh 'gzip -1 < images/ubuntu-rock64-raw.img > liquid-rock64.img.gz'
