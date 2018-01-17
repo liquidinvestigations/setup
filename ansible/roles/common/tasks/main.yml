@@ -39,7 +39,7 @@
     state: latest
   with_items:
     - sudo
-    - ansible
+    - 'ansible=2.4*'
     - curl
     - git
     - apt-transport-https
