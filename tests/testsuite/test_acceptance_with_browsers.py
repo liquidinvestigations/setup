@@ -217,8 +217,7 @@ def test_login_into_home_page(browser):
     login_admin_into_homepage(browser)
 
     # logout
-    with browser.get_iframe('liMenu') as menu:
-        menu.click_link_by_partial_href("/accounts/logout/")
+    browser.click_link_by_partial_href("/accounts/logout/")
 
     browser.visit(URL)
     assert browser.url.endswith('/accounts/login/')
@@ -326,8 +325,7 @@ def test_login_into_hoover(browser):
 def navigate_to_admin(browser):
     login_admin_into_homepage(browser)
 
-    with browser.get_iframe('liMenu') as menu:
-        menu.click_link_by_partial_href("/admin-ui")
+    browser.click_link_by_partial_href("/admin-ui")
 
     # wait for the admin page to pop up
     assert browser.is_text_present("General Status")
