@@ -337,7 +337,9 @@ def test_admin_header_and_redirect_to_status(browser):
     navigate_to_admin(browser)
 
     assert browser.is_text_present("admin")
-    assert browser.is_text_present("Logged in as: {}".format(ADMIN_USERNAME))
+    assert browser.is_text_present("Logged in as:")
+    assert browser.is_text_present(ADMIN_USERNAME)
+    assert browser.is_text_present("Admin panel")
 
 
 @flaky(max_runs=3)
