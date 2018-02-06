@@ -48,7 +48,10 @@ def on_reconfigure():
     options = json.load(sys.stdin)
     vars = {'liquid_{}'.format(k): v for k, v in options['vars'].items()}
     vars['liquid_apps'] = get_liquid_options().get('apps', True)
+
     old_vars = get_current_vars()
+    first_boot = not old_vars
+
     print('old_vars:', json.dumps(old_vars))
     print('vars:', json.dumps(vars))
 
@@ -71,11 +74,11 @@ def on_reconfigure():
 
     print('changes:', changes)
 
-    if old_vars:
-        tags = ','.join('configure-{}'.format(c) for c in changes)
+    if first_boot:
+        tags = 'configure'
 
     else:
-        tags = 'configure'
+        tags = ','.join('configure-{}'.format(c) for c in changes)
 
     print('tags:', tags)
 
