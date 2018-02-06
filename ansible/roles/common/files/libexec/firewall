@@ -27,6 +27,8 @@ iptables -A INPUT -p udp --dport 1194 -j ACCEPT # openvpn
 iptables -A INPUT -j KEEPSAFE
 
 iptables -t nat -F
-iptables -t nat -A POSTROUTING ! -d 10.8.0.0/8 -j MASQUERADE
+iptables -t nat -A POSTROUTING -d 127.0.0.0/8 -j RETURN
+iptables -t nat -A POSTROUTING -d 10.8.0.0/24 -j RETURN
+iptables -t nat -A POSTROUTING -j MASQUERADE
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
