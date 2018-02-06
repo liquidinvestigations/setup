@@ -17,7 +17,7 @@
       src: vpn-server/supervisor/vpn-server.conf
       dest: /etc/supervisor/conf.d/vpn-server.conf
   tags:
-    - configure
+    - configure configure-vpn
 
 - when: not liquid_vpn.server.enabled
   name: Remove configuration files for disabled vpn server
@@ -28,4 +28,4 @@
     - /var/lib/liquid/vpn/server/server.ovpn
     - /etc/supervisor/conf.d/vpn-server.conf
   tags:
-    - configure
+    - configure configure-vpn

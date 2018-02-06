@@ -13,7 +13,7 @@
       dest: /etc/supervisor/conf.d/vpn-client.conf
 
   tags:
-    - configure
+    - configure configure-vpn
 
 - name: Remove the client configuration files
   when: not (liquid_vpn.client.config and liquid_vpn.client.enabled)
@@ -24,4 +24,4 @@
     - /var/lib/liquid/vpn/client.ovpn
     - /etc/supervisor/conf.d/vpn-client.conf
   tags:
-    - configure
+    - configure configure-vpn

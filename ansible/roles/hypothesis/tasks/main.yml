@@ -136,6 +136,9 @@
       dest: /opt/common/initialize.d/23-hypothesis.sh
       mode: 0755
 
+  tags:
+    - configure configure-apps
+
 - when: not liquid_services.hypothesis.enabled
   name: Remove configuration files for disabled service
   file:
@@ -150,4 +153,4 @@
     - /opt/common/hooks/user-deleted.d/hypothesis
     - /opt/common/initialize.d/23-hypothesis.sh
   tags:
-    - configure
+    - configure configure-apps

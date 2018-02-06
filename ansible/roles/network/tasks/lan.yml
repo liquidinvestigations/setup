@@ -12,7 +12,7 @@
     src: lan/dnsmasq.conf
     dest: /var/lib/liquid/lan/dnsmasq.conf
   tags:
-    - configure
+    - configure configure-lan
 
 - name: Create the lan supervisor configuration
   copy:
