@@ -64,6 +64,7 @@
       mode: 0755
   tags:
     - configure
+    - configure-apps
 
 - when: not liquid_services.davros.enabled
   name: Remove configuration files for disabled service
@@ -76,3 +77,4 @@
     - /opt/common/initialize.d/20-davros.sh
   tags:
     - configure
+    - configure-apps

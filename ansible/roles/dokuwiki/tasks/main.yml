@@ -75,6 +75,7 @@
       - user-deleted
   tags:
     - configure
+    - configure-apps
 
 - when: not liquid_services.dokuwiki.enabled
   name: Remove configuration files for disabled service
@@ -89,3 +90,4 @@
     - /opt/common/hooks/user-deleted.d/dokuwiki
   tags:
     - configure
+    - configure-apps
