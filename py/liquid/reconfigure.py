@@ -70,7 +70,7 @@ def on_reconfigure():
         changes.add('vpn')
 
     if vars['liquid_services'] != old_vars.get('liquid_services'):
-        changes.add('apps')
+        changes.add('services')
 
     print('changes:', changes)
 
@@ -85,7 +85,7 @@ def on_reconfigure():
     if tags:
         ansible(vars, tags)
 
-    if changes.intersection({'apps'}):
+    if changes.intersection({'services'}):
         run('/opt/common/initialize.sh')
 
     if changes.intersection({'lan'}):
@@ -110,7 +110,7 @@ def on_reconfigure():
         else:
             run('systemctl stop ssh')
 
-    if changes.intersection({'apps'}):
+    if changes.intersection({'services'}):
         run('service nginx restart')
         run('supervisorctl update')
         run('supervisorctl restart all')
