@@ -70,7 +70,7 @@ def on_reconfigure():
         changes.add('vpn')
 
     if vars['liquid_services'] != old_vars.get('liquid_services'):
-        changes.add('services')
+        changes.add('apps')
 
     print('changes:', changes)
 
