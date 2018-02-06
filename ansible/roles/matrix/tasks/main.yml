@@ -99,7 +99,8 @@
       - user-passwd
       - user-deleted
   tags:
-    - configure configure-apps
+    - configure
+    - configure-apps
 
 - when: not liquid_services.matrix.enabled
   name: Remove configuration files for disabled service
@@ -116,4 +117,5 @@
     - /opt/common/initialize.d/24-matrix.sh
     - /opt/matrix/synapse/homeserver.yaml
   tags:
-    - configure configure-apps
+    - configure
+    - configure-apps

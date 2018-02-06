@@ -3,7 +3,8 @@
     src: sshd_config
     dest: /etc/ssh/sshd_config
   tags:
-    - configure configure-ssh
+    - configure
+    - configure-ssh
 
 - name: Write ssh banner
   template:
@@ -17,7 +18,8 @@
     name: ssh
     enabled: "{{ liquid_ssh.enabled }}"
   tags:
-    - configure configure-ssh
+    - configure
+    - configure-ssh
 
 - name: Set up .ssh dir for liquid-admin user
   file:
@@ -35,4 +37,5 @@
     owner: liquid-admin
     group: liquid-admin
   tags:
-    - configure configure-ssh
+    - configure
+    - configure-ssh

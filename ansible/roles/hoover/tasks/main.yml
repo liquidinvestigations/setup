@@ -216,7 +216,8 @@
       owner: liquid-apps
       group: liquid-apps
   tags:
-    - configure configure-apps
+    - configure
+    - configure-apps
 
 - when: not liquid_services.hoover.enabled
   name: Remove configuration files for disabled service
@@ -230,4 +231,5 @@
     - /opt/common/initialize.d/41-hoover-import-davros-sync.sh
     - /opt/hoover/search/hoover/site/settings/local.py
   tags:
-    - configure configure-apps
+    - configure
+    - configure-apps
