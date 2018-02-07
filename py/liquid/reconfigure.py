@@ -110,9 +110,10 @@ def on_reconfigure():
         else:
             run('systemctl stop ssh')
 
+    run('supervisorctl update')
+    run('supervisorctl start all')
+
     if changes.intersection({'services'}):
         run('service nginx restart')
-        run('supervisorctl update')
-        run('supervisorctl restart all')
 
     write_current_vars(vars)
