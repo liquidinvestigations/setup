@@ -2,10 +2,14 @@
 - name: Dump all vars
   debug:
     var: vars
+  tags:
+    - prerequisites
 
 - name: Dump all environment vars
   debug:
     var: environment
+  tags:
+    - prerequisites
 
 - name: Add the ansible ppa repository
   command: apt-add-repository -y ppa:ansible/ansible
@@ -57,7 +61,7 @@
   tags:
     - prerequisites
 
-- name: Install base packages
+- name: Install ansible 2.4
   apt:
     name: "ansible=2.4*"
   tags:
