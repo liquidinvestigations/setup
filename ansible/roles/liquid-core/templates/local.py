@@ -45,5 +45,6 @@ DISCOVERY_URL = 'http://localhost:13777'
 
 LIQUID_SETUP_RECONFIGURE = 'sudo /opt/setup/libexec/liquid-core-reconfigure'
 LIQUID_CORE_VAR = '/var/lib/liquid/core'
+LIQUID_SUPERVISORCTL = 'sudo /usr/bin/supervisorctl'
 
 from .secret_key import SECRET_KEY
