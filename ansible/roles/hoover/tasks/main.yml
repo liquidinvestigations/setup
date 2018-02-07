@@ -217,7 +217,7 @@
       group: liquid-apps
   tags:
     - configure
-    - configure-apps
+    - configure-services
 
 - when: not liquid_services.hoover.enabled
   name: Remove configuration files for disabled service
@@ -232,4 +232,4 @@
     - /opt/hoover/search/hoover/site/settings/local.py
   tags:
     - configure
-    - configure-apps
+    - configure-services

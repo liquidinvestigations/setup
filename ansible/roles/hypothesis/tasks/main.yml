@@ -138,7 +138,7 @@
 
   tags:
     - configure
-    - configure-apps
+    - configure-services
 
 - when: not liquid_services.hypothesis.enabled
   name: Remove configuration files for disabled service
@@ -155,4 +155,4 @@
     - /opt/common/initialize.d/23-hypothesis.sh
   tags:
     - configure
-    - configure-apps
+    - configure-services
