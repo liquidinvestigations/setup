@@ -267,14 +267,14 @@ def test_login_into_matrix(browser):
 
     # navigate to matrix and login
     browser.find_by_text('Matrix').click()
-    assert browser.is_element_present_by_text("Matrix ID (e.g. @bob:matrix.org or bob)")
-    browser.find_by_css('#user_id').fill(ADMIN_USERNAME)
-    browser.find_by_css('#password').fill(ADMIN_PASSWORD)
-    browser.find_by_css('button#login').click()
+    assert browser.is_element_present_by_text("Sign in with")
+    browser.find_by_css('.mx_Login_field mx_Login_username').fill(ADMIN_USERNAME)
+    browser.find_by_css('.mx_Login_field').fill(ADMIN_PASSWORD)
+    browser.find_by_css('.mx_Login_submit').click()
 
     # we should be logged in now, let's check
-    assert browser.is_element_present_by_text(ADMIN_USERNAME)
-    assert browser.is_text_present("Welcome to homeserver")
+    #assert browser.is_element_present_by_text(ADMIN_USERNAME)
+    assert browser.is_text_present("Search the room directory")
 
 
 @app_test
