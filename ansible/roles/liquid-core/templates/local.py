@@ -32,7 +32,7 @@ DOKUWIKI_APP_URL = 'http://dokuwiki.{{ liquid_domain }}'
 {% endif %}
 
 {% if liquid_services.matrix.enabled %}
-MATRIX_APP_URL = 'http://matrix.{{ liquid_domain }}'
+MATRIX_APP_URL = 'http://riot.{{ liquid_domain }}'
 {% endif %}
 
 {% if liquid_services.davros.enabled %}
