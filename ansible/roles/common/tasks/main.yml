@@ -146,6 +146,7 @@
     dest: /var/lib/liquid/conf/options.json
   tags:
     - configure
+    - configure-vpn
 
 - name: Create common folder
   file:

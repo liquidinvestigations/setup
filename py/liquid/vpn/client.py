@@ -49,9 +49,10 @@ def read_key(name):
 
 
 def generate_config(name):
+    vpn_server_address = OPTIONS['vpn']['server']['address']
     return CLIENT_OVPN_TEMPLATE.format(
-        address=OPTIONS['domain'],
-        port=1194,
+        address=vpn_server_address['address'],
+        port=vpn_server_address['port'],
         ca_cert=read_key('ca.crt'),
         client_cert=read_key('client-{}.crt'.format(name)),
         client_key=read_key('client-{}.key'.format(name)),
