@@ -18,9 +18,12 @@
 
 - name: Create the matrix folder
   file:
-    path: /opt/matrix
+    path: "{{ item }}"
     state: directory
     mode: 0755
+  with_items:
+    - /opt/matrix
+    - /opt/matrix/riot
   tags:
     - prerequisites
 
