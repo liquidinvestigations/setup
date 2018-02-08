@@ -44,6 +44,15 @@
   tags:
     - prerequisites
 
+- name: Download riot release
+  unarchive:
+    src: https://github.com/vector-im/riot-web/releases/download/v0.13.4/riot-v0.13.4.tar.gz
+    dest: /opt/matrix/riot
+    remote_src: yes
+    creates: /opt/matrix/riot/riot-v0.13.4
+  tags:
+    - prerequisites
+
 - when: liquid_services.matrix.enabled
   block:
   - name: Run the default configuration
@@ -72,6 +81,11 @@
     template:
       src: homeserver.yaml
       dest: /opt/matrix/synapse/homeserver.yaml
+  
+  - name: Create riot configuration file
+    template:
+      src: riot-config.json
+      dest: /opt/matrix/riot/riot-v0.13.4/config.json
   
   - name: Create the initialization script
     copy:

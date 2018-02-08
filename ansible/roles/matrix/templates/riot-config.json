@@ -1,0 +1,16 @@
+{
+    "default_hs_url": "http://matrix.{{ liquid_domain }}",
+    "default_is_url": "",
+    "brand": "Liquid Riot",
+    "integrations_ui_url": "",
+    "integrations_rest_url": "",
+    "bug_report_endpoint_url": "",
+    "features": {
+        "feature_groups": "labs",
+        "feature_pinning": "labs"
+    },
+    "default_federate": false,
+    "roomDirectory": null,
+    "welcomeUserId": "@riot-bot:matrix.{{ liquid_domain }}",
+    "piwik": null
+}
