@@ -1,5 +1,5 @@
 {
-    "default_hs_url": "http://matrix.{{ liquid_domain }}",
+    "default_hs_url": "{{ http_scheme }}://matrix.{{ liquid_domain }}",
     "default_is_url": "",
     "brand": "Liquid Riot",
     "integrations_ui_url": "",
