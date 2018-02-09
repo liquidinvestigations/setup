@@ -111,7 +111,12 @@ def on_reconfigure():
             run('systemctl stop ssh')
 
     run('supervisorctl update')
-    run('supervisorctl start all')
+
+    if first_boot:
+        run('supervisorctl restart all')
+
+    else:
+        run('supervisorctl start all')
 
     if changes.intersection({'services'}):
         run('service nginx restart')
