@@ -61,8 +61,6 @@
       shell: "rm -rf /opt/hoover"
     - name: Fail the task because Hoover failed to install
       command: /bin/false
-  tags:
-    - prerequisites
 
 - name: Update source code for hoover search
   git:
