@@ -69,8 +69,8 @@ def skip_if_welcome_not_set(browser):
 
 def wait_for_welcome_done():
     WELCOME_DONE_URL = URL + "/welcome/done/"
-    WAIT_TIME = 3 * 60
-    WAIT_INCREMENT = 3
+    WAIT_TIME = 10 * 60
+    WAIT_INCREMENT = 7
 
     t0 = time.time()
     while time.time() < t0 + WAIT_TIME:
