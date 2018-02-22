@@ -94,6 +94,14 @@
     remote_src: yes
     creates: /opt/hoover/elasticsearch-2.4.3
 
+- name: Set up file permissions for elasticsearch
+  file:
+    path: /opt/hoover/elasticsearch-2.4.3
+    owner: liquid-apps
+    group: liquid-apps
+    state: directory
+    recurse: true
+
 - name: Write the elasticsearch configuration file
   template:
     src: elasticsearch-config/elasticsearch.yml
@@ -101,13 +109,22 @@
   tags:
     - configure
 
-- name: Change ownership of elasticsearch data and logs folders
+- name: Create hoover data and log dirs under /var/lib/liquid/hoover
   file:
-    path: "/opt/hoover/elasticsearch-2.4.3"
+    path: "/var/lib/liquid/{{item}}"
     owner: liquid-apps
     group: liquid-apps
     state: directory
-    recurse: true
+  with_items:
+    - hoover
+    - hoover/blobs
+    - hoover/search
+    - hoover/snoop2
+    - hoover/elasticsearch
+    - hoover/elasticsearch/logs
+    - hoover/elasticsearch/data
+    - hoover/elasticsearch/plugins
+    - hoover/elasticsearch/scripts
 
 - name: Download Apache Tika
   get_url:
@@ -136,15 +153,6 @@
     - snoop2-workers
     - tika
 
-- name: Set permissions on the cache folder
-  file:
-    path: /opt/hoover/cache
-    state: directory
-    mode: 0755
-    owner: liquid-apps
-    group: liquid-apps
-    recurse: true
-
 - name: Create the local.py config for snoop2
   template:
     src: snoop2-localsettings.py
@@ -152,26 +160,32 @@
   tags:
     - configure
 
-- name: Touch the secret_key.py config for snoop2
+- name: Link the secret_key.py config for snoop
   file:
+    src: /var/lib/liquid/hoover/snoop2/secret_key.py
     dest: /opt/hoover/snoop2/snoop/secret_key.py
     owner: liquid-apps
     group: liquid-apps
-    state: touch
+    state: link
+    force: yes
 
-- name: Touch the secret_key.py config for search
+- name: Link the secret_key.py config for search
   file:
+    src: /var/lib/liquid/hoover/search/secret_key.py
     dest: /opt/hoover/search/hoover/site/settings/secret_key.py
     owner: liquid-apps
     group: liquid-apps
-    state: touch
+    state: link
+    force: yes
 
-- name: Touch the oauth.py config for search
+- name: Link the oauth.py config for search
   file:
+    src: /var/lib/liquid/hoover/search/oauth.py
     dest: /opt/hoover/search/hoover/site/settings/oauth.py
     owner: liquid-apps
     group: liquid-apps
-    state: touch
+    state: link
+    force: yes
 
 - when: liquid_services.hoover.enabled
   block:

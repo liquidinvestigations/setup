@@ -41,15 +41,20 @@
   tags:
     - prerequisites
 
+- name: Move dokuwiki to /var/lib/liquid/dokuwiki
+  shell: mv /opt/dokuwiki /var/lib/liquid
+
+- name: Link to new dokuwiki path
+  shell: ln -s /var/lib/liquid/dokuwiki /opt/dokuwiki
+
 - name: Set up file permissions
   file:
     path: /opt/dokuwiki
     state: directory
     owner: www-data
     group: www-data
-    recurse: true
-  tags:
-    - prerequisites
+    recurse: yes
+    follow: yes
 
 - when: liquid_services.dokuwiki.enabled
   block:

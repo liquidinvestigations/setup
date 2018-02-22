@@ -10,7 +10,6 @@ if grep -qs -- '-- placeholder --' /opt/liquid-core/liquid-core/liquidcore/site/
 fi
 
 cd /opt/liquid-core/liquid-core
-../venv/bin/python ./manage.py migrate
-chown liquid-apps: ../var/db.sqlite3
+sudo -u liquid-apps ../venv/bin/python ./manage.py migrate
 
 supervisorctl start liquid-core

@@ -32,12 +32,6 @@
     virtualenv: /opt/liquid-core/venv
     virtualenv_python: python3
 
-- name: Create the var folder
-  file:
-    path: /opt/liquid-core/var
-    state: directory
-    owner: liquid-apps
-
 - name: Collect django static files
   shell: ../venv/bin/python ./manage.py collectstatic --noinput
   args:
