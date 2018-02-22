@@ -9,7 +9,7 @@ if [ ! -s /opt/hoover/search/hoover/site/settings/secret_key.py ]; then
     # create secret keys without echoing
     set +x
     echo "SECRET_KEY = '`openssl rand -base64 48`'" > /opt/hoover/search/hoover/site/settings/secret_key.py
-    echo "SECRET_KEY = '`openssl rand -base64 48`'" > /opt/hoover/snoop/snoop/site/settings/secret_key.py
+    echo "SECRET_KEY = '`openssl rand -base64 48`'" > /opt/hoover/snoop2/snoop/secret_key.py
 )
 fi
 
@@ -22,11 +22,11 @@ echo "CLIENT_SECRET = '$CLIENT_SECRET'" >> /opt/hoover/search/hoover/site/settin
 sudo -u liquid-apps bash <<EOF
 set -x
 psql -lqt | cut -d \| -f 1 | grep -qw hoover-search || createdb hoover-search
-psql -lqt | cut -d \| -f 1 | grep -qw hoover-snoop || createdb hoover-snoop
+psql -lqt | cut -d \| -f 1 | grep -qw hoover-snoop2 || createdb hoover-snoop2
 /opt/hoover/bin/hoover search migrate
-/opt/hoover/bin/hoover snoop migrate
+/opt/hoover/bin/hoover snoop2 migrate
 EOF
 
 # Start services
-supervisorctl start hoover-elasticsearch hoover-search hoover-snoop hoover-tika
-supervisorctl start hoover-snoop-worker hoover-snoop-updater hoover-search-updater
+supervisorctl start hoover-elasticsearch hoover-search hoover-snoop2 hoover-tika
+supervisorctl start hoover-snoop2-worker hoover-snoop2-updater hoover-search-updater

@@ -21,18 +21,18 @@ supervisorctl start hoover-elasticsearch
 DAVROS_DATA_PATH=/var/lib/liquid/data/davros-sync
 
 # if the davros-sync collection exists, exit
-have_davros_sync=$(sudo -u liquid-apps /opt/hoover/bin/hoover snoop collection | grep davros-sync | wc -l)
+have_davros_sync=$(sudo -u liquid-apps /opt/hoover/bin/hoover snoop2 collection | grep davros-sync | wc -l)
 if [[ $have_davros_sync -ne 0 ]]; then exit 0; fi
 
 # create the davros-sync collection
 supervisorctl start hoover-tika
-supervisorctl start hoover-snoop
+supervisorctl start hoover-snoop2
 
 # create the davros-sync collection and walk / digest it
 sudo -u liquid-apps bash <<EOF
 set -x
-/opt/hoover/bin/hoover snoop createcollection '$DAVROS_DATA_PATH' davros-sync davros-sync "Davros Upload", "Davros Upload"
-/opt/hoover/bin/hoover snoop walk davros-sync
+/opt/hoover/bin/hoover snoop2 createcollection '$DAVROS_DATA_PATH' davros-sync davros-sync "Davros Upload", "Davros Upload"
+/opt/hoover/bin/hoover snoop2 walk davros-sync
 EOF
 
 # wait after hoover's tika
@@ -41,7 +41,7 @@ wait_url $tika_url
 
 sudo -u liquid-apps bash <<EOF
 set -x
-/opt/hoover/bin/hoover snoop worker digest
+/opt/hoover/bin/hoover snoop2 worker digest
 EOF
 
 supervisorctl stop hoover-tika
@@ -53,7 +53,7 @@ wait_url $es_url
 
 sudo -u liquid-apps bash <<EOF
 set -x
-/opt/hoover/bin/hoover snoop resetindex davros-sync
+/opt/hoover/bin/hoover snoop2 resetindex davros-sync
 EOF
 
 snoop_url="http://localhost:11941"
@@ -74,12 +74,12 @@ EOF
 #c.save()
 #EOF
 
-supervisorctl stop hoover-snoop
+supervisorctl stop hoover-snoop2
 supervisorctl stop hoover-elasticsearch
 
 sudo -u liquid-apps bash <<EOF
 set -x
-. /opt/hoover/venvs/snoop/bin/activate
-cd /opt/hoover/snoop
+. /opt/hoover/venvs/snoop2/bin/activate
+cd /opt/hoover/snoop2
 #py.test
 EOF

@@ -5,9 +5,9 @@ use_https: false
 # Default of different git repos checked out on the images
 git_repo_versions:
   hoover:
-    setup: master
+    setup: snoop2
     testdata: master
-    snoop: master
+    snoop2: master
     search: master
     ui: master
   hypothesis:
@@ -15,6 +15,6 @@ git_repo_versions:
     h_client_build: master
   discover: master
   liquid_core: master
-  setup: master
+  setup: snoop2
   web_ui: master
   ui_templates: master

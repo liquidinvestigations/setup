@@ -24,6 +24,9 @@ if [[ $have_testdata -ne 0 ]]; then exit 0; fi
 
 # create the testdata collection
 supervisorctl start hoover-tika
+echo "TODO update this script for snoop2"
+exit 1
+
 supervisorctl start hoover-snoop
 
 # create the testdata collection and walk / digest it
