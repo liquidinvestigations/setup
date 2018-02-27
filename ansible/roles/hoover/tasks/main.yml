@@ -85,8 +85,6 @@
     repo: https://github.com/hoover/testdata.git
     dest: /opt/hoover/testdata
     version: "{{ git_repo_versions.hoover.testdata }}"
-  tags:
-    - prerequisites
 
 - name: Download elasticsearch v2
   unarchive:
@@ -94,8 +92,6 @@
     dest: /opt/hoover
     remote_src: yes
     creates: /opt/hoover/elasticsearch-2.4.3
-  tags:
-    - prerequisites
 
 - name: Write the elasticsearch configuration file
   template:
@@ -117,8 +113,6 @@
     dest: /opt/hoover/tika-server.jar
     url: https://jenkins.liquiddemo.org/__images__/base/tika-server-1.17.jar
     checksum: "sha1:8f55705c8226c6efe2c095fee10bdefdda21b7e8"
-  tags:
-    - prerequisites
 
 #### INSTALL SCRIPTS ####
 - name: Create the libexec folder
