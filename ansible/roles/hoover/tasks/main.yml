@@ -42,6 +42,12 @@
   tags:
     - prerequisites
 
+- name: Create /var/lib/liquid/hoover directory
+  file:
+    path: /var/lib/liquid/hoover
+    state: directory
+    owner: liquid-apps
+
 - block:
   - name: Run hoover initial setup
     shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/master/install.py)"
