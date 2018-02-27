@@ -27,6 +27,8 @@ psql -lqt | cut -d \| -f 1 | grep -qw hoover-snoop2 || createdb hoover-snoop2
 /opt/hoover/bin/hoover snoop2 migrate
 EOF
 
+/opt/hoover/bin/hoover snoop2 downloadmagic
+
 # Start services
 supervisorctl start hoover-elasticsearch hoover-search hoover-snoop2 hoover-tika
 supervisorctl start hoover-snoop2-workers hoover-snoop2-updater hoover-search-updater
