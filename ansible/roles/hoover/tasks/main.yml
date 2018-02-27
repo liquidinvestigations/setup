@@ -52,6 +52,7 @@
       HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
       HOOVER_ES_URL: "http://localhost:14352"
       HOOVER_TIKA_URL: "http://localhost:15423"
+      HOOVER_SNOOP2_BLOBS: "/var/lib/liquid/hoover/blobs"
     args:
       executable: /bin/bash
       chdir: /opt
