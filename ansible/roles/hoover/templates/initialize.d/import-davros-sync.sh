@@ -46,14 +46,14 @@ supervisorctl start hoover-elasticsearch
 es_url="http://localhost:14352"
 wait_url $es_url
 
+snoop_url="http://localhost:11941"
+wait_url $snoop_url/collections/davros-sync/json
+
 sudo -u liquid-apps bash <<EOF
 set -x
 /opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/collections/davros-sync/json" --public
 /opt/hoover/bin/hoover search resetindex davros-sync
 EOF
-
-snoop_url="http://localhost:11941"
-wait_url $snoop_url/collections/davros-sync/json
 
 
 sudo -u liquid-apps bash <<EOF
