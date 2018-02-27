@@ -48,7 +48,7 @@ wait_url $es_url
 
 sudo -u liquid-apps bash <<EOF
 set -x
-/opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/davros-sync/json" --public
+/opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/collections/davros-sync/json" --public
 /opt/hoover/bin/hoover search resetindex davros-sync
 EOF
 
