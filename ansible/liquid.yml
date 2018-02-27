@@ -8,6 +8,7 @@
   roles:
     - common
     - devel
+    - python3
     - network
     - discover
     - liquid-core
