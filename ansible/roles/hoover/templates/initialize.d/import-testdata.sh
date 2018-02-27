@@ -40,11 +40,6 @@ EOF
 tika_url="http://localhost:15423"
 wait_url $tika_url
 
-sudo -u liquid-apps bash <<EOF
-set -x
-/opt/hoover/bin/hoover snoop worker digest
-EOF
-
 supervisorctl stop hoover-tika
 supervisorctl start hoover-elasticsearch
 
