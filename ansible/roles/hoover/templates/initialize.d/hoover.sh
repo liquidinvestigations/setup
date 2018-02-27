@@ -29,4 +29,4 @@ EOF
 
 # Start services
 supervisorctl start hoover-elasticsearch hoover-search hoover-snoop2 hoover-tika
-supervisorctl start hoover-snoop2-worker hoover-snoop2-updater hoover-search-updater
+supervisorctl start hoover-snoop2-workers hoover-snoop2-updater hoover-search-updater
