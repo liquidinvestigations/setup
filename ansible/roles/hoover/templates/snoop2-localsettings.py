@@ -13,3 +13,5 @@ DATABASES = {
 ALLOWED_HOSTS = ["localhost"]
 
 SNOOP_TIKA_URL = 'http://localhost:15423'
+
+SNOOP_BLOB_STORAGE = '/var/lib/liquid/hoover/blobs'
