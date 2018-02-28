@@ -6,7 +6,6 @@ use_https: false
 git_repo_versions:
   hoover:
     setup: snoop2
-    testdata: master
     snoop2: master
     search: master
     ui: master

@@ -55,9 +55,9 @@ $ bin/install
 
 
 ## First boot
-On first (re)boot, the bundle will configure databases, and import the
-[testdata](https://github.com/hoover/testdata) collection into Hoover. This
-will take a few minutes. You can follow the progress in the log file:
+On first (re)boot, the bundle will configure the system, the apps and their
+databases. This will take a few minutes. You can follow the progress in the log
+file:
 
 ```
 tail -f /var/log/rc.local.log

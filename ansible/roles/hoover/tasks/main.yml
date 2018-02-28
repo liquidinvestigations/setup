@@ -87,12 +87,6 @@
     dest: /opt/hoover/ui
     version: "{{ git_repo_versions.hoover.ui }}"
 
-- name: Clone the testdata repo
-  git:
-    repo: https://github.com/hoover/testdata.git
-    dest: /opt/hoover/testdata
-    version: "{{ git_repo_versions.hoover.testdata }}"
-
 - name: Download elasticsearch v2
   unarchive:
     src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.3.tar.gz

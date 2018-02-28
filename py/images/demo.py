@@ -65,21 +65,13 @@ class DemoBuilder(Builder_cloud):
         print("\nRunning ansible...")
         self.run_ansible('image', None, None, {})
 
-    def kill_testdata(self, target):
-        import_testdata = (
-            target.mount_point /
-            'opt/hoover/libexec/import_testdata'
-        )
-        with import_testdata.open('w') as f:
-            f.write('#!/bin/bash\necho "no testdata"\n')
-
     def copy_users(self, target, users_json):
         target_users_json = target.mount_point / 'var/lib/liquid/core/users.json'
         with users_json.open('rb') as f:
             with target_users_json.open('wb') as g:
                 g.write(f.read())
 
-    def setup_demo(self, image, config_yml, users_json, shell, no_testdata, serial):
+    def setup_demo(self, image, config_yml, users_json, shell, serial):
         with self.open_target(image) as target:
             if shell:
                 print("Running interactive shell...")
@@ -102,9 +94,6 @@ class DemoBuilder(Builder_cloud):
             print("\nCopying the users file...")
             self.copy_users(target, users_json)
 
-            if no_testdata:
-                self.kill_testdata(target)
-
 def install():
     from argparse import ArgumentParser
     parser = ArgumentParser(description="Provision a nightly image as demo server")
@@ -112,7 +101,6 @@ def install():
     parser.add_argument('config_yml', help="Path to ansible configuration file")
     parser.add_argument('users_json', help="Path to JSON file with initial users")
     parser.add_argument('--shell', action='store_true', help="Open shell in chroot")
-    parser.add_argument('--no-testdata', action='store_true', help="Skip testdata")
     parser.add_argument('--serial', action='store_true',
                         help="Use ttys0 as serial console")
     options = parser.parse_args()
@@ -123,6 +111,5 @@ def install():
         Path(options.config_yml),
         Path(options.users_json),
         options.shell,
-        options.no_testdata,
         options.serial,
     )
