@@ -29,9 +29,7 @@ HOOVER_ELASTICSEARCH_URL = 'http://localhost:14352'
 HOOVER_UI_ROOT = '/opt/hoover/ui/build'
 
 HOOVER_OAUTH_LIQUID_URL = "{{ http_scheme }}://{{ liquid_domain }}"
-{% if  use_https %}
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-{% endif %}
 
 from .secret_key import SECRET_KEY
 from .oauth import CLIENT_ID as HOOVER_OAUTH_LIQUID_CLIENT_ID

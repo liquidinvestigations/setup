@@ -1,6 +1,7 @@
 {
   "domain": "{{ liquid_domain }}",
   "use_https": {{ use_https | to_json }},
+  "http_scheme": {{ http_scheme | to_json }},
   "apps": {{ liquid_apps | to_json }},
   "vpn": {{ liquid_vpn | to_json }}
 }
