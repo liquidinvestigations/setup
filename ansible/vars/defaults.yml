@@ -39,8 +39,7 @@ use_https: false
 git_repo_versions:
   hoover:
     setup: master
-    testdata: master
-    snoop: master
+    snoop2: master
     search: master
     ui: master
   hypothesis:

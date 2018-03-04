@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+cd /opt/hoover/snoop2
+source /opt/hoover/venvs/snoop2/bin/activate
+exec ./manage.py runworkers

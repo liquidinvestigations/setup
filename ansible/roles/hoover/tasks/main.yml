@@ -42,6 +42,12 @@
   tags:
     - prerequisites
 
+- name: Create /var/lib/liquid/hoover directory
+  file:
+    path: /var/lib/liquid/hoover
+    state: directory
+    owner: liquid-apps
+
 - block:
   - name: Run hoover initial setup
     shell: "python3 <(curl -sL https://github.com/hoover/setup/raw/master/install.py)"
@@ -52,6 +58,7 @@
       HOOVER_ALLOWED_HOSTS: "hoover.{{ liquid_domain }}"
       HOOVER_ES_URL: "http://localhost:14352"
       HOOVER_TIKA_URL: "http://localhost:15423"
+      HOOVER_SNOOP2_BLOBS: "/var/lib/liquid/hoover/blobs"
     args:
       executable: /bin/bash
       chdir: /opt
@@ -68,23 +75,17 @@
     dest: /opt/hoover/search
     version: "{{ git_repo_versions.hoover.search }}"
 
-- name: Update source code for hoover snoop
+- name: Update source code for hoover snoop2
   git:
-    repo: https://github.com/hoover/snoop.git
-    dest: /opt/hoover/snoop
-    version: "{{ git_repo_versions.hoover.snoop }}"
+    repo: https://github.com/hoover/snoop2.git
+    dest: /opt/hoover/snoop2
+    version: "{{ git_repo_versions.hoover.snoop2 }}"
 
 - name: Update source code for hoover ui
   git:
     repo: https://github.com/hoover/ui.git
     dest: /opt/hoover/ui
     version: "{{ git_repo_versions.hoover.ui }}"
-
-- name: Clone the testdata repo
-  git:
-    repo: https://github.com/hoover/testdata.git
-    dest: /opt/hoover/testdata
-    version: "{{ git_repo_versions.hoover.testdata }}"
 
 - name: Download elasticsearch v2
   unarchive:
@@ -129,10 +130,10 @@
   with_items:
     - elasticsearch
     - runserver-search
-    - runserver-snoop
-    - snoop-updater
+    - runserver-snoop2
+    - snoop2-updater
     - search-updater
-    - snoop-worker
+    - snoop2-workers
     - tika
 
 - name: Set permissions on the cache folder
@@ -144,21 +145,16 @@
     group: liquid-apps
     recurse: true
 
-- name: Create the testing_local.py config for snoop
-  copy:
-    src: snoop-testing-local.py
-    dest: /opt/hoover/snoop/snoop/site/settings/testing_local.py
-
-- name: Create the local.py config for snoop
+- name: Create the local.py config for snoop2
   template:
-    src: snoop-local.py
-    dest: /opt/hoover/snoop/snoop/site/settings/local.py
+    src: snoop2-localsettings.py
+    dest: /opt/hoover/snoop2/snoop/localsettings.py
   tags:
     - configure
 
-- name: Touch the secret_key.py config for snoop
+- name: Touch the secret_key.py config for snoop2
   file:
-    dest: /opt/hoover/snoop/snoop/site/settings/secret_key.py
+    dest: /opt/hoover/snoop2/snoop/secret_key.py
     owner: liquid-apps
     group: liquid-apps
     state: touch
