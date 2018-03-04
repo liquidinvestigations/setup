@@ -218,7 +218,7 @@
     dest: /opt/common/boot.sh
     mode: 0755
 
-- name: Start boot script
+- name: Insert line in rc.local to run /opt/setup/libexec/boot
   lineinfile:
     dest: /etc/rc.local
     insertbefore: "exit 0"

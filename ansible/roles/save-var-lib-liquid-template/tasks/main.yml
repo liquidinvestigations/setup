@@ -1,0 +1,8 @@
+---
+- name: Remove /opt/var-lib-liquid-template if it exists
+  file:
+    path: /opt/var-lib-liquid-template
+    state: absent
+
+- name: Save /opt/var-lib-liquid-template from /var/lib/liquid
+  command: cp -a /var/lib/liquid /opt/var-lib-liquid-template
