@@ -34,7 +34,7 @@ liquid_ssh:
 
 devel: false
 use_https: false
-http_scheme: null
+http_scheme: "{{ 'https' if use_https else 'http' }}"
 
 # Default of different git repos checked out on the images
 git_repo_versions:
