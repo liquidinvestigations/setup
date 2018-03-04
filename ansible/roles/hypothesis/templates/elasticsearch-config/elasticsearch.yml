@@ -5,3 +5,5 @@ http.port: 14312
 transport.tcp.port: 14313
 path.data: /var/lib/liquid/data/hypothesis/elasticsearch/data
 path.logs: /var/lib/liquid/data/hypothesis/elasticsearch/logs
+path.plugins: /var/lib/liquid/data/hypothesis/elasticsearch/plugins
+path.scripts: /var/lib/liquid/data/hypothesis/elasticsearch/scripts

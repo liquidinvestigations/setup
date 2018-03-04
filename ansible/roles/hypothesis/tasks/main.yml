@@ -94,12 +94,14 @@
     - hypothesis/elasticsearch
     - hypothesis/elasticsearch/logs
     - hypothesis/elasticsearch/data
+    - hypothesis/elasticsearch/plugins
+    - hypothesis/elasticsearch/scripts
 
 - name: Install elasticsearch ICU plugin
   command: bin/plugin install elasticsearch/elasticsearch-analysis-icu/2.7.0
   args:
     chdir: /opt/hypothesis/elasticsearch-1.7.2
-    creates: /opt/hypothesis/elasticsearch-1.7.2/plugins/analysis-icu
+    creates: /var/lib/liquid/data/hypothesis/elasticsearch/plugins/analysis-icu
 
 - name: Create the libexec folder
   file:
