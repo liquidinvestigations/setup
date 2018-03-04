@@ -10,7 +10,7 @@ function wait_url {
     until $(curl --connect-timeout 3 --max-time 20 --output /dev/null --silent --head --fail $1); do
         sleep 7
         ((X=X+1))
-        if [[ $X -gt 20 ]]; then
+        if [[ $X -gt 40 ]]; then
             echo "wait_url: $1 timed out" >&2
             exit 1;
         fi
