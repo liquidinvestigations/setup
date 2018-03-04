@@ -2,6 +2,8 @@
 set -e
 set -x
 
+return # TODO fix davros-sync, invalidate filesystem.walk tasks
+
 cd /opt/hoover
 
 function wait_url {
