@@ -1,1 +1,1 @@
-  http_scheme: "{{ 'https' if use_https else 'http' }}"
+http_scheme: "{{ http_scheme or ('https' if use_https else 'http') }}"
