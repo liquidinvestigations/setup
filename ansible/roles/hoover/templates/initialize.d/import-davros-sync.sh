@@ -2,7 +2,7 @@
 set -e
 set -x
 
-return # TODO fix davros-sync, invalidate filesystem.walk tasks
+exit 0 # TODO fix davros-sync, invalidate filesystem.walk tasks
 
 cd /opt/hoover
 
