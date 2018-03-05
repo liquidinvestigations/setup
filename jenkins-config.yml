@@ -5,7 +5,7 @@ use_https: false
 # Default of different git repos checked out on the images
 git_repo_versions:
   hoover:
-    setup: snoop2
+    setup: master
     snoop2: master
     search: master
     ui: master
