@@ -57,6 +57,7 @@
     - postgresql-server-dev-all
     - python-psycopg2 # so that ansible can manage postgres users and dbs
     - openssh-server
+    - rabbitmq-server
   tags:
     - prerequisites
 
@@ -135,10 +136,42 @@
     state: directory
   with_items:
     - /var/lib/liquid
+    - /var/lib/liquid/data
+    - /var/lib/liquid/data/postgresql
     - /var/lib/liquid/conf
     - /var/lib/liquid/https
     - /var/lib/liquid/https/nginx
     - /var/lib/liquid/https/certs
+
+- name: Write postgresql configuration file
+  copy:
+    src: postgresql.conf
+    dest: /etc/postgresql/9.5/main/postgresql.conf
+
+- name: Move postgresql data
+  shell: mv /var/lib/postgresql/9.5 /var/lib/liquid/data/postgresql/
+  args:
+    creates: /var/lib/liquid/data/postgresql/9.5
+
+- name: Move rabbitmq data
+  shell: mv /var/lib/rabbitmq /var/lib/liquid/data/
+  args:
+    creates: /var/lib/liquid/data/rabbitmq
+
+- name: Link rabbitmq data to new location
+  file:
+    src: /var/lib/liquid/data/rabbitmq
+    path: /var/lib/rabbitmq
+    state: link
+    force: true
+
+- name: Fix postgresql file dependencies
+  file:
+    path: /var/lib/liquid/data/postgresql
+    state: directory
+    owner: postgres
+    group: postgres
+    recurse: true
 
 - name: Put configuration in /var/lib/liquid/conf/options.json
   template:
@@ -185,7 +218,7 @@
     dest: /opt/common/boot.sh
     mode: 0755
 
-- name: Start boot script
+- name: Insert line in rc.local to run /opt/setup/libexec/boot
   lineinfile:
     dest: /etc/rc.local
     insertbefore: "exit 0"

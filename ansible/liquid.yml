@@ -18,3 +18,4 @@
     - {tags: ['apps'], role: dokuwiki}
     - {tags: ['apps'], role: matrix}
     - {tags: ['apps'], role: davros}
+    - save-var-lib-liquid-template

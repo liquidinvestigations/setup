@@ -1,3 +1,4 @@
+import os.path
 import re
 
 DEBUG = {% if devel %}True{% else %}False{% endif %}
@@ -9,13 +10,6 @@ CORS_ORIGIN_REGEX_WHITELIST = [
     '^(https?://)?(\w+\.)?' + re.escape('{{ liquid_domain }}') + r'$',
 ]
 CORS_ALLOW_CREDENTIALS = True
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/opt/liquid-core/var/db.sqlite3',
-    }
-}
 
 INVOKE_HOOK = 'sudo /opt/common/libexec/invoke-hook'
 
@@ -46,5 +40,12 @@ DISCOVERY_URL = 'http://localhost:13777'
 LIQUID_SETUP_RECONFIGURE = 'sudo /opt/setup/libexec/liquid-core-reconfigure'
 LIQUID_CORE_VAR = '/var/lib/liquid/core'
 LIQUID_SUPERVISORCTL = 'sudo /usr/bin/supervisorctl'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(LIQUID_CORE_VAR, 'db.sqlite3'),
+    }
+}
 
 from .secret_key import SECRET_KEY

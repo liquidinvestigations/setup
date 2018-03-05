@@ -5,7 +5,6 @@
     state: latest
   with_items:
     - python2.7-dev
-    - rabbitmq-server
     - libffi-dev
   tags:
     - prerequisites
@@ -84,17 +83,34 @@
     - data
     - logs
 
+- name: Create elasticsearch data and log dirs
+  file:
+    path: "/var/lib/liquid/data/{{item}}"
+    owner: liquid-apps
+    group: liquid-apps
+    state: directory
+  with_items:
+    - hypothesis
+    - hypothesis/elasticsearch
+    - hypothesis/elasticsearch/logs
+    - hypothesis/elasticsearch/data
+    - hypothesis/elasticsearch/plugins
+    - hypothesis/elasticsearch/scripts
+
 - name: Install elasticsearch ICU plugin
   command: bin/plugin install elasticsearch/elasticsearch-analysis-icu/2.7.0
   args:
     chdir: /opt/hypothesis/elasticsearch-1.7.2
-    creates: /opt/hypothesis/elasticsearch-1.7.2/plugins/analysis-icu
+    creates: /var/lib/liquid/data/hypothesis/elasticsearch/plugins/analysis-icu
 
 - name: Create the libexec folder
   file:
     path: /opt/hypothesis/libexec
     state: directory
     mode: 0755
+
+- name: Link the secrets bash script
+  shell: ln -s /var/lib/liquid/data/hypothesis/secrets.sh /opt/hypothesis/libexec/secrets.sh
 
 - name: Create the elasticsearch run script
   template:

@@ -3,3 +3,7 @@ index.number_of_replicas: 0
 network.host: 127.0.0.1
 http.port: 14352
 transport.tcp.port: 14353
+path.data: /var/lib/liquid/hoover/elasticsearch/data
+path.logs: /var/lib/liquid/hoover/elasticsearch/logs
+path.plugins: /var/lib/liquid/hoover/elasticsearch/plugins
+path.scripts: /var/lib/liquid/hoover/elasticsearch/scripts
