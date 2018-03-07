@@ -9,13 +9,6 @@
   tags:
     - prerequisites
 
-- name: Create /opt/dokuwiki directory
-  file:
-    path: /opt/dokuwiki
-    state: directory
-  tags:
-    - prerequisites
-
 - name: Add user liquid-apps to group www-data
   user:
     name: liquid-apps
@@ -24,36 +17,49 @@
   tags:
     - prerequisites
 
-- name: Download DokuWiki stable source code
-  shell: "wget https://download.dokuwiki.org/src/dokuwiki/dokuwiki-2017-02-19e.tgz -O - | tar -xzf - -C /opt/dokuwiki --strip 1"
-  tags:
-    - prerequisites
-
-- name: Create dokuwiki bootstrap template directory
-  file:
-    path: /opt/dokuwiki/lib/tpl/bootstrap-template
-    state: directory
-  tags:
-    - prerequisites
-
-- name: Download DokuWiki bootstrap template coode
-  shell: "wget https://github.com/LotarProject/dokuwiki-template-bootstrap3/tarball/2ae0cefbd25ce2304914bd01e6350d4eb83310f3 -O - | tar -xzf - -C /opt/dokuwiki/lib/tpl/bootstrap-template --strip 1"
-  tags:
-    - prerequisites
-
-- name: Move dokuwiki to /var/lib/liquid/dokuwiki
-  shell: mv /opt/dokuwiki /var/lib/liquid
-  args:
-    creates: /var/lib/liquid/dokuwiki
-
-- name: Link to new dokuwiki path
-  file:
-    src: /var/lib/liquid/dokuwiki
+- name: Find out if dokuwiki is installed
+  stat:
     path: /opt/dokuwiki
-    state: link
-    force: yes
-    owner: www-data
-    group: www-data
+  register: dokuwiki
+
+- when: dokuwiki.stat.exists == False
+  name: Install Dokuwiki
+  block:
+  - name: Create /opt/dokuwiki directory
+    file:
+      path: /opt/dokuwiki
+      state: directory
+    tags:
+      - prerequisites
+
+  - name: Download DokuWiki stable source code
+    shell: "wget https://download.dokuwiki.org/src/dokuwiki/dokuwiki-2017-02-19e.tgz -O - | tar -xzf - -C /opt/dokuwiki --strip 1"
+    tags:
+      - prerequisites
+
+  - name: Create dokuwiki bootstrap template directory
+    file:
+      path: /opt/dokuwiki/lib/tpl/bootstrap-template
+      state: directory
+    tags:
+      - prerequisites
+
+  - name: Download DokuWiki bootstrap template coode
+    shell: "wget https://github.com/LotarProject/dokuwiki-template-bootstrap3/tarball/2ae0cefbd25ce2304914bd01e6350d4eb83310f3 -O - | tar -xzf - -C /opt/dokuwiki/lib/tpl/bootstrap-template --strip 1"
+    tags:
+      - prerequisites
+
+  - name: Move dokuwiki to /var/lib/liquid/dokuwiki
+    shell: mv /opt/dokuwiki /var/lib/liquid
+
+  - name: Link to new dokuwiki path
+    file:
+      src: /var/lib/liquid/dokuwiki
+      path: /opt/dokuwiki
+      state: link
+      force: yes
+      owner: www-data
+      group: www-data
 
 - name: Set up file permissions
   file:
