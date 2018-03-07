@@ -110,7 +110,13 @@
     mode: 0755
 
 - name: Link the secrets bash script
-  shell: ln -s /var/lib/liquid/data/hypothesis/secrets.sh /opt/hypothesis/libexec/secrets.sh
+  file:
+    src: /var/lib/liquid/data/hypothesis/secrets.sh
+    path: /opt/hypothesis/libexec/secrets.sh
+    owner: liquid-apps
+    group: liquid-apps
+    state: link
+    force: yes
 
 - name: Create the elasticsearch run script
   template:
