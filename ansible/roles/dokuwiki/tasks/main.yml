@@ -47,14 +47,13 @@
     creates: /var/lib/liquid/dokuwiki
 
 - name: Link to new dokuwiki path
-  file: ln -s /var/lib/liquid/dokuwiki /opt/dokuwiki
+  file:
     src: /var/lib/liquid/dokuwiki
     path: /opt/dokuwiki
     state: link
     force: yes
     owner: www-data
     group: www-data
-
 
 - name: Set up file permissions
   file:
