@@ -43,9 +43,18 @@
 
 - name: Move dokuwiki to /var/lib/liquid/dokuwiki
   shell: mv /opt/dokuwiki /var/lib/liquid
+  args:
+    creates: /var/lib/liquid/dokuwiki
 
 - name: Link to new dokuwiki path
-  shell: ln -s /var/lib/liquid/dokuwiki /opt/dokuwiki
+  file: ln -s /var/lib/liquid/dokuwiki /opt/dokuwiki
+    src: /var/lib/liquid/dokuwiki
+    path: /opt/dokuwiki
+    state: link
+    force: yes
+    owner: www-data
+    group: www-data
+
 
 - name: Set up file permissions
   file:
