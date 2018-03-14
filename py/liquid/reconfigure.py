@@ -85,6 +85,8 @@ def on_reconfigure():
     if tags:
         ansible(vars, tags)
 
+    run('supervisorctl update')
+
     if changes.intersection({'services'}):
         run('/opt/common/initialize.sh')
 
@@ -109,8 +111,6 @@ def on_reconfigure():
             run('systemctl reload-or-restart ssh')
         else:
             run('systemctl stop ssh')
-
-    run('supervisorctl update')
 
     if first_boot:
         run('supervisorctl restart all')
