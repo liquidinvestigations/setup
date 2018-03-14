@@ -1,2 +1,3 @@
-Defaults!/opt/common/libexec/invoke-hook env_keep=LIQUID_HOOK_DATA
+Defaults!/opt/common/libexec/invoke-hook env_keep="LIQUID_HOOK_DATA PYTHONUNBUFFERED"
+Defaults!/opt/setup/libexec/liquid-core-reconfigure env_keep="PYTHONUNBUFFERED"
 liquid-apps ALL=(ALL) NOPASSWD: /opt/common/libexec/invoke-hook, /opt/setup/libexec/liquid-core-reconfigure, /opt/setup/libexec/shutdown, /usr/bin/supervisorctl, /opt/setup/libexec/vpn-client-config

@@ -11,7 +11,7 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-INVOKE_HOOK = 'sudo /opt/common/libexec/invoke-hook'
+INVOKE_HOOK = 'sudo PYTHONUNBUFFERED=doit /opt/common/libexec/invoke-hook'
 
 {% if liquid_services.hoover.enabled %}
 HOOVER_APP_URL = 'http://hoover.{{ liquid_domain }}'
@@ -37,7 +37,7 @@ LIQUID_DOMAIN = '{{ liquid_domain }}'
 
 DISCOVERY_URL = 'http://localhost:13777'
 
-LIQUID_SETUP_RECONFIGURE = 'sudo /opt/setup/libexec/liquid-core-reconfigure'
+LIQUID_SETUP_RECONFIGURE = 'sudo PYTHONUNBUFFERED=doit /opt/setup/libexec/liquid-core-reconfigure'
 LIQUID_CORE_VAR = '/var/lib/liquid/core'
 LIQUID_SUPERVISORCTL = 'sudo /usr/bin/supervisorctl'
 
