@@ -58,31 +58,32 @@ def on_reconfigure():
     old_vars = get_current_vars()
     first_boot = not old_vars
     repair = arg_options.repair
+    run_all = first_boot or repair
 
     print('old_vars:', json.dumps(old_vars))
     print('vars:', json.dumps(vars))
-    print('first_boot:', first_boot, 'repair:', repair)
+    print('first_boot:', first_boot, 'repair:', repair, 'run_all:', run_all)
 
     changes = set()
 
-    if vars['liquid_lan'] != old_vars.get('liquid_lan'):
+    if run_all or vars['liquid_lan'] != old_vars.get('liquid_lan'):
         changes.add('lan')
 
-    if vars['liquid_wan'] != old_vars.get('liquid_wan'):
+    if run_all or vars['liquid_wan'] != old_vars.get('liquid_wan'):
         changes.add('wan')
 
-    if vars['liquid_ssh'] != old_vars.get('liquid_ssh'):
+    if run_all or vars['liquid_ssh'] != old_vars.get('liquid_ssh'):
         changes.add('ssh')
 
-    if vars['liquid_vpn'] != old_vars.get('liquid_vpn'):
+    if run_all or vars['liquid_vpn'] != old_vars.get('liquid_vpn'):
         changes.add('vpn')
 
-    if vars['liquid_services'] != old_vars.get('liquid_services'):
+    if run_all or vars['liquid_services'] != old_vars.get('liquid_services'):
         changes.add('services')
 
     print('changes:', changes)
 
-    if first_boot or repair:
+    if run_all:
         tags = 'configure'
 
     else:
@@ -120,7 +121,7 @@ def on_reconfigure():
         else:
             run('systemctl stop ssh')
 
-    if first_boot or repair:
+    if run_all:
         run('supervisorctl restart all')
 
     else:
