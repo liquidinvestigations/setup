@@ -21,6 +21,8 @@
   stat:
     path: /opt/dokuwiki
   register: dokuwiki
+  tags:
+    - prerequisites
 
 - when: dokuwiki.stat.exists == False
   name: Install Dokuwiki
