@@ -14,23 +14,23 @@ CORS_ALLOW_CREDENTIALS = True
 INVOKE_HOOK = 'sudo PYTHONUNBUFFERED=doit /opt/common/libexec/invoke-hook'
 
 {% if liquid_services.hoover.enabled %}
-HOOVER_APP_URL = 'http://hoover.{{ liquid_domain }}'
+HOOVER_APP_URL = '{{ http_scheme }}://hoover.{{ liquid_domain }}'
 {% endif %}
 
 {% if liquid_services.hypothesis.enabled %}
-HYPOTHESIS_APP_URL = 'http://hypothesis.{{ liquid_domain }}'
+HYPOTHESIS_APP_URL = '{{ http_scheme }}://hypothesis.{{ liquid_domain }}'
 {% endif %}
 
 {% if liquid_services.dokuwiki.enabled %}
-DOKUWIKI_APP_URL = 'http://dokuwiki.{{ liquid_domain }}'
+DOKUWIKI_APP_URL = '{{ http_scheme }}://dokuwiki.{{ liquid_domain }}'
 {% endif %}
 
 {% if liquid_services.matrix.enabled %}
-MATRIX_APP_URL = 'http://riot.{{ liquid_domain }}'
+MATRIX_APP_URL = '{{ http_scheme }}://riot.{{ liquid_domain }}'
 {% endif %}
 
 {% if liquid_services.davros.enabled %}
-DAVROS_APP_URL = 'http://davros.{{ liquid_domain }}'
+DAVROS_APP_URL = '{{ http_scheme }}://davros.{{ liquid_domain }}'
 {% endif %}
 
 LIQUID_DOMAIN = '{{ liquid_domain }}'
