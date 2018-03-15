@@ -1,1 +1,1 @@
-LIQUID_URL = '{{ http_scheme }}://{{ liquid_domain }}'
+LIQUID_URL = "{{ 'https' if use_https else 'http' }}://{{ liquid_domain }}"

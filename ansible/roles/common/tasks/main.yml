@@ -254,6 +254,13 @@
     src: nginx/https.conf
     dest: /var/lib/liquid/https/nginx/https.conf
 
+- name: nginx real_scheme variable
+  template:
+    src: nginx/real_scheme.conf
+    dest: /etc/nginx/conf.d/real_scheme.conf
+  tags:
+    - configure
+
 - name: Reload nginx after starting services
   copy:
     src: initialize.d/99-nginx-reload.sh

@@ -28,7 +28,7 @@ HOOVER_UPLOADS_ROOT = str(base_dir / 'uploads')
 HOOVER_ELASTICSEARCH_URL = 'http://localhost:14352'
 HOOVER_UI_ROOT = '/opt/hoover/ui/build'
 
-HOOVER_OAUTH_LIQUID_URL = "{{ http_scheme }}://{{ liquid_domain }}"
+HOOVER_OAUTH_LIQUID_URL = "{{ 'https' if use_https else 'http' }}://{{ liquid_domain }}"
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 from .secret_key import SECRET_KEY
