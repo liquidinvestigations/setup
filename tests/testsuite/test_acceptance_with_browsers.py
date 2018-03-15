@@ -39,7 +39,7 @@ if NOAPPS:
 
 BROWSERS = [
     'firefox',
-    'chrome',
+#    'chrome',
 ]
 
 chrome_options = ChromeOptions()
