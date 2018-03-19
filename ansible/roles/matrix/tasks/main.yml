@@ -47,6 +47,11 @@
   tags:
     - prerequisites
 
+- name: Install liquid oauth password backend
+  copy:
+    src: liquid_auth_provider.py
+    dest: /opt/matrix/synapse/lib/python2.7/site-packages/liquid_auth_provider.py
+
 - name: Download custom riot release
   unarchive:
     src: https://jenkins.liquiddemo.org/job/liquidinvestigations/job/riot-build/job/master/lastSuccessfulBuild/artifact/riot-build/riot-liquid.tar.gz
