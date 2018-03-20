@@ -267,10 +267,6 @@ def test_login_into_matrix(browser):
 
     # navigate to matrix and login
     browser.find_by_text('Matrix').click()
-    assert browser.is_element_present_by_text("Sign in with")
-    browser.find_by_css('.mx_Login_field[name=username]').fill(ADMIN_USERNAME)
-    browser.find_by_css('.mx_Login_field[name=password]').fill(ADMIN_PASSWORD)
-    browser.find_by_css('.mx_Login_submit').click()
 
     # we should be logged in now, let's check
     #assert browser.is_element_present_by_text(ADMIN_USERNAME)
