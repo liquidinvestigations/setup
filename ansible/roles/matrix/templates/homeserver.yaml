@@ -228,3 +228,8 @@ password_config:
    # Uncomment and change to a secret random string for extra security.
    # DO NOT CHANGE THIS AFTER INITIAL SETUP!
    #pepper: ""
+
+password_providers:
+  - module: "liquid_auth_provider.RestAuthProvider"
+    config:
+      endpoint: "{{ oauth_server_url }}"
