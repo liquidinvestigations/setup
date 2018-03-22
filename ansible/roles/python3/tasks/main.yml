@@ -58,19 +58,27 @@
         dest="/tmp/"
         copy=no
         creates="/tmp/Python-{{version}}"
+      tags:
+        - prerequisites
     - name: "configure python{{version}} build"
       command: ./configure
       args:
         chdir: "/tmp/Python-{{version}}"
         creates: "/tmp/Python-{{version}}/Makefile"
+      tags:
+        - prerequisites
     - name: "build python{{version}}"
       # not using make module to be able to use -j and creates option to fully skip step
       command: make -j{{threads}}
       args:
         chdir: "/tmp/Python-{{version}}"
         creates: "/tmp/Python-{{version}}/python"
+      tags:
+        - prerequisites
     - name: "install python{{version}}"
       become: yes
       make:
         chdir: "/tmp/Python-{{version}}"
         target: altinstall
+      tags:
+        - prerequisites
