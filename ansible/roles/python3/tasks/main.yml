@@ -26,12 +26,7 @@
 
 - when: ansible_architecture == 'aarch64'
   block:
-  - hosts: all
-  vars:
-    version: 3.6.4
-    threads: 4
-  tasks:
-    - name: "python{{version}} runtime&build dependencies"
+    - name: "python3.6.4 runtime&build dependencies"
       become: yes
       apt: name={{item}}
       with_items:
@@ -48,37 +43,35 @@
         - libexpat1-dev
         - liblzma-dev
         - zlib1g-dev
-    - name: "Download python{{version}}"
+    - name: "Download python3.6.4"
       get_url:
-        url="https://www.python.org/ftp/python/{{version}}/Python-{{version}}.tar.xz"
-        dest="/tmp/Python-{{version}}.tar.xz"
-    - name: "Unarchive python{{version}}"
+        url="https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz"
+        dest="/tmp/Python-3.6.4.tar.xz"
+    - name: "Unarchive python3.6.4"
       unarchive:
-        src="/tmp/Python-{{version}}.tar.xz"
+        src="/tmp/Python-3.6.4.tar.xz"
         dest="/tmp/"
         copy=no
-        creates="/tmp/Python-{{version}}"
+        creates="/tmp/Python-3.6.4"
       tags:
         - prerequisites
-    - name: "configure python{{version}} build"
+    - name: "configure python3.6.4 build"
       command: ./configure
       args:
-        chdir: "/tmp/Python-{{version}}"
-        creates: "/tmp/Python-{{version}}/Makefile"
+        chdir: "/tmp/Python-3.6.4"
+        creates: "/tmp/Python-3.6.4/Makefile"
       tags:
         - prerequisites
-    - name: "build python{{version}}"
-      # not using make module to be able to use -j and creates option to fully skip step
-      command: make -j{{threads}}
+    - name: "build python3.6.4"
       args:
-        chdir: "/tmp/Python-{{version}}"
-        creates: "/tmp/Python-{{version}}/python"
+        chdir: "/tmp/Python-3.6.4"
+        creates: "/tmp/Python-3.6.4/python"
       tags:
         - prerequisites
-    - name: "install python{{version}}"
+    - name: "install python3.6.4"
       become: yes
       make:
-        chdir: "/tmp/Python-{{version}}"
+        chdir: "/tmp/Python-3.6.4"
         target: altinstall
       tags:
         - prerequisites
