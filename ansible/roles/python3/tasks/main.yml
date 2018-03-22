@@ -63,6 +63,7 @@
       tags:
         - prerequisites
     - name: "build python3.6.4"
+      command: make -j4
       args:
         chdir: "/tmp/Python-3.6.4"
         creates: "/tmp/Python-3.6.4/python"
