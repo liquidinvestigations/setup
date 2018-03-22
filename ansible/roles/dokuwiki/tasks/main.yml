@@ -22,7 +22,7 @@
     path: /opt/dokuwiki
   register: dokuwiki
 
-- when: dokuwiki.stat.exists == False
+- when: dokuwiki.stat.exists == False or dokuwiki.stat.isdir == True
   name: Install Dokuwiki
   block:
   - name: Create /opt/dokuwiki directory
