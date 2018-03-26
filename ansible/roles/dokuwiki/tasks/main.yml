@@ -62,6 +62,12 @@
       owner: www-data
       group: www-data
 
+  - name: Install oauth plugin
+    git:
+      repo: https://github.com/liquidinvestigations/dokuwiki-plugin-oauth
+      dest: /opt/dokuwiki/lib/plugins/oauth
+      version: "{{ git_repo_versions.dokuwiki_plugin_oauth }}"
+
 
 - when: liquid_services.dokuwiki.enabled
   block:
