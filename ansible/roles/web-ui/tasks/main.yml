@@ -16,25 +16,27 @@
     repo: https://github.com/liquidinvestigations/web-ui.git
     dest: /opt/ui/web-ui
     version: "{{ git_repo_versions.web_ui }}"
-  become: yes
-  become_user: liquid-apps
 
 - name: Download the ui-templates source code
   git:
     repo: https://github.com/liquidinvestigations/ui-templates.git
     dest: /opt/ui/ui-templates
     version: "{{ git_repo_versions.ui_templates }}"
-  become: yes
-  become_user: liquid-apps
 
-- name: Web UI dist artifacts
+- name: Download Web UI dist artifacts
   unarchive:
     src: https://jenkins.liquiddemo.org/job/liquidinvestigations/job/web-ui/job/master/lastSuccessfulBuild/artifact/web-ui-dist.tar.gz
     dest: /opt/ui/web-ui
     remote_src: yes
     creates: /opt/ui/web-ui/dist
-  become: yes
-  become_user: liquid-apps
+
+- name: Set up file permissions on /opt/ui
+  file:
+    path: /opt/ui
+    state: directory
+    owner: liquid-apps
+    group: liquid-apps
+    recurse: true
 
 - name: Put the install-templates script into first-boot
   copy:
