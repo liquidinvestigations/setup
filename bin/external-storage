@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+
+import subprocess
+import json
+import logging
+from pathlib import Path
+
+block_devices = None
+
+def update_block_devices():
+    global block_devices
+    output = subprocess.check_output(['lsblk', '-JObl'])
+    block_devices = json.loads(output)['blockdevices']
+    sh('sync')
+
+def sh(*args, **kwargs):
+    print('+', ' '.join(args))
+    print(subprocess.check_output(args, stderr=subprocess.STDOUT, **kwargs).decode('latin1'))
+
+
+def get_block_device(selector):
+    update_block_devices()
+
+    candidates = [d for d in block_devices if selector(d)]
+
+    if len(candidates) == 0:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+    else:
+        candidate_list = ", ".join([c['name'] for c in candidates])
+        error = "found {} disk candidates: {}".format(
+            len(candidates),
+            candidate_list,
+        )
+        raise RuntimeError(error)
+
+
+def is_unmounted_disk(disk):
+    MIN_SIZE = 1024 * 1024 * 1024 * 3  # 3GB
+
+    return disk.get('group') == 'disk' and disk.get('type') == 'disk' and not disk.get('fstype') and not disk.get('mountpoint') and int(disk.get('size', '0')) >= MIN_SIZE and disk.get('kname') not in ( p['pkname'] for p in block_devices if p.get('mountpoint'))
+
+
+def is_unmounted_partition(part):
+    if part.get('group') != 'disk' or part.get('fstype') != 'ext4' or part.get('label') != 'LIQUID' or part.get('mountpoint'):
+        return False
+
+    [parent] = [d for d in block_devices if d['kname'] == part['pkname']]
+    return is_unmounted_disk(parent)
+
+
+SFDISK_COMMANDS = """
+label: dos
+device: {disk}
+unit: sectors
+
+{disk}1 : start=        2048, type=83
+"""
+
+def partition_disk(disk):
+    sh('sfdisk', disk, input=SFDISK_COMMANDS.format(disk=disk).encode())
+    return "{}1".format(disk)
+
+
+def find_and_partition_device():
+    print('==== Looking for drive to partition ====')
+
+    block_device = get_block_device(is_unmounted_disk)
+    disk = '/dev/' + block_device['name']
+
+    print("Selected empty disk {}".format(disk))
+
+    partition = partition_disk(disk)
+    print('Obtained new dos partition {}'.format(partition))
+
+    print('Running mkfs.ext4 on {}'.format(partition))
+    sh('mkfs.ext4', partition, '-L', 'LIQUID')
+
+    print('Mounting the partition on /var/lib/liquid')
+    sh('mount', partition, '/var/lib/liquid')
+
+    print('Copy the things to it')
+    sh('cp -a /opt/var-lib-liquid-template/* /var/lib/liquid/', shell=True)
+
+    print("Partition with /var/lib/liquid is ready")
+
+    print('Unmounting the partition')
+    sh('umount', partition)
+
+    print('Checking that we can find the partition again')
+    found_device = get_block_device(is_unmounted_partition)
+    assert partition == '/dev/' + found_device['name']
+
+    return found_device
+
+
+def get_or_make_partition():
+    device = get_block_device(is_unmounted_partition)
+    if not device:
+        device = find_and_partition_device()
+
+    print('Selected partition {} from device {}'.format(device['name'], device['pkname']))
+    return '/dev/' + device['name']
+
+
+def main():
+    print('==== Looking for drive to mount ====')
+
+    if Path('/opt/common/LIQUID_EXTERNAL_DISABLE').exists():
+        print("found /opt/common/LIQUID_EXTERNAL_DISABLE, exiting")
+        return
+
+    if Path('/opt/common/LIQUID_EXTERNAL_BLOCK_DEVICE').exists():
+        with Path('/opt/common/LIQUID_EXTERNAL_BLOCK_DEVICE').open() as f:
+            partition = f.read().strip()
+    else:
+        partition = get_or_make_partition()
+
+    print('Mounting the partition on /var/lib/liquid')
+    sh('mount', partition, '/var/lib/liquid')
+
+    print('==== External drive mounted ====')
+
+
+if __name__ == '__main__':
+    main()

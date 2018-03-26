@@ -5,6 +5,14 @@ set -x
 echo "Starting firewall"
 /opt/common/libexec/firewall
 
+echo "Looking for attached external storage..."
+until /opt/setup/bin/external-storage; do
+        echo 'waiting for external storage ...'
+        sleep 20
+done
+
+
+systemctl start supervisor
 supervisor_up() {
   ! supervisorctl status | grep -q 'supervisor\.sock no such file'
 }

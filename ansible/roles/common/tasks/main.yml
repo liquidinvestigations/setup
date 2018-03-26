@@ -96,10 +96,10 @@
   tags:
     - prerequisites
 
-- name: Enable supervisor
+- name: Disable supervisor
   service:
     name: supervisor
-    enabled: yes
+    enabled: no
 
 - name: Create liquid-apps system user
   user:
