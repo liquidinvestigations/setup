@@ -17,3 +17,4 @@ git_repo_versions:
   setup: master
   web_ui: master
   ui_templates: master
+  dokuwiki_plugin_oauth: master
