@@ -5,5 +5,5 @@ sleep 3
 cd /opt/hoover
 while true; do
 	sleep 40
-	/opt/hoover/bin/hoover snoop2 walk davros-sync > /dev/null
+	/opt/hoover/bin/hoover snoop2 retrytasks --func=filesystem.walk > /dev/null
 done
