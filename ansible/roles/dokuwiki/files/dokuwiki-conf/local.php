@@ -14,5 +14,4 @@ $conf['authtype'] = 'oauth';
 $conf['defaultgroup'] = 'admin,user';
 $conf['plugin']['oauth']['liquid-key'] = '{oauth_id}';
 $conf['plugin']['oauth']['liquid-secret'] = '{oauth_secret}';
-$conf['plugin']['oauth']['liquid-authurl'] = '{oauth_url}authorize';
-$conf['plugin']['oauth']['liquid-tokenurl'] = '{oauth_url}token';
+$conf['plugin']['oauth']['liquid-core-url'] = '{oauth_url}';
