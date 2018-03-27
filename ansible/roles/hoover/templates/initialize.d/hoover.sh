@@ -15,6 +15,11 @@ if [ ! -e $HOOVER_DATA_DIR/search/secret_key.py ]; then
 )
 fi
 
+if [ ! $(rabbitmqctl list_vhosts | grep snoop2) ]; then
+  rabbitmqctl add_vhost snoop2
+  rabbitmqctl set_permissions -p snoop2 guest ".*" ".*" ".*"
+fi
+
 sudo -u liquid-apps /opt/liquid-core/libexec/create-oauth-application "hoover" "{{ http_scheme }}://hoover.{{ liquid_domain }}/accounts/oauth2-exchange/"
 source /var/lib/liquid/oauth_keys/hoover
 echo "CLIENT_ID = '$CLIENT_ID'" > $HOOVER_DATA_DIR/search/oauth.py
