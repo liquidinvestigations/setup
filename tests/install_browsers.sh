@@ -33,6 +33,6 @@ wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.de
 cd $HERE
 rm -rf TMP
 
-if [ ! -L bin/google-chrome ]; then
+if [ ! -L $WEBDRIVER_BIN/google-chrome ]; then
     ln -s `which google-chrome-stable` $WEBDRIVER_BIN/google-chrome
 fi
