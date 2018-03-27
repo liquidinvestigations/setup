@@ -33,7 +33,7 @@ def random_salt():
     return ''.join(urandom.choice('0123456789abcdef') for _ in range(128))
 
 
-with open() as f:
+with open('/var/lib/liquid/conf/options.json', encoding='utf8') as f:
     liquid_options = json.load(f)
 
 callback_url = (
