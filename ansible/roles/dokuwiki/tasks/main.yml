@@ -82,15 +82,6 @@
       dest: /opt/common/initialize.d/21-dokuwiki.sh
       mode: 0755
 
-  - name: Subscribe to hooks
-    copy:
-      src: hooks/user
-      dest: /opt/common/hooks/{{ item }}.d/dokuwiki
-      mode: 0755
-    with_items:
-      - user-created
-      - user-passwd
-      - user-deleted
   tags:
     - configure
     - configure-services
@@ -103,9 +94,6 @@
   with_items:
     - /etc/nginx/sites-enabled/dokuwiki.conf
     - /opt/common/initialize.d/21-dokuwiki.sh
-    - /opt/common/hooks/user-created.d/dokuwiki
-    - /opt/common/hooks/user-passwd.d/dokuwiki
-    - /opt/common/hooks/user-deleted.d/dokuwiki
   tags:
     - configure
     - configure-services
