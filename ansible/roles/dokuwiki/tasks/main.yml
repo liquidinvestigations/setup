@@ -62,6 +62,12 @@
       owner: www-data
       group: www-data
 
+  - name: Install oauth plugin
+    git:
+      repo: https://github.com/liquidinvestigations/dokuwiki-plugin-oauth
+      dest: /opt/dokuwiki/lib/plugins/oauth
+      version: "{{ git_repo_versions.dokuwiki_plugin_oauth }}"
+
 
 - when: liquid_services.dokuwiki.enabled
   block:
@@ -76,15 +82,6 @@
       dest: /opt/common/initialize.d/21-dokuwiki.sh
       mode: 0755
 
-  - name: Subscribe to hooks
-    copy:
-      src: hooks/user
-      dest: /opt/common/hooks/{{ item }}.d/dokuwiki
-      mode: 0755
-    with_items:
-      - user-created
-      - user-passwd
-      - user-deleted
   tags:
     - configure
     - configure-services
@@ -97,9 +94,6 @@
   with_items:
     - /etc/nginx/sites-enabled/dokuwiki.conf
     - /opt/common/initialize.d/21-dokuwiki.sh
-    - /opt/common/hooks/user-created.d/dokuwiki
-    - /opt/common/hooks/user-passwd.d/dokuwiki
-    - /opt/common/hooks/user-deleted.d/dokuwiki
   tags:
     - configure
     - configure-services
