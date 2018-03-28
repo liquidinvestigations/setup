@@ -40,14 +40,8 @@ SECRETS_PATH=/var/lib/liquid/data/hypothesis/secrets.sh
 if [ ! -e $SECRETS_PATH ]; then
   set +x
   echo "Creating secret keys..."
+  CLIENT_OAUTH_ID=$(sudo -u liquid-apps ./libexec/run-h bin/hypothesis authclient add --type public --name liquid --authority hypothesis.{{ liquid_domain }})
   echo "export SECRET_KEY='$(openssl rand -base64 32 | tr -d '\n')'" > $SECRETS_PATH
-  CLIENT_OAUTH_ID=$(
-    sudo -u liquid-apps
-    ../libexec/run-h bin/hypothesis authclient add
-        --type public
-        --name liquid
-        --authority hypothesis.liquid.example.org
-  )
 
   echo "export CLIENT_OAUTH_ID='$CLIENT_OAUTH_ID'" >> $SECRETS_PATH
   set -x
