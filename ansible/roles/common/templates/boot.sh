@@ -26,7 +26,7 @@ FIRST_BOOT=NOT_STARTED
 # Errors on, try to start first boot.
 set -e
 cd /opt/common
-if [ ! -f first_boot_done ] && [ ! -f first_boot_failed ]; then
+if [ ! -f /var/lib/liquid/first_boot_done ] && [ ! -f /var/lib/liquid/first_boot_failed ]; then
   echo "Starting first boot."
   if /opt/common/libexec/invoke-hook first-boot; then
     echo "First boot done."
@@ -53,15 +53,15 @@ case "$FIRST_BOOT" in
     ;;
   DONE)
     echo "Marking first_boot_done"
-    touch first_boot_done
+    touch /var/lib/liquid/first_boot_done
     ;;
   FAILED)
     echo "Marking first_boot_failed"
-    touch first_boot_failed
+    touch /var/lib/liquid/first_boot_failed
     ;;
   *)
     echo "Unknown FIRST_BOOT flag, marking first_boot_failed"
-    touch first_boot_failed
+    touch /var/lib/liquid/first_boot_failed
     ;;
 esac
 

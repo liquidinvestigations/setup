@@ -18,8 +18,8 @@ from time import sleep
 from sys import exit
 import subprocess
 
-FILE_FAIL = '/opt/common/first_boot_failed'
-FILE_DONE = '/opt/common/first_boot_done'
+FILE_FAIL = '/var/lib/liquid/first_boot_failed'
+FILE_DONE = '/var/lib/liquid/first_boot_done'
 FILE_LOG = '/var/log/rc.local.log'
 
 SLEEP_SECS = 3
