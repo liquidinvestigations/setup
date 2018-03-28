@@ -178,3 +178,5 @@
   tags:
     - configure
     - configure-services
+
+- import_tasks: tasks/authproxy.yml
