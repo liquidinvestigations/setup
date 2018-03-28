@@ -17,7 +17,7 @@
 
 - name: Download the source code
   git:
-    repo: https://github.com/hypothesis/h.git
+    repo: https://github.com/liquidinvestigations/h.git
     dest: /opt/hypothesis/h
     version: "{{ git_repo_versions.hypothesis.h }}"
 
