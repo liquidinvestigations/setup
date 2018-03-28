@@ -41,6 +41,7 @@ export DATABASE_URL="postgresql:///hypothesis"
 export APP_URL="http://hypothesis.{{ liquid_domain }}"
 export ELASTICSEARCH_HOST="http://127.0.0.1:14312"
 export SECRET_KEY="temporary secret key for initialize"
+export AUTH_DOMAIN="hypothesis.{{ liquid_domain }}"
 bin/hypothesis init
 EOF
 
