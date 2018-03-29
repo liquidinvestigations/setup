@@ -248,10 +248,6 @@ def test_login_into_hypothesis(browser):
 
     # navigate to hypothesis and login
     browser.find_by_text('Hypothesis').click()
-    browser.find_by_text('Log in').click()
-    browser.fill('username', ADMIN_USERNAME)
-    browser.fill('password', ADMIN_PASSWORD)
-    browser.find_by_css('#deformLog_in').click()
 
     # we should be logged in now, let's check
     assert browser.is_element_present_by_text(ADMIN_USERNAME)

@@ -10,5 +10,6 @@ export DATABASE_URL="postgresql:///hypothesis"
 export APP_URL="{{ http_scheme }}://hypothesis.{{ liquid_domain }}"
 export CLIENT_URL="{{ http_scheme }}://client.hypothesis.{{ liquid_domain }}"
 export ELASTICSEARCH_HOST="http://127.0.0.1:14312"
+export PROXY_AUTH="true"
 
 exec "$@"

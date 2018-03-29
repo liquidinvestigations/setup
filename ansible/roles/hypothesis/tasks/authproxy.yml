@@ -1,0 +1,36 @@
+---
+
+- name: Clone authproxy repo
+  git:
+    repo: https://github.com/liquidinvestigations/authproxy.git
+    dest: /opt/hypothesis/authproxy
+
+- name: Install authproxy requirements
+  pip:
+    requirements: /opt/hypothesis/authproxy/requirements.txt
+    virtualenv: /opt/hypothesis/authproxy/venv
+    virtualenv_python: python3
+
+- name: Create authproxy main config
+  template:
+    src: authproxy/settings.py
+    dest: /opt/hypothesis/authproxy/config/settings.py
+
+- when: liquid_services.hypothesis.enabled
+  name: Copy the initialization script
+  template:
+    src: initialize.d/authproxy.sh
+    dest: /opt/common/initialize.d/20-hypothesis-authproxy.sh
+    mode: 0755
+  tags:
+    - configure
+    - configure-services
+
+- when: not liquid_services.hypothesis.enabled
+  name: Remove configuration files for disabled service
+  file:
+    path: /opt/common/initialize.d/20-hypothesis-authproxy.sh
+    state: absent
+  tags:
+    - configure
+    - configure-services

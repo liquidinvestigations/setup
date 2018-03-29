@@ -10,7 +10,7 @@ git_repo_versions:
     search: master
     ui: master
   hypothesis:
-    h: 53046f652c801b85e792c0020fa71f7493b249da
+    h: master
     h_client_build: master
   discover: master
   liquid_core: master
