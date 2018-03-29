@@ -35,6 +35,6 @@ set -x
 /opt/hoover/bin/hoover snoop2 createcollection davros-sync '$DAVROS_DATA_PATH'
 /opt/hoover/bin/hoover snoop2 resetcollectionindex davros-sync
 /opt/hoover/bin/hoover snoop2 rundispatcher
-/opt/hoover/bin/hoover search addcollection davros-sync "$snoop_url/collections/davros-sync/json" --public
+/opt/hoover/bin/hoover search addcollection davros-sync "http://localhost:11941/collections/davros-sync/json" --public
 touch /var/lib/liquid/hoover/created-davros-sync
 EOF
