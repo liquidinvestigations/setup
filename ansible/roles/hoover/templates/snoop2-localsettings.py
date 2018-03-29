@@ -17,3 +17,5 @@ SNOOP_TIKA_URL = 'http://localhost:15423'
 SNOOP_BLOB_STORAGE = '/var/lib/liquid/hoover/blobs'
 
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/snoop2'
+
+SNOOP_COLLECTIONS_ELASTICSEARCH_URL = 'http://localhost:14352'

@@ -149,7 +149,6 @@
     - runserver-search
     - runserver-snoop2
     - snoop2-updater
-    - search-updater
     - snoop2-workers
     - tika
 
