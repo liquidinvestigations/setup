@@ -87,7 +87,10 @@
     dest: /opt/hoover/ui
     version: "{{ git_repo_versions.hoover.ui }}"
 
-- import_tasks: tasks/magic.yml
+- name: Fix the magic
+  shell: "cp /usr/share/file/magic.mgc /opt/hoover/snoop2/magic.mgc"
+  tags:
+    - magiefrate
 
 - name: Download elasticsearch v2
   unarchive:

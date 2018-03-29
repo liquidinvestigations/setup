@@ -1,11 +1,21 @@
+- name: Install magic dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - autoconf
+    - automake
+  tags:
+    - prerequisites
+
 - name: Download magic repo
   git:
     repo: https://github.com/hoover/magic-definitions
     dest: /opt/hoover/magic-definitions
     version: "{{ git_repo_versions.hoover.magic_definitions }}"
 
-- name: Build magic
-  shell: "./build.sh
-          cp file/bin/file /usr/local/bin/file"
-  cwd: /opt/hoover/magic-definitions
+- name: Deploy magic
+  shell: "bash build.sh && cp file/bin/file /usr/local/bin/file"
+  args:
+    chdir: /opt/hoover/magic-definitions
   creates: /usr/local/bin/file
