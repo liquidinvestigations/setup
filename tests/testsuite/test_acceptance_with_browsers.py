@@ -286,11 +286,6 @@ def test_login_into_hoover(browser):
     # navigate to hoover
     browser.find_by_text('Hoover').click()
 
-    # click on the menu and on "login"
-    browser.find_by_id('loggedin-btngroup').click()
-    assert browser.is_element_present_by_text("login")
-    browser.find_by_text('login').click()
-
     # we should be logged in because oauth
     browser.find_by_id('loggedin-btngroup').click()
     assert browser.is_element_present_by_text("admin")

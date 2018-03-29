@@ -14,7 +14,7 @@ CORS_ALLOW_CREDENTIALS = True
 INVOKE_HOOK = 'sudo PYTHONUNBUFFERED=doit /opt/common/libexec/invoke-hook'
 
 {% if liquid_services.hoover.enabled %}
-HOOVER_APP_URL = '{{ http_scheme }}://hoover.{{ liquid_domain }}'
+HOOVER_APP_URL = '{{ http_scheme }}://hoover.{{ liquid_domain }}/accounts/login/'
 {% endif %}
 
 {% if liquid_services.hypothesis.enabled %}
