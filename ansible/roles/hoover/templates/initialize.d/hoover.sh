@@ -15,6 +15,8 @@ if [ ! -e $HOOVER_DATA_DIR/search/secret_key.py ]; then
 )
 fi
 
+until rabbitmqctl list_vhosts; do echo 'waiting for rabbitmq'; sleep 5; done
+
 if [ ! $(rabbitmqctl list_vhosts | grep snoop2) ]; then
   rabbitmqctl add_vhost snoop2
   rabbitmqctl set_permissions -p snoop2 guest ".*" ".*" ".*"

@@ -101,6 +101,16 @@
     name: supervisor
     enabled: no
 
+- name: Disable rabbitmq
+  service:
+    name: rabbitmq-server
+    enabled: no
+
+- name: Disable postgresql
+  service:
+    name: postgresql
+    enabled: no
+
 - name: Create liquid-apps system user
   user:
     name: liquid-apps

@@ -12,6 +12,8 @@ until /opt/setup/bin/external-storage; do
 done
 
 
+systemctl start postgresql
+systemctl start rabbitmq-server
 systemctl start supervisor
 supervisor_up() {
   ! supervisorctl status | grep -q 'supervisor\.sock no such file'
@@ -19,7 +21,6 @@ supervisor_up() {
 until supervisor_up; do echo 'waiting for supervisor ...'; sleep 1; done
 echo 'supervisor up'
 supervisorctl update
-service postgresql start
 
 FIRST_BOOT=NOT_STARTED
 
