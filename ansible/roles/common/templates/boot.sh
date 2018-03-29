@@ -42,9 +42,6 @@ else
  ./initialize.sh
 fi
 
-supervisorctl update
-supervisorctl start all
-
 # Mark first_boot_done and first_boot_failed only after the
 # services have been started and hooks have been ran.
 # This is important for the first boot tests, that wait
