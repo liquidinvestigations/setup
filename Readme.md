@@ -82,6 +82,44 @@ and put those hosts in your hosts file.
 
 The services can be managed via `supervisorctl`.
 
+
+## External Storage and Encryption
+By default, the image looks for the first external block device (USB stick,
+USB or internal hard disk, virtual hard disk) that has the following
+characteristics:
+
+- it's larger than 3GB in total capacity
+- it's not mounted
+
+The system then formats and mounts the drive. It's going to be used as external
+storage; all user data (documents, wiki pages, chat history) are going to be
+stored on it.
+
+This functionality can be disabled by creating the file
+`/opt/common/LIQUID_EXTERNAL_DISABLE` on the image, by using the
+`/bin/with-image-chroot` script.
+
+### When running a VM with factory
+
+The `--usb-storage` factory flag has to be used with a `raw` format virtual
+hard disk. Create one with:
+
+```bash
+qemu-img create -f raw the-image.raw`
+```
+
+### External Storage Encryption
+The block device that's going to be mounted into the system can be overridden
+by writing a file `/opt/common/LIQUID_EXTERNAL_BLOCK_DEVICE` that contains
+the path to the desired block device. Both [Luks][] and [VeraCrypt][]
+can be used, if installed and configured through the shell.
+
+[Luks]: https://guardianproject.info/code/luks/
+[VeraCrypt]: https://www.veracrypt.fr/en/Downloads.html
+
+You can hook into `bin/external-storage` to automate the process to your
+specific workflow.
+
 ## Development notes
 
 The `devel` role sets up the following:
