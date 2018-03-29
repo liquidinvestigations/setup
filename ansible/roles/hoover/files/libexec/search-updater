@@ -1,9 +1,0 @@
-#!/bin/bash
-set -e
-
-sleep 3
-cd /opt/hoover
-while true; do
-	sleep 20
-	/opt/hoover/bin/hoover search update davros-sync > /dev/null
-done

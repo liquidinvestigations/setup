@@ -9,6 +9,7 @@ git_repo_versions:
     snoop2: master
     search: master
     ui: master
+    magic_definitions: master
   hypothesis:
     h: master
     h_client_build: master

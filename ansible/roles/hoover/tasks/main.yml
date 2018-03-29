@@ -87,6 +87,11 @@
     dest: /opt/hoover/ui
     version: "{{ git_repo_versions.hoover.ui }}"
 
+- name: Fix the magic
+  shell: "cp /usr/share/file/magic.mgc /opt/hoover/snoop2/magic.mgc"
+  tags:
+    - magiefrate
+
 - name: Download elasticsearch v2
   unarchive:
     src: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.4.3.tar.gz
@@ -149,7 +154,6 @@
     - runserver-search
     - runserver-snoop2
     - snoop2-updater
-    - search-updater
     - snoop2-workers
     - tika
 
