@@ -14,7 +14,7 @@ git_repo_versions:
     h_client_build: master
   discover: master
   liquid_core: master
-  setup: master
+  setup: davros-sync
   web_ui: master
   ui_templates: master
   dokuwiki_plugin_oauth: master
