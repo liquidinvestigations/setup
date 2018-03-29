@@ -22,7 +22,7 @@ HYPOTHESIS_APP_URL = '{{ http_scheme }}://hypothesis.{{ liquid_domain }}'
 {% endif %}
 
 {% if liquid_services.dokuwiki.enabled %}
-DOKUWIKI_APP_URL = '{{ http_scheme }}://dokuwiki.{{ liquid_domain }}'
+DOKUWIKI_APP_URL = '{{ http_scheme }}://dokuwiki.{{ liquid_domain }}/doku.php?oauthlogin=Liquid'
 {% endif %}
 
 {% if liquid_services.matrix.enabled %}
