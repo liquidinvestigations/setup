@@ -230,8 +230,6 @@ def test_login_into_dokuwiki(browser):
 
     # navigate to dokuwiki and login
     browser.find_by_text('DokuWiki').click()
-    assert browser.is_element_present_by_text("Permission Denied")
-    browser.find_by_css('.plugin_oauth_Liquid').click()
 
     # we should be logged in now, let's check
     browser.is_element_present_by_css("ul#dw__user_menu")
