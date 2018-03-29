@@ -1,0 +1,11 @@
+- name: Download magic repo
+  git:
+    repo: https://github.com/hoover/magic-definitions
+    dest: /opt/hoover/magic-definitions
+    version: "{{ git_repo_versions.hoover.magic-definitions }}"
+
+- name: Build magic
+  shell: "./build.sh
+          cp file/bin/file /usr/local/bin/file"
+  cwd: /opt/hoover/magic-definitions
+  creates: /usr/local/bin/file
