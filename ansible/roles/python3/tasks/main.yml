@@ -26,57 +26,58 @@
 
 - when: ansible_architecture == 'aarch64'
   block:
-    - name: "python3.6.4 runtime&build dependencies"
-      become: yes
-      apt: name={{item}}
-      with_items:
-        - build-essential
-        - tk-dev
-        - libncurses5-dev
-        - libncursesw5-dev
-        - libreadline6-dev
-        - libdb5.3-dev
-        - libgdbm-dev
-        - libsqlite3-dev
-        - libssl-dev
-        - libbz2-dev
-        - libexpat1-dev
-        - liblzma-dev
-        - zlib1g-dev
+  - name: "python3.6.4 runtime&build dependencies"
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - build-essential
+      - tk-dev
+      - libncurses5-dev
+      - libncursesw5-dev
+      - libreadline6-dev
+      - libdb5.3-dev
+      - libgdbm-dev
+      - libsqlite3-dev
+      - libssl-dev
+      - libbz2-dev
+      - libexpat1-dev
+      - liblzma-dev
+      - zlib1g-dev
 
-    - name: "Download python3.6.4"
-      get_url:
-        url: "https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz"
-        dest: /tmp/Python-3.6.4.tar.xz
+  - name: "Download python3.6.4"
+    get_url:
+      url: "https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz"
+      dest: /tmp/Python-3.6.4.tar.xz
 
-    - name: "Unarchive python3.6.4"
-      unarchive:
-        src: /tmp/Python-3.6.4.tar.xz
-        dest: /tmp/
-        copy: false
-      creates: /tmp/Python-3.6.4
-      tags:
-        - prerequisites
+  - name: "Unarchive python3.6.4"
+    unarchive:
+      src: /tmp/Python-3.6.4.tar.xz
+      dest: /tmp/
+      copy: false
+    creates: /tmp/Python-3.6.4
+    tags:
+      - prerequisites
 
-    - name: "configure python3.6.4 build"
-      command: ./configure
-      args:
-        chdir: "/tmp/Python-3.6.4"
-        creates: "/tmp/Python-3.6.4/Makefile"
-      tags:
-        - prerequisites
+  - name: "configure python3.6.4 build"
+    command: ./configure
+    args:
+      chdir: "/tmp/Python-3.6.4"
+      creates: "/tmp/Python-3.6.4/Makefile"
+    tags:
+      - prerequisites
 
-    - name: "build python3.6.4"
-      command: make -j4
-      args:
-        chdir: "/tmp/Python-3.6.4"
-        creates: "/tmp/Python-3.6.4/python"
-      tags:
-        - prerequisites
+  - name: "build python3.6.4"
+    command: make -j4
+    args:
+      chdir: "/tmp/Python-3.6.4"
+      creates: "/tmp/Python-3.6.4/python"
+    tags:
+      - prerequisites
 
-    - name: "install python3.6.4"
-      make:
-        chdir: "/tmp/Python-3.6.4"
-        target: altinstall
-      tags:
-        - prerequisites
+  - name: "install python3.6.4"
+    make:
+      chdir: "/tmp/Python-3.6.4"
+      target: altinstall
+    tags:
+      - prerequisites
