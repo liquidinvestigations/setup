@@ -46,8 +46,9 @@ class BaseBuilder:
         if not have_ansible:
             run(['apt-add-repository', '-y', 'ppa:ansible/ansible'])
             run(['apt-get', '-qq', 'update'], stdout=subprocess.DEVNULL)
-            run(['apt-get', '-qq', 'install', '-y', 'ansible', 'git'],
-                stdout=subprocess.DEVNULL)
+            run(['apt-get', '-qq', 'install', '-y',
+                 'ansible', 'git', 'dmidecode',
+            ], stdout=subprocess.DEVNULL)
 
     def install_qemu_utils(self):
         run(['apt-get', '-qq', 'install', '-y', 'qemu-utils'],
