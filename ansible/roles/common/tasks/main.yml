@@ -61,9 +61,9 @@
   tags:
     - prerequisites
 
-- name: Install ansible 2.4
+- name: Install ansible 2.5
   apt:
-    name: "ansible=2.4*"
+    name: "ansible=2.5*"
   tags:
     - prerequisites
 
