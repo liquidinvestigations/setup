@@ -4,8 +4,6 @@
   - name: Add deadsnakes repo
     apt_repository:
       repo: "ppa:deadsnakes/ppa"
-    tags:
-      - prerequisites
 
   - name: Install python3.6
     apt:
@@ -13,16 +11,15 @@
         - python3.6
         - python3.6-dev
       state: installed
-    tags:
-      - prerequisites
 
   - name: Create symlink /usr/local/bin/python3
     file:
       src: /usr/bin/python3.6
       dest: /usr/local/bin/python3
       state: link
-    tags:
-      - prerequisites
+
+  tags:
+    - prerequisites
 
 - when: ansible_architecture == 'aarch64'
   block:
@@ -56,28 +53,23 @@
       dest: /tmp/
       copy: false
     creates: /tmp/Python-3.6.4
-    tags:
-      - prerequisites
 
   - name: "configure python3.6.4 build"
     command: ./configure
     args:
       chdir: "/tmp/Python-3.6.4"
       creates: "/tmp/Python-3.6.4/Makefile"
-    tags:
-      - prerequisites
 
   - name: "build python3.6.4"
     command: make -j4
     args:
       chdir: "/tmp/Python-3.6.4"
       creates: "/tmp/Python-3.6.4/python"
-    tags:
-      - prerequisites
 
   - name: "install python3.6.4"
     make:
       chdir: "/tmp/Python-3.6.4"
       target: altinstall
-    tags:
-      - prerequisites
+
+  tags:
+    - prerequisites
