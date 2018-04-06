@@ -89,8 +89,10 @@ class BaseBuilder:
             print('APT::Install-Suggests "false";', file=f)
 
         target.chroot_run(['apt-get', '-qq', 'update'])
-        target.chroot_run(['apt-get', '-qq', 'install', '-y', 'python'],
-                          stdout=subprocess.DEVNULL)
+        target.chroot_run([
+            'apt-get', '-qq', 'install', '-y',
+            'python', 'dmidecode',
+        ], stdout=subprocess.DEVNULL)
         target.chroot_run(['apt-get', '-qq', 'clean'])
 
     def run_ansible(self, host_pattern, tags, skip_tags, vars):
