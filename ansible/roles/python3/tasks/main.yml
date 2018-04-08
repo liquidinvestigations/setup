@@ -71,5 +71,11 @@
       chdir: "/tmp/Python-3.6.4"
       target: altinstall
 
+  - name: Create symlink /usr/local/bin/python3
+    file:
+      src: /usr/local/bin/python3.6
+      dest: /usr/local/bin/python3
+      state: link
+
   tags:
     - prerequisites
